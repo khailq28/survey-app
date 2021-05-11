@@ -1,10 +1,17 @@
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { useEffect } from "react";
 import Login from "./components/Login";
-import Home from "./components/Home";
+import HomeBody from "./components/HomeBody";
 import Header from "./components/Header";
+import { connect } from "react-redux";
+import { getUserAuth } from "./actions";
 
-function App() {
+function App(props) {
+    useEffect(() => {
+        props.getUserAuth();
+    }, []);
+
     return (
         <Router>
             <Switch>
@@ -13,11 +20,23 @@ function App() {
                 </Route>
                 <Route path="/home">
                     <Header />
-                    <Home />
+                    <HomeBody />
                 </Route>
             </Switch>
         </Router>
     );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {};
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        getUserAuth: () => {
+            dispatch(getUserAuth());
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

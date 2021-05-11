@@ -1,10 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import SearchIcon from "@material-ui/icons/Search";
+import { connect } from "react-redux";
+import { signOutAPI } from "../actions";
+import { Redirect } from "react-router";
 
 function Header(props) {
     return (
         <Container>
+            {!props.user && <Redirect to="/" />}
             <Content>
                 <Logo>
                     <a href="/home">
@@ -22,10 +26,14 @@ function Header(props) {
 
                 <SignOut>
                     <User>
-                        <UserImg src="/images/user.svg" alt="" />
+                        {props.user && props.user.photoURL ? (
+                            <UserImg src={props.user.photoURL} alt="" />
+                        ) : (
+                            <UserImg src="/images/user.svg" alt="" />
+                        )}
                     </User>
 
-                    <DropDown>
+                    <DropDown onClick={() => props.signOut()}>
                         <span>Sign out</span>
                     </DropDown>
                 </SignOut>
@@ -38,7 +46,6 @@ const Container = styled.div`
     background-color: white;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     left: 0;
-    padding: 0 24px;
     position: fixed;
     top: 0;
     width: 100vw;
@@ -57,22 +64,23 @@ const Content = styled.div`
     align-items: center;
     margin: 0 auto;
     min-height: 100%;
-    max-width: 1128px;
+    max-width: 100%;
+    justify-content: space-between;
 `;
 
 const Logo = styled.span`
     margin-right: 8px;
     display: inline-block;
     vertical-align: middle;
+    padding-left: 2px;
 
     a > img {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
+    }
 
-        @media only screen and (max-width: 768px) {
-            width: 40px;
-            height: 40px;
-        }
+    @media (min-width: 1129px) {
+        padding-left: 20px;
     }
 `;
 
@@ -101,6 +109,10 @@ const Search = styled.div`
 
             @media (max-width: 768px) {
                 width: 210px;
+            }
+
+            @media (max-width: 280px) {
+                width: 140px;
             }
         }
     }
@@ -146,12 +158,8 @@ const User = styled.div`
 `;
 
 const UserImg = styled.img`
-    width: 50px;
+    width: 40px;
     border-radius: 50%;
-
-    @media (max-width: 768px) {
-        width: 40px;
-    }
 `;
 
 const DropDown = styled.div`
@@ -166,14 +174,58 @@ const DropDown = styled.div`
     text-align: center;
     display: none;
     cursor: pointer;
+    transform: 0.4s;
+
+    &:after {
+        content: "";
+        width: 0px;
+        height: 0px;
+        border: 7px #ffffff00 solid;
+        border-bottom-color: #dddddd;
+        position: absolute;
+        left: 68px;
+        top: -14px;
+        transform: 0.4s;
+    }
+
+    @media (min-width: 1129px) {
+        left: 92%;
+
+        &:after {
+            left: 70px;
+        }
+    }
+
+    @media only screen and (min-width: 769px) and (max-width: 1128px) {
+        left: 88%;
+        &:after {
+            left: 55px;
+        }
+    }
+
+    @media only screen and (max-width: 768px) and (max-width: 480px) {
+        &:after {
+            left: 70px;
+        }
+    }
+
+    @media (max-width: 489px) {
+        &:after {
+            left: 55px;
+        }
+    }
 
     &:hover {
         background: blue;
         color: white;
+
+        &:after {
+            border-bottom-color: blue;
+        }
     }
 
     @media only screen and (min-width: 768px) {
-        top: 60px;
+        top: 56px;
         right: 220px;
     }
 
@@ -221,4 +273,18 @@ const SignOut = styled.div`
     }
 `;
 
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        signOut: () => {
+            dispatch(signOutAPI());
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

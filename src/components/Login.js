@@ -1,13 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { signInAPI } from "../actions";
+import { Redirect } from "react-router";
 
 function Login(props) {
     return (
         <Container>
+            {props.user && <Redirect to="/home" />}
             <CTA>
                 <Content>
                     <Title>survey forms</Title>
-                    <Google>
+                    <Google onClick={() => props.signIn()}>
                         <img src="/images/login/google.svg" alt="" />
                         Đăng nhập bằng Google
                     </Google>
@@ -126,4 +130,18 @@ const Description = styled.p`
     }
 `;
 
-export default Login;
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        signIn: () => {
+            dispatch(signInAPI());
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
