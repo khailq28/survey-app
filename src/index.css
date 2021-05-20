@@ -51,3 +51,23 @@ a {
         transform: translateY(3px);
     }
 }
+
+@keyframes slideUp {
+    from {
+        top: 100px;
+    }
+
+    to {
+        top: 0;
+    }
+}
+
+@keyframes scaleForm {
+    from {
+        transform: scale(0.7);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}

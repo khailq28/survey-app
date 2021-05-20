@@ -3,23 +3,20 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { signInAPI } from "../actions";
 import { Redirect } from "react-router";
-import Slide from "react-reveal/Slide";
 
 function Login(props) {
     return (
         <Container>
             {props.user && <Redirect to="/home" />}
-            <Slide bottom>
-                <CTA>
-                    <Content>
-                        <Title>survey forms</Title>
-                        <Google onClick={() => props.signIn()}>
-                            <img src="/images/login/google.svg" alt="" />
-                            &nbsp;<p>Đăng nhập bằng Google</p>
-                        </Google>
-                    </Content>
-                </CTA>
-            </Slide>
+            <CTA>
+                <Content>
+                    <Title>survey forms</Title>
+                    <Google onClick={() => props.signIn()}>
+                        <img src="/images/login/google.svg" alt="" />
+                        &nbsp;<p>Đăng nhập bằng Google</p>
+                    </Google>
+                </Content>
+            </CTA>
             <BgImage />
         </Container>
     );
@@ -29,8 +26,11 @@ const Container = styled.div`
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     height: 100vh;
+    position: relative;
 `;
 
 const Content = styled.div`
@@ -67,7 +67,11 @@ const CTA = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin: auto;
+    animation: slideUp 0.8s ease-in-out forwards;
+    position: absolute;
 `;
 
 const Title = styled.div`

@@ -6,8 +6,8 @@ import HomeBody from "./components/HomeBody";
 import Header from "./components/Header";
 import { connect } from "react-redux";
 import { getUserAuth } from "./actions";
-import FormHeader from "./components/FormHeader";
 import { Prompt } from "react-router-dom";
+import CreateNewForm from "./components/CreateNewForm";
 
 function App(props) {
     useEffect(() => {
@@ -25,12 +25,10 @@ function App(props) {
                     <HomeBody />
                 </Route>
                 <Route path="/form/:id">
-                    <FormHeader />
+                    <CreateNewForm />
                     <Prompt
                         when={true}
-                        message={(location) =>
-                            `Bạn chắc chắn muốn đi đến ${location.pathname}`
-                        }
+                        message={() => `Bạn chắc chắn muốn thoát?`}
                     />
                 </Route>
             </Switch>

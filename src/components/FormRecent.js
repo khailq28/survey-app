@@ -2,27 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import StorageIcon from "@material-ui/icons/Storage";
-import Slide from "react-reveal/Slide";
 
 function FormRecent(props) {
     return (
-        <Slide up>
-            <Card>
-                <img src="/images/home/t-shirt.png" alt="" />
-                <Body>
-                    <Title>abc</Title>
-                    <Content>
-                        <ContentBody
-                            style={{ fontSize: "12px", color: "grey" }}
-                        >
-                            <StorageButton /> Đã mở 6/5/2021
-                        </ContentBody>
+        <Card>
+            <img src="/images/home/t-shirt.png" alt="" />
+            <Body>
+                <Title>abc</Title>
+                <Content>
+                    <ContentBody style={{ fontSize: "12px", color: "grey" }}>
+                        <StorageButton /> Đã mở 6/5/2021
+                    </ContentBody>
 
-                        <MoreVertButton />
-                    </Content>
-                </Body>
-            </Card>
-        </Slide>
+                    <MoreVertButton />
+                </Content>
+            </Body>
+        </Card>
     );
 }
 
@@ -30,6 +25,7 @@ const Card = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    animation: scaleForm 0.8s ease-in-out forwards;
 
     width: 100%;
 

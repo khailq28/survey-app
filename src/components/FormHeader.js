@@ -1,15 +1,7 @@
 import React from "react";
-import { connect } from "react-redux";
-import { signOutAPI } from "../actions";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
 
 function FormHeader(props) {
-    const history = useHistory();
-    if (!props.user) {
-        history.push("/");
-    }
-
     return (
         <Container>
             <Content>
@@ -19,6 +11,7 @@ function FormHeader(props) {
                     </a>
                 </Logo>
 
+                <h1>sdfas</h1>
                 <SignOut>
                     <User>
                         {props.user && props.user.photoURL ? (
@@ -220,18 +213,4 @@ const SignOut = styled.div`
     }
 `;
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.userState.user,
-    };
-};
-
-const mapDispatchToProps = (dispatch, props) => {
-    return {
-        signOut: () => {
-            dispatch(signOutAPI());
-        },
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FormHeader);
+export default FormHeader;
