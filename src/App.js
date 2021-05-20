@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import { connect } from "react-redux";
 import { getUserAuth } from "./actions";
 import FormHeader from "./components/FormHeader";
+import { Prompt } from "react-router-dom";
 
 function App(props) {
     useEffect(() => {
@@ -25,6 +26,12 @@ function App(props) {
                 </Route>
                 <Route path="/form/:id">
                     <FormHeader />
+                    <Prompt
+                        when={true}
+                        message={(location) =>
+                            `Bạn chắc chắn muốn đi đến ${location.pathname}`
+                        }
+                    />
                 </Route>
             </Switch>
         </Router>
