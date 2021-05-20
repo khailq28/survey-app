@@ -4,13 +4,23 @@ import PostAddIcon from "@material-ui/icons/PostAdd";
 import StorageIcon from "@material-ui/icons/Storage";
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import { IconButton } from "@material-ui/core";
+import uuid from "react-uuid";
+import { useHistory } from "react-router-dom";
 
 import FormRecent from "./FormRecent";
 
 function HomeBody(props) {
+    const history = useHistory();
+
+    const CreateForm = () => {
+        let id = uuid();
+
+        history.push("/form/" + id);
+    };
+
     return (
         <Container>
-            <CreateNewSurvey>
+            <CreateNewSurvey onClick={CreateForm}>
                 <AddIcon />
                 <p>Bắt đầu biểu mẫu mới</p>
             </CreateNewSurvey>

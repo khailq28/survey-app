@@ -6,6 +6,7 @@ import HomeBody from "./components/HomeBody";
 import Header from "./components/Header";
 import { connect } from "react-redux";
 import { getUserAuth } from "./actions";
+import FormHeader from "./components/FormHeader";
 
 function App(props) {
     useEffect(() => {
@@ -21,6 +22,9 @@ function App(props) {
                 <Route path="/home">
                     <Header />
                     <HomeBody />
+                </Route>
+                <Route path="/form/:id">
+                    <FormHeader />
                 </Route>
             </Switch>
         </Router>
