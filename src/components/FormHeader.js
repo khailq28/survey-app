@@ -1,5 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
+import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
+import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
+import { IconButton } from "@material-ui/core";
 
 function FormHeader(props) {
     return (
@@ -11,20 +16,48 @@ function FormHeader(props) {
                     </a>
                 </Logo>
 
-                <h1>sdfas</h1>
-                <SignOut>
-                    <User>
-                        {props.user && props.user.photoURL ? (
-                            <UserImg src={props.user.photoURL} alt="" />
-                        ) : (
-                            <UserImg src="/images/user.svg" alt="" />
-                        )}
-                    </User>
+                <NameInput>
+                    <input value="Ko tieu de" />
+                </NameInput>
 
-                    <DropDown onClick={() => props.signOut()}>
-                        <span>Sign out</span>
-                    </DropDown>
-                </SignOut>
+                <Right>
+                    <NavListWrap>
+                        <NavList>
+                            <MenuButton>
+                                <ColorLensOutlinedIcon className="menuIcon" />
+                            </MenuButton>
+                        </NavList>
+                        <NavList>
+                            <MenuButton>
+                                <VisibilityOutlinedIcon className="menuIcon" />
+                            </MenuButton>
+                        </NavList>
+                        <NavList>
+                            <MenuButton>
+                                <SendOutlinedIcon className="menuIcon" />
+                            </MenuButton>
+                        </NavList>
+                        <NavList>
+                            <MenuButton>
+                                <SettingsOutlinedIcon className="menuIcon" />
+                            </MenuButton>
+                        </NavList>
+                    </NavListWrap>
+
+                    <SignOut>
+                        <User>
+                            {props.user && props.user.photoURL ? (
+                                <UserImg src={props.user.photoURL} alt="" />
+                            ) : (
+                                <UserImg src="/images/user.svg" alt="" />
+                            )}
+                        </User>
+
+                        <DropDown onClick={() => props.signOut()}>
+                            <span>Sign out</span>
+                        </DropDown>
+                    </SignOut>
+                </Right>
             </Content>
         </Container>
     );
@@ -70,6 +103,10 @@ const Logo = styled.span`
     @media (min-width: 1129px) {
         padding-left: 20px;
     }
+`;
+
+const Right = styled.div`
+    display: flex;
 `;
 
 const User = styled.div`
@@ -211,6 +248,79 @@ const SignOut = styled.div`
             justify-content: center;
         }
     }
+`;
+
+const NavListWrap = styled.div`
+    display: flex;
+    flex-wrap: nowrap;
+    list-style-type: none;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 768px) {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        background: white;
+        padding: 5px 0;
+        width: 100vw;
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+    }
+`;
+
+const NavList = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0 10px;
+    font-size: 20px !important;
+
+    .menuIcon {
+        color: var(--icon-color);
+    }
+
+    @media (max-width: 768px) {
+        width: 25%;
+        border-left: 1px solid rgba(0, 0, 0, 0.2);
+        border-right: 1px solid rgba(0, 0, 0, 0.2);
+    }
+`;
+
+const NameInput = styled.div`
+    align-items: center;
+    opacity: 1;
+    flex-grow: 1;
+    position: relative;
+
+    & > input {
+        border: none;
+        outline: none;
+        font-family: "Google Sans", Roboto, Arial, sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 24px;
+        margin-left: 15px;
+        color: #202124;
+        width: 600px;
+
+        @media (max-width: 768px) {
+            width: 210px;
+        }
+
+        @media (max-width: 280px) {
+            width: 140px;
+        }
+
+        &:focus {
+            border-bottom: 2px solid var(--icon-color);
+        }
+    }
+`;
+
+const MenuButton = styled(IconButton)`
+    margin: 0 !important;
+    padding: 7px !important;
 `;
 
 export default FormHeader;

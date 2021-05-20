@@ -1,3 +1,7 @@
+:root {
+    --icon-color: #5f6368;
+}
+
 body {
     font-family: Avenir-Roman, sans-serif;
     margin: 0;
