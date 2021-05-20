@@ -80,6 +80,7 @@ const CreateNewSurvey = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    animation: animateDown infinite 1.5s forwards;
 
     &:hover {
         background-color: #0483ee;
@@ -136,7 +137,7 @@ const Content = styled.div`
     display: grid;
     grid-gap: 20px;
     gap: 20px;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     width: 100%;
     box-sizing: border-box;
     padding: 8px;

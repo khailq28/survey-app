@@ -3,29 +3,23 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { signInAPI } from "../actions";
 import { Redirect } from "react-router";
+import Slide from "react-reveal/Slide";
 
 function Login(props) {
     return (
         <Container>
             {props.user && <Redirect to="/home" />}
-            <CTA>
-                <Content>
-                    <Title>survey forms</Title>
-                    <Google onClick={() => props.signIn()}>
-                        <img src="/images/login/google.svg" alt="" />
-                        Đăng nhập bằng Google
-                    </Google>
-                    <Description>
-                        Giảng viên hướng dẫn: <br />
-                        THẦY MAI VĂN MẠNH
-                        <br />
-                        Người thực hiện: <br />
-                        Lương Quang Khải - 51703108 <br />
-                        Vữ Lưu Bá Huy - 51703104
-                    </Description>
-                </Content>
-            </CTA>
-
+            <Slide bottom>
+                <CTA>
+                    <Content>
+                        <Title>survey forms</Title>
+                        <Google onClick={() => props.signIn()}>
+                            <img src="/images/login/google.svg" alt="" />
+                            &nbsp;<p>Đăng nhập bằng Google</p>
+                        </Google>
+                    </Content>
+                </CTA>
+            </Slide>
             <BgImage />
         </Container>
     );
@@ -112,21 +106,10 @@ const Google = styled.button`
     &:hover {
         background-color: #0063e5;
         color: rgba(0, 0, 0, 0.75);
-    }
-`;
 
-const Description = styled.p`
-    color: hsla(0, 0%, 95.3%, 1);
-    margin: 0 0 24px;
-    line-height: 1.5;
-    letter-spacing: 1.5px;
-    font-size: 22px;
-    max-width: 600px;
-    min-height: 1px;
-    display: block;
-    width: 100%;
-    @media only screen and (max-width: 768px) {
-        font-size: 17px;
+        p {
+            color: white;
+        }
     }
 `;
 

@@ -2,22 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import StorageIcon from "@material-ui/icons/Storage";
+import Slide from "react-reveal/Slide";
 
 function FormRecent(props) {
     return (
-        <Card>
-            <img src="/images/home/t-shirt.png" alt="" />
-            <Body>
-                <Title>abc</Title>
-                <Content>
-                    <ContentBody style={{ fontSize: "12px", color: "grey" }}>
-                        <StorageButton /> Đã mở 6/5/2021
-                    </ContentBody>
+        <Slide up>
+            <Card>
+                <img src="/images/home/t-shirt.png" alt="" />
+                <Body>
+                    <Title>abc</Title>
+                    <Content>
+                        <ContentBody
+                            style={{ fontSize: "12px", color: "grey" }}
+                        >
+                            <StorageButton /> Đã mở 6/5/2021
+                        </ContentBody>
 
-                    <MoreVertButton />
-                </Content>
-            </Body>
-        </Card>
+                        <MoreVertButton />
+                    </Content>
+                </Body>
+            </Card>
+        </Slide>
     );
 }
 
