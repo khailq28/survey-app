@@ -1,37 +1,77 @@
 import React from "react";
-import style from "../style/formRecent.module.css";
+import styled from "styled-components";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import StorageIcon from "@material-ui/icons/Storage";
 
 function FormRecent(props) {
     return (
-        <div className={style.doc_card}>
+        <Card>
             <img src="/images/home/t-shirt.png" alt="" />
-            <div className={style.doc_card_content}>
-                <h5 style={{ overFlow: "ellipsis" }}>abc</h5>
-                <div className={style.doc_content}>
-                    <div
-                        className={style.content_left}
-                        style={{ fontSize: "12px", color: "grey" }}
-                    >
-                        <StorageIcon
-                            style={{
-                                color: "white",
-                                fontSize: "20px",
-                                backgroundColor: "#6E2594",
-                                padding: "3px",
-                                marginRight: "3px",
-                                borderRadius: "2px",
-                            }}
-                        />{" "}
-                        Đã mở 6/5/2021
-                    </div>
+            <Body>
+                <Title>abc</Title>
+                <Content>
+                    <ContentBody style={{ fontSize: "12px", color: "grey" }}>
+                        <StorageButton /> Đã mở 6/5/2021
+                    </ContentBody>
 
-                    <MoreVertIcon style={{ color: "grey", fontSize: "20px" }} />
-                </div>
-            </div>
-        </div>
+                    <MoreVertButton />
+                </Content>
+            </Body>
+        </Card>
     );
 }
+
+const Card = styled.div`
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    width: 100%;
+
+    &:hover {
+        border: 1px solid #6e2594;
+    }
+
+    img {
+        box-sizing: border-box;
+        height: 150px;
+        width: 100%px;
+    }
+`;
+const Body = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 18px;
+`;
+
+const Title = styled.h5`
+    overflow: ellipsis;
+`;
+
+const Content = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 5px;
+`;
+
+const ContentBody = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+const StorageButton = styled(StorageIcon)`
+    color: white;
+    font-size: 20px;
+    background-color: #6e2594;
+    padding: 3px;
+    margin-right: 3px;
+    border-radius: 2px;
+`;
+const MoreVertButton = styled(MoreVertIcon)`
+    color: grey;
+    font-size: 20px;
+`;
 
 export default FormRecent;
