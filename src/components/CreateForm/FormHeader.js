@@ -41,7 +41,7 @@ function FormHeader(props) {
                 </Logo>
 
                 <NameInput>
-                    <input defaultValue="Ko tieu de" />
+                    <input defaultValue="Mẫu không tiêu đề" />
                 </NameInput>
 
                 <Right>
@@ -364,9 +364,12 @@ const NameInput = styled.div`
             width: 140px;
         }
 
+        border-radius: 0px 0px 4px 4px;
+        border-bottom: 0px solid var(--icon-color);
+        transition: border-bottom 0.2s ease-in-out;
+
         &:focus {
-            border-radius: 0px 0px 4px 4px;
-            border-bottom: 3px solid var(--icon-color);
+            border-bottom-width: 3px;
         }
     }
 `;
