@@ -6,7 +6,6 @@ import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import { IconButton } from "@material-ui/core";
 import uuid from "react-uuid";
 import { useHistory } from "react-router-dom";
-
 import FormRecent from "./FormRecent";
 
 function HomeBody(props) {

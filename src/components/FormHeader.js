@@ -5,8 +5,16 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
 import { IconButton } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 function FormHeader(props) {
+    const history = useHistory();
+
+    var signOut = () => {
+        props.signOut();
+        history.push("/");
+    };
+
     return (
         <Container>
             <Content>
@@ -53,7 +61,7 @@ function FormHeader(props) {
                             )}
                         </User>
 
-                        <DropDown onClick={() => props.signOut()}>
+                        <DropDown onClick={signOut}>
                             <span>Sign out</span>
                         </DropDown>
                     </SignOut>
