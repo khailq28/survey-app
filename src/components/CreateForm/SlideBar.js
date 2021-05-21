@@ -73,7 +73,7 @@ const Slide = styled.div`
     top: 0;
     bottom: 0;
     right: 0;
-    background-color: white;
+    background-color: #e6f7ff;
     width: 300px;
     z-index: 10;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);

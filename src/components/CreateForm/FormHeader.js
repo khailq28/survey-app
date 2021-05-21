@@ -10,6 +10,7 @@ import SlideBar from "./SlideBar";
 import { connect } from "react-redux";
 import { setStatusSlideBar, signOutAPI } from "../../actions";
 import PropTypes from "prop-types";
+import TabPanel from "./TabPanel";
 
 FormHeader.propTypes = {
     user: PropTypes.object,
@@ -106,6 +107,7 @@ function FormHeader(props) {
 
                 <SlideBar />
             </Content>
+            <TabPanel />
         </Container>
     );
 }
