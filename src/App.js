@@ -2,12 +2,12 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useEffect } from "react";
 import Login from "./components/Login";
-import HomeBody from "./components/HomeBody";
-import Header from "./components/Header";
+import HomeBody from "./components/Home/HomeBody";
+import Header from "./components/Home/Header";
 import { connect } from "react-redux";
 import { getUserAuth } from "./actions";
 import { Prompt } from "react-router-dom";
-import CreateNewForm from "./components/CreateNewForm";
+import CreateNewForm from "./components/CreateForm/CreateNewForm";
 
 function App(props) {
     useEffect(() => {

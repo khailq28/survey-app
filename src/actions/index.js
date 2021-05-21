@@ -1,5 +1,5 @@
 import { auth, provider } from "../firebase";
-import { SET_USER } from "./actionType";
+import { SET_USER, SET_STATUS_SLIDE_BAR } from "./actionType";
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -37,5 +37,12 @@ export function signOutAPI() {
             .catch((error) => {
                 console.log(error.message);
             });
+    };
+}
+
+export function setStatusSlideBar(oStatus) {
+    return {
+        type: SET_STATUS_SLIDE_BAR,
+        oStatus,
     };
 }

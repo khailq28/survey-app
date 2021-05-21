@@ -15,6 +15,7 @@ html {
 
 * {
     box-sizing: border-box;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
 }
 
 a {

@@ -6,6 +6,22 @@ import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
 import { IconButton } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import SlideBar from "./SlideBar";
+import { connect } from "react-redux";
+import { setStatusSlideBar, signOutAPI } from "../../actions";
+import PropTypes from "prop-types";
+
+FormHeader.propTypes = {
+    user: PropTypes.object,
+    signOut: PropTypes.func,
+    setStatusSlideBar: PropTypes.func,
+};
+
+FormHeader.defaultProps = {
+    user: null,
+    signOut: null,
+    setStatusSlideBar: null,
+};
 
 function FormHeader(props) {
     const history = useHistory();
@@ -31,22 +47,50 @@ function FormHeader(props) {
                 <Right>
                     <NavListWrap>
                         <NavList>
-                            <MenuButton>
+                            <MenuButton
+                                onClick={() =>
+                                    props.setStatusSlideBar({
+                                        status: true,
+                                        title: "layout",
+                                    })
+                                }
+                            >
                                 <ColorLensOutlinedIcon className="menuIcon" />
                             </MenuButton>
                         </NavList>
                         <NavList>
-                            <MenuButton>
+                            <MenuButton
+                                onClick={() =>
+                                    props.setStatusSlideBar({
+                                        status: true,
+                                        title: "eye",
+                                    })
+                                }
+                            >
                                 <VisibilityOutlinedIcon className="menuIcon" />
                             </MenuButton>
                         </NavList>
                         <NavList>
-                            <MenuButton>
+                            <MenuButton
+                                onClick={() =>
+                                    props.setStatusSlideBar({
+                                        status: true,
+                                        title: "send",
+                                    })
+                                }
+                            >
                                 <SendOutlinedIcon className="menuIcon" />
                             </MenuButton>
                         </NavList>
                         <NavList>
-                            <MenuButton>
+                            <MenuButton
+                                onClick={() =>
+                                    props.setStatusSlideBar({
+                                        status: true,
+                                        title: "setting",
+                                    })
+                                }
+                            >
                                 <SettingsOutlinedIcon className="menuIcon" />
                             </MenuButton>
                         </NavList>
@@ -66,6 +110,8 @@ function FormHeader(props) {
                         </DropDown>
                     </SignOut>
                 </Right>
+
+                <SlideBar />
             </Content>
         </Container>
     );
@@ -337,4 +383,22 @@ const MenuButton = styled(IconButton)`
     padding: 7px !important;
 `;
 
-export default FormHeader;
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        signOut: () => {
+            dispatch(signOutAPI());
+        },
+
+        setStatusSlideBar: (oStatus) => {
+            dispatch(setStatusSlideBar(oStatus));
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormHeader);
