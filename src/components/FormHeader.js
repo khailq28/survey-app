@@ -12,7 +12,7 @@ function FormHeader(props) {
 
     var signOut = () => {
         props.signOut();
-        history.push("/");
+        history.replace("/");
     };
 
     return (
