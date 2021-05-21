@@ -17,7 +17,7 @@ function FormHeader(props) {
                 </Logo>
 
                 <NameInput>
-                    <input value="Ko tieu de" />
+                    <input defaultValue="Ko tieu de" />
                 </NameInput>
 
                 <Right>
@@ -102,6 +102,11 @@ const Logo = styled.span`
 
     @media (min-width: 1129px) {
         padding-left: 20px;
+    }
+
+    &:after {
+        content: : "";
+
     }
 `;
 
@@ -313,7 +318,8 @@ const NameInput = styled.div`
         }
 
         &:focus {
-            border-bottom: 2px solid var(--icon-color);
+            border-radius: 0px 0px 4px 4px;
+            border-bottom: 3px solid var(--icon-color);
         }
     }
 `;
