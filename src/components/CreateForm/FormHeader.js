@@ -47,6 +47,11 @@ function FormHeader(props) {
                 <Right>
                     <NavListWrap>
                         <NavList>
+                            <MenuButton>
+                                <VisibilityOutlinedIcon className="menuIcon" />
+                            </MenuButton>
+                        </NavList>
+                        <NavList>
                             <MenuButton
                                 onClick={() =>
                                     props.setStatusSlideBar({
@@ -56,18 +61,6 @@ function FormHeader(props) {
                                 }
                             >
                                 <ColorLensOutlinedIcon className="menuIcon" />
-                            </MenuButton>
-                        </NavList>
-                        <NavList>
-                            <MenuButton
-                                onClick={() =>
-                                    props.setStatusSlideBar({
-                                        status: true,
-                                        title: "eye",
-                                    })
-                                }
-                            >
-                                <VisibilityOutlinedIcon className="menuIcon" />
                             </MenuButton>
                         </NavList>
                         <NavList>

@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import CloseIcon from "@material-ui/icons/Close";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
-import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
 import { IconButton } from "@material-ui/core";
@@ -23,13 +22,31 @@ SlideBar.defaultProps = {
 
 function SlideBar(props) {
     var { status, title } = props.slideBar;
+
+    var header =
+        title == "layout" ? (
+            <SlideLeft>
+                <ColorLensOutlinedIcon className="icon" />
+                &nbsp;<p> Tùy chọn giao diện</p>
+            </SlideLeft>
+        ) : title == "send" ? (
+            <SlideLeft>
+                <SendOutlinedIcon className="icon" />
+                &nbsp;<p>Gửi</p>
+            </SlideLeft>
+        ) : title == "setting" ? (
+            <SlideLeft>
+                <SettingsOutlinedIcon className="icon" />
+                &nbsp;<p> Cài đặt</p>
+            </SlideLeft>
+        ) : (
+            ""
+        );
+
     return (
         <Slide show={status}>
             <SlideHeader>
-                <SlideLeft>
-                    <ColorLensOutlinedIcon className="icon" />
-                    &nbsp;<p>Tùy chọn giao diện</p>
-                </SlideLeft>
+                {header}
                 <SlideRight>
                     <IconButton
                         onClick={() =>
@@ -45,6 +62,10 @@ function SlideBar(props) {
             </SlideHeader>
         </Slide>
     );
+
+    var showHeader = (title) => {
+        return title;
+    };
 }
 
 const Slide = styled.div`
