@@ -8,11 +8,12 @@ import { connect } from "react-redux";
 import { getUserAuth } from "./actions";
 import { Prompt } from "react-router-dom";
 import FormHeader from "./components/CreateForm/FormHeader";
+import TabHeader from "./components/CreateForm/TabHeader";
 
 function App(props) {
     useEffect(() => {
         props.getUserAuth();
-    }, []);
+    });
 
     return (
         <Router>
@@ -26,6 +27,7 @@ function App(props) {
                 </Route>
                 <Route path="/form/:id">
                     <FormHeader />
+                    <TabHeader />
                     <Prompt
                         when={true}
                         message={() => `Bạn chắc chắn muốn thoát?`}

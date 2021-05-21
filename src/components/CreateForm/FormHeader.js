@@ -10,7 +10,6 @@ import SlideBar from "./SlideBar";
 import { connect } from "react-redux";
 import { setStatusSlideBar, signOutAPI } from "../../actions";
 import PropTypes from "prop-types";
-import TabHeader from "./TabHeader";
 
 FormHeader.propTypes = {
     user: PropTypes.object,
@@ -107,7 +106,6 @@ function FormHeader(props) {
 
                 <SlideBar />
             </Content>
-            <TabHeader />
         </Container>
     );
 }
@@ -135,7 +133,7 @@ const Content = styled.div`
     min-height: 100%;
     max-width: 100%;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.2); */
 `;
 
 const Logo = styled.span`

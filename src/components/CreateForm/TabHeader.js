@@ -42,7 +42,7 @@ function TabHeader(props) {
         setValue(newValue);
     };
     return (
-        <div>
+        <Container>
             <CustomPaper>
                 <CustomTabs
                     value={value}
@@ -51,8 +51,8 @@ function TabHeader(props) {
                     textColor="primary"
                     centered
                 >
-                    <CustomTab label="Câu hỏi" />
-                    <CustomTab label="Câu trả lời" />
+                    <CustomTab label="Câu hỏi" {...a11yProps(0)} />
+                    <CustomTab label="Câu trả lời" {...a11yProps(1)} />
                 </CustomTabs>
             </CustomPaper>
             <TabPanel value={value} index={0}>
@@ -61,21 +61,31 @@ function TabHeader(props) {
             <TabPanel value={value} index={1}>
                 tab2
             </TabPanel>
-        </div>
+        </Container>
     );
 }
 
+const Container = styled.div`
+    margin-top: 50px;
+`;
+
 const CustomPaper = styled(Paper)`
     flex-grow: 1 !important;
+    position: fixed !important;
+    width: 100%;
 `;
 const CustomTabs = styled(Tabs)`
-    height: 10 !important;
+    height: 5 !important;
+    .PrivateTabIndicator-root-1 {
+        height: 3px;
+        border-radius: 4px 4px 0 0;
+    }
 `;
 const CustomTab = styled(Tab)`
     font-size: 12 !important;
     color: "#5f6368" !important;
     text-transform: capitalize !important;
-    height: 10 !important;
+    height: 5 !important;
     font-weight: 600 !important;
 `;
 

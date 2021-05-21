@@ -24,17 +24,17 @@ function SlideBar(props) {
     var { status, title } = props.slideBar;
 
     var header =
-        title == "layout" ? (
+        title === "layout" ? (
             <SlideLeft>
                 <ColorLensOutlinedIcon className="icon" />
                 &nbsp;<p> Tùy chọn giao diện</p>
             </SlideLeft>
-        ) : title == "send" ? (
+        ) : title === "send" ? (
             <SlideLeft>
                 <SendOutlinedIcon className="icon" />
                 &nbsp;<p>Gửi</p>
             </SlideLeft>
-        ) : title == "setting" ? (
+        ) : title === "setting" ? (
             <SlideLeft>
                 <SettingsOutlinedIcon className="icon" />
                 &nbsp;<p> Cài đặt</p>
@@ -62,10 +62,6 @@ function SlideBar(props) {
             </SlideHeader>
         </Slide>
     );
-
-    var showHeader = (title) => {
-        return title;
-    };
 }
 
 const Slide = styled.div`
