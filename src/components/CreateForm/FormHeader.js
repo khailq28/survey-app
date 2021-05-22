@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
@@ -14,6 +14,7 @@ import {
     setTitleForm,
     changeTitle,
 } from "../../actions";
+// import { INITIAL_STATE, surveyReducer } from "../../reducers/surveyReducer";
 import PropTypes from "prop-types";
 
 FormHeader.propTypes = {
@@ -38,7 +39,6 @@ FormHeader.defaultProps = {
 
 function FormHeader(props) {
     const history = useHistory();
-    const [title, setTitle] = useState("Mẫu không tiêu đề");
 
     var signOut = () => {
         props.signOut();
@@ -48,22 +48,8 @@ function FormHeader(props) {
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
-        setTitle(value);
+        props.setTitleForm(value);
     };
-
-    useEffect(() => {
-        setTitle(props.title);
-    }, []);
-
-    useEffect(() => {
-        props.setTitleForm(title);
-        props.changeTitle(true);
-    }, [title]);
-
-    useEffect(() => {
-        setTitle(props.title);
-        props.changeTitle(false);
-    }, [props.statusChangeTitle.status]);
 
     return (
         <Container>
@@ -76,7 +62,7 @@ function FormHeader(props) {
 
                 <NameInput>
                     <input
-                        value={title}
+                        value={props.title}
                         onFocus={(e) => e.target.select()}
                         onChange={handleChangeTitle}
                     />

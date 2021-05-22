@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -47,50 +47,25 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function FormTitle(props) {
-    const [title, setTitle] = useState("Mẫu không tiêu đề");
-    const [description, setDescription] = useState("");
-
     // handle change Title
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
-        setTitle(value);
+        props.setTitleForm(value);
     };
-
-    useEffect(() => {
-        setTitle(props.title);
-    }, []);
-
-    useEffect(() => {
-        props.setTitleForm(title);
-        props.changeTitle(true);
-    }, [title]);
-
-    useEffect(() => {
-        setTitle(props.title);
-        props.changeTitle(false);
-    }, [props.statusChangeTitle.status]);
 
     // handle change description
     var handleChangeDesc = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
-        setDescription(value);
+        props.setDescription(value);
     };
-
-    useEffect(() => {
-        setDescription(props.description);
-    }, []);
-
-    useEffect(() => {
-        props.setDescription(description);
-    }, [description]);
 
     return (
         <Title>
             <QuestionFormName
                 type="'text"
-                value={title}
+                value={props.title}
                 onFocus={(e) => e.target.select()}
                 onChange={handleChangeTitle}
                 // placeholder={documentName}
@@ -102,7 +77,7 @@ function FormTitle(props) {
             <QuestionFormDesc
                 type="text"
                 placeholder="Mô tả biểu mẫu"
-                value={description}
+                value={props.description}
                 onChange={handleChangeDesc}
                 // placeholder={documentDescription}
                 // value={documentDescription}
