@@ -41,7 +41,10 @@ function FormHeader(props) {
                 </Logo>
 
                 <NameInput>
-                    <input defaultValue="Mẫu không tiêu đề" />
+                    <input 
+                        defaultValue="Mẫu không tiêu đề" 
+                        onFocus={e => e.target.select()}
+                    />
                 </NameInput>
 
                 <Right>
