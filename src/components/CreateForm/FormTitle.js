@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 function FormTitle(props) {
     return (
-        <Title className="question_form_top">
+        <Title>
             <QuestionFormName
                 type="text"
                 defaultValue="Mẫu không tiêu đề"
@@ -28,11 +28,19 @@ function FormTitle(props) {
 }
 
 const Title = styled.div`
-    background-color: white;
     border-top: 8px solid var(--basic-color);
+    background-color: white;
     border-radius: 8px;
     padding: 25px 20px;
     text-transform: capitalize;
+    width: 750px;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    height: 100%;
+    margin-bottom: 15px;
+
+    @media (max-width: 768px) {
+        width: 80%;
+    }
 `;
 
 const QuestionFormName = styled.input`
