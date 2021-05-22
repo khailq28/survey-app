@@ -22,7 +22,7 @@ var INITIAL_STATE = {
 const surveyReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case actionType.SET_ID_FORM:
-            console.log(action);
+            state.id = action.id;
             return { ...state };
         case actionType.SET_TITLE_FORM:
             state.title = action.title;

@@ -7,12 +7,36 @@ import { IconButton } from "@material-ui/core";
 import uuid from "react-uuid";
 import { useHistory } from "react-router-dom";
 import FormRecent from "./FormRecent";
+import { connect } from "react-redux";
+import { setIdForm } from "../../actions";
+import PropTypes from "prop-types";
+
+HomeBody.propTypes = {
+    setIdForm: PropTypes.func,
+};
+
+HomeBody.defaultProps = {
+    setIdForm: null,
+};
+
+const mapStateToProps = (state) => {
+    return {};
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        setIdForm: (id) => {
+            dispatch(setIdForm(id));
+        },
+    };
+};
 
 function HomeBody(props) {
     const history = useHistory();
 
     const CreateForm = () => {
         let id = uuid();
+        props.setIdForm(id);
 
         history.push("/form/" + id);
     };
@@ -156,4 +180,4 @@ const SortByButton = styled(SortByAlphaIcon)`
     color: black;
 `;
 
-export default HomeBody;
+export default connect(mapStateToProps, mapDispatchToProps)(HomeBody);
