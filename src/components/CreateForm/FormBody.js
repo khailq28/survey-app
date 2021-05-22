@@ -12,7 +12,6 @@ FormBody.defaultProps = {
 };
 
 function FormBody(props) {
-    console.log(props.questions);
     return <Form>adsfds</Form>;
 }
 

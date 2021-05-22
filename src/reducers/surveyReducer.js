@@ -13,10 +13,10 @@ var INITIAL_STATE = {
                 { optionText: "b" },
                 { optionText: "c" },
             ],
-            open: true,
-            required: false,
         },
     ],
+    open: true,
+    required: false,
 };
 
 const surveyReducer = (state = INITIAL_STATE, action) => {
@@ -26,6 +26,9 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
         case actionType.SET_TITLE_FORM:
             state.title = action.title;
+            return { ...state };
+        case actionType.SET_DESCRIPTION:
+            state.description = action.description;
             return { ...state };
         default:
             return { ...state };

@@ -67,3 +67,10 @@ export function changeTitle(status) {
         status,
     };
 }
+
+export function setDescription(description) {
+    return {
+        type: actionType.SET_DESCRIPTION,
+        description,
+    };
+}
