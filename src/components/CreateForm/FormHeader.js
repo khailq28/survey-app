@@ -8,12 +8,7 @@ import { IconButton } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import SlideBar from "./SlideBar";
 import { connect } from "react-redux";
-import {
-    setStatusSlideBar,
-    signOutAPI,
-    setTitleForm,
-    changeTitle,
-} from "../../actions";
+import { setStatusSlideBar, signOutAPI, setTitleForm } from "../../actions";
 // import { INITIAL_STATE, surveyReducer } from "../../reducers/surveyReducer";
 import PropTypes from "prop-types";
 
@@ -23,8 +18,6 @@ FormHeader.propTypes = {
     setStatusSlideBar: PropTypes.func,
     title: PropTypes.string,
     setTitleForm: PropTypes.func,
-    changeTitle: PropTypes.func,
-    statusChangeTitle: PropTypes.object,
 };
 
 FormHeader.defaultProps = {
@@ -33,8 +26,6 @@ FormHeader.defaultProps = {
     setStatusSlideBar: null,
     title: "Mẫu không tiêu đề",
     setTitleForm: null,
-    changeTitle: null,
-    statusChangeTitle: false,
 };
 
 function FormHeader(props) {
@@ -407,7 +398,6 @@ const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
         title: state.survey.title,
-        statusChangeTitle: state.statusChangeTitle,
     };
 };
 
@@ -423,10 +413,6 @@ const mapDispatchToProps = (dispatch, props) => {
 
         setTitleForm: (title) => {
             dispatch(setTitleForm(title));
-        },
-
-        changeTitle: (status) => {
-            dispatch(changeTitle(status));
         },
     };
 };

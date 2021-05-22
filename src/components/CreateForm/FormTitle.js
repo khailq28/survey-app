@@ -2,13 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { setTitleForm, changeTitle, setDescription } from "../../actions";
+import { setTitleForm, setDescription } from "../../actions";
 
 FormTitle.propTypes = {
     title: PropTypes.string,
     setTitleForm: PropTypes.func,
-    changeTitle: PropTypes.func,
-    statusChangeTitle: PropTypes.object,
     setDescription: PropTypes.func,
     description: PropTypes.string,
 };
@@ -16,8 +14,6 @@ FormTitle.propTypes = {
 FormTitle.defaultProps = {
     title: "Mẫu không tiêu đề",
     setTitleForm: null,
-    changeTitle: null,
-    statusChangeTitle: false,
     setDescription: null,
     description: "",
 };
@@ -26,7 +22,6 @@ const mapStateToProps = (state) => {
     return {
         title: state.survey.title,
         description: state.survey.description,
-        statusChangeTitle: state.statusChangeTitle,
     };
 };
 
@@ -34,10 +29,6 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         setTitleForm: (title) => {
             dispatch(setTitleForm(title));
-        },
-
-        changeTitle: (status) => {
-            dispatch(changeTitle(status));
         },
 
         setDescription: (description) => {
@@ -130,7 +121,7 @@ const QuestionFormDesc = styled.input`
     box-sizing: border-box;
     margin-top: 10px;
     font-family: "Google Sans", Roboto, Arial, sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 40px;
 

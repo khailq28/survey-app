@@ -61,13 +61,6 @@ export function setTitleForm(title) {
     };
 }
 
-export function changeTitle(status) {
-    return {
-        type: actionType.CHANGE_TITLE,
-        status,
-    };
-}
-
 export function setDescription(description) {
     return {
         type: actionType.SET_DESCRIPTION,
