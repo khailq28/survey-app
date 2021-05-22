@@ -14,10 +14,21 @@ var INITIAL_STATE = {
                 { optionText: "b" },
                 { optionText: "c" },
             ],
+            open: true,
+            required: false,
+        },
+        {
+            questionText: "asdffdsa?",
+            questionType: "radio",
+            options: [
+                { optionText: "a" },
+                { optionText: "b" },
+                { optionText: "c" },
+            ],
+            open: false,
+            required: false,
         },
     ],
-    open: true,
-    required: false,
 };
 
 const surveyReducer = (state = INITIAL_STATE, action) => {

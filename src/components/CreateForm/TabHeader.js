@@ -73,6 +73,7 @@ const CustomPaper = styled(Paper)`
     flex-grow: 1 !important;
     position: fixed !important;
     width: 100%;
+    z-index: 10;
 `;
 const CustomTabs = styled(Tabs)`
     height: 5 !important;

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import Question from "./Question";
 
 FormBody.propTypes = {
     questions: PropTypes.array,
@@ -12,7 +13,15 @@ FormBody.defaultProps = {
 };
 
 function FormBody(props) {
-    return <Form>adsfds</Form>;
+    var questionUI = props.questions.map((question, index) => {
+        return (
+            <Form key={index}>
+                <Question question={question} index={index} />
+            </Form>
+        );
+    });
+
+    return <div>{questionUI}</div>;
 }
 
 const Form = styled.div`
