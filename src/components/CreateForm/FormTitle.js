@@ -7,6 +7,7 @@ function FormTitle(props) {
             <QuestionFormName
                 type="text"
                 defaultValue="Mẫu không tiêu đề"
+                onFocus={(e) => e.target.select()}
                 // placeholder={documentName}
                 // value={documentName}
                 // onChange={(e) => {
@@ -28,7 +29,7 @@ function FormTitle(props) {
 
 const Title = styled.div`
     background-color: white;
-    border-top: 8px solid rgb(103, 58, 183);
+    border-top: 8px solid var(--basic-color);
     border-radius: 8px;
     padding: 25px 20px;
     text-transform: capitalize;
@@ -47,7 +48,7 @@ const QuestionFormName = styled.input`
     border-bottom: 1px solid #f4f4f9;
     color: black;
     border-radius: 0px 0px 4px 4px;
-    border-bottom: 0px solid rgb(103, 58, 183);
+    border-bottom: 0px solid var(--basic-color);
     transition: border-bottom 0.2s ease-in-out;
 
     &:focus {
@@ -69,7 +70,7 @@ const QuestionFormDesc = styled.input`
     border-bottom: 1px solid #f4f4f9;
     color: black;
     border-radius: 0px 0px 4px 4px;
-    border-bottom: 0px solid rgb(103, 58, 183);
+    border-bottom: 0px solid var(--basic-color);
     transition: border-bottom 0.2s ease-in-out;
 
     &:focus {

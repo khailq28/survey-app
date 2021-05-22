@@ -31,7 +31,7 @@ const Questiontitle = styled.div`
     box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
 
     @media (max-width: 768px) {
-        width: 100%;
+        width: 80%;
     }
 `;
 
