@@ -1,8 +1,8 @@
 import { auth, provider } from "../firebase";
-import { SET_USER, SET_STATUS_SLIDE_BAR } from "./actionType";
+import * as actionType from "./actionType";
 
 export const setUser = (payload) => ({
-    type: SET_USER,
+    type: actionType.SET_USER,
     user: payload,
 });
 
@@ -42,7 +42,28 @@ export function signOutAPI() {
 
 export function setStatusSlideBar(oStatus) {
     return {
-        type: SET_STATUS_SLIDE_BAR,
+        type: actionType.SET_STATUS_SLIDE_BAR,
         oStatus,
+    };
+}
+
+export function setIdForm(id) {
+    return {
+        type: actionType.SET_ID_FORM,
+        id,
+    };
+}
+
+export function setTitleForm(title) {
+    return {
+        type: actionType.SET_TITLE_FORM,
+        title,
+    };
+}
+
+export function changeTitle(status) {
+    return {
+        type: actionType.CHANGE_TITLE,
+        status,
     };
 }

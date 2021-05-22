@@ -1,6 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
+FormBody.propTypes = {
+    questions: PropTypes.array,
+};
+
+FormBody.defaultProps = {
+    questions: null,
+};
 
 function FormBody(props) {
     console.log(props.questions);

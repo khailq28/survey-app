@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
@@ -8,28 +8,62 @@ import { IconButton } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import SlideBar from "./SlideBar";
 import { connect } from "react-redux";
-import { setStatusSlideBar, signOutAPI } from "../../actions";
+import {
+    setStatusSlideBar,
+    signOutAPI,
+    setTitleForm,
+    changeTitle,
+} from "../../actions";
 import PropTypes from "prop-types";
 
 FormHeader.propTypes = {
     user: PropTypes.object,
     signOut: PropTypes.func,
     setStatusSlideBar: PropTypes.func,
+    title: PropTypes.string,
+    setTitleForm: PropTypes.func,
+    changeTitle: PropTypes.func,
+    statusChangeTitle: PropTypes.object,
 };
 
 FormHeader.defaultProps = {
     user: null,
     signOut: null,
     setStatusSlideBar: null,
+    title: "Mẫu không tiêu đề",
+    setTitleForm: null,
+    changeTitle: null,
+    statusChangeTitle: false,
 };
 
 function FormHeader(props) {
     const history = useHistory();
+    const [title, setTitle] = useState("Mẫu không tiêu đề");
 
     var signOut = () => {
         props.signOut();
         history.replace("/");
     };
+
+    var handleChangeTitle = (e) => {
+        var target = e.target;
+        var value = target.type === "checked" ? target.checked : target.value;
+        setTitle(value);
+    };
+
+    useEffect(() => {
+        setTitle(props.title);
+    }, []);
+
+    useEffect(() => {
+        props.setTitleForm(title);
+        props.changeTitle(true);
+    }, [title]);
+
+    useEffect(() => {
+        setTitle(props.title);
+        props.changeTitle(false);
+    }, [props.statusChangeTitle.status]);
 
     return (
         <Container>
@@ -41,9 +75,10 @@ function FormHeader(props) {
                 </Logo>
 
                 <NameInput>
-                    <input 
-                        defaultValue="Mẫu không tiêu đề" 
-                        onFocus={e => e.target.select()}
+                    <input
+                        value={title}
+                        onFocus={(e) => e.target.select()}
+                        onChange={handleChangeTitle}
                     />
                 </NameInput>
 
@@ -385,6 +420,8 @@ const MenuButton = styled(IconButton)`
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
+        title: state.survey.title,
+        statusChangeTitle: state.statusChangeTitle,
     };
 };
 
@@ -396,6 +433,14 @@ const mapDispatchToProps = (dispatch, props) => {
 
         setStatusSlideBar: (oStatus) => {
             dispatch(setStatusSlideBar(oStatus));
+        },
+
+        setTitleForm: (title) => {
+            dispatch(setTitleForm(title));
+        },
+
+        changeTitle: (status) => {
+            dispatch(changeTitle(status));
         },
     };
 };
