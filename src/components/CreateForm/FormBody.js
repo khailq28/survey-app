@@ -27,7 +27,7 @@ function FormBody(props) {
 const Form = styled.div`
     background-color: white;
     border-radius: 8px;
-    padding: 25px 20px;
+    padding: 10px;
     text-transform: capitalize;
     width: 750px;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
@@ -36,6 +36,10 @@ const Form = styled.div`
 
     @media (max-width: 768px) {
         width: 80%;
+    }
+
+    .MuiPaper-elevation1 {
+        box-shadow: none !important;
     }
 `;
 

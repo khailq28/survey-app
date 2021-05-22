@@ -34,6 +34,7 @@ function Question(props) {
             <CustomAccordionSummary
                 aria-controls="panel1a-content"
                 elevation={1}
+                status={!question.open ? false : true}
             >
                 {!question.open ? (
                     <SaveQuestion>
@@ -80,6 +81,17 @@ function Question(props) {
 
 const CustomAccordionSummary = styled(AccordionSummary)`
     width: 100%;
+    ${(props) =>
+        props.status
+            ? `
+        min-height: 0 !important;
+        max-height: 0 !important;
+
+        & > .Mui-expanded {
+            min-height: 0 !important;
+        }
+    `
+            : ""};
 `;
 
 const SaveQuestion = styled.div`
