@@ -2,6 +2,7 @@ import * as actionType from "../actions/actionType";
 
 var INITIAL_STATE = {
     id: "",
+    author: "",
     title: "Mẫu Không tiêu đề",
     description: "",
     questions: [
@@ -29,6 +30,9 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
         case actionType.SET_DESCRIPTION:
             state.description = action.description;
+            return { ...state };
+        case actionType.SET_AUTHOR:
+            state.author = action.author;
             return { ...state };
         default:
             return { ...state };

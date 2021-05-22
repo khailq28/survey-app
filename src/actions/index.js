@@ -67,3 +67,10 @@ export function setDescription(description) {
         description,
     };
 }
+
+export function setAuthor(author) {
+    return {
+        type: actionType.SET_AUTHOR,
+        author,
+    };
+}

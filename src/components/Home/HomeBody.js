@@ -8,25 +8,35 @@ import uuid from "react-uuid";
 import { useHistory } from "react-router-dom";
 import FormRecent from "./FormRecent";
 import { connect } from "react-redux";
-import { setIdForm } from "../../actions";
+import { setIdForm, setAuthor } from "../../actions";
 import PropTypes from "prop-types";
 
 HomeBody.propTypes = {
     setIdForm: PropTypes.func,
+    setAuthor: PropTypes.func,
+    user: PropTypes.object,
 };
 
 HomeBody.defaultProps = {
     setIdForm: null,
+    setAuthor: null,
+    userEmail: null,
 };
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        user: state.userState.user,
+    };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
         setIdForm: (id) => {
             dispatch(setIdForm(id));
+        },
+
+        setAuthor: (author) => {
+            dispatch(setAuthor(author));
         },
     };
 };
@@ -37,6 +47,7 @@ function HomeBody(props) {
     const CreateForm = () => {
         let id = uuid();
         props.setIdForm(id);
+        props.setAuthor(props.user.email);
 
         history.push("/form/" + id);
     };
