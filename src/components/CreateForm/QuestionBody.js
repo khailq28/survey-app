@@ -62,6 +62,7 @@ const Body = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
+    margin-left: 15px;
 
     .text {
         margin-right: 15px;
@@ -72,7 +73,7 @@ const OptionInput = styled.input`
     outline: none;
     border: none;
     height: 40px;
-    width: 450px;
+    width: 570px;
     font-family: Roboto, Arial, sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -96,7 +97,7 @@ const OptionInput = styled.input`
     }
 
     @media only screen and (min-width: 768px) and (min-height: 1366px) {
-        width: 100;
+        width: 80px;
     }
 `;
 

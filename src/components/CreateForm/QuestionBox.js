@@ -11,6 +11,9 @@ import ScheduleIcon from "@material-ui/icons/Schedule";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import CropOriginalIcon from "@material-ui/icons/CropOriginal";
 import styled from "styled-components";
+import SubjectIcon from "@material-ui/icons/Subject";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";
 import { IconButton } from "@material-ui/core";
 // import PropTypes from 'prop-types';
 
@@ -35,17 +38,29 @@ function QuestionBox(props) {
                         <CustomCropOriginalIcon />
                     </CustomIconButton>
 
-                    <CustomSelect>
-                        <CustomMenuItem value="radio">
+                    <CustomSelect defaultValue="short">
+                        <CustomMenuItem value="short">
                             <ShortTextIcon className="ele-icon" />
                             &nbsp;<span>Trả lời ngắn</span>
                         </CustomMenuItem>
-                        <CustomMenuItem id="checkbox">
+                        <CustomMenuItem value="param">
+                            <SubjectIcon className="ele-icon" />
+                            &nbsp;<span>Đoạn</span>
+                        </CustomMenuItem>
+                        <CustomMenuItem value="radio">
                             <RadioButtonCheckedIcon
                                 checked
                                 className="ele-icon"
                             />
                             &nbsp;<span>Trắc nghiệm</span>
+                        </CustomMenuItem>
+                        <CustomMenuItem value="check">
+                            <CheckBoxIcon checked className="ele-icon" />
+                            &nbsp;<span>Hộp kiểm</span>
+                        </CustomMenuItem>
+                        <CustomMenuItem value="30">
+                            <ArrowDropDownCircleIcon className="ele-icon" />
+                            &nbsp;<span>Menu thả xuống</span>
                         </CustomMenuItem>
                         <CustomMenuItem value="40">
                             <BackupIcon className="ele-icon" />
@@ -57,7 +72,7 @@ function QuestionBox(props) {
                         </CustomMenuItem>
                         <CustomMenuItem value="60">
                             <AppsIcon className="ele-icon" />
-                            &nbsp;<span>Hộp kiểm nghiệm</span>
+                            &nbsp;<span>Lưới hộp kiểm</span>
                         </CustomMenuItem>
                         <CustomMenuItem
                             value="date"
@@ -69,7 +84,7 @@ function QuestionBox(props) {
                             &nbsp;<span>Ngày</span>
                         </CustomMenuItem>
                         <CustomMenuItem
-                            value="date"
+                            value="time"
                             // onClick={(e) => {
                             //     setType(e.target.id);
                             // }}
@@ -148,9 +163,22 @@ const CustomSelect = styled(Select)`
     border: 1.5px solid #f4f4f9;
     border-radius: 3px;
     background: transparent;
+    position: relative;
+
+    .ele-icon {
+        color: var(--icon-color);
+        position: absolute;
+        top: 5px;
+    }
+
+    span {
+        margin-left: 22px;
+        color: var(--icon-color);
+    }
 `;
 
 const CustomMenuItem = styled(MenuItem)`
+    height: 50px;
     .ele-icon {
         color: var(--icon-color);
     }

@@ -10,6 +10,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import PropTypes from "prop-types";
 import QuestionBox from "./QuestionBox";
 import QuestionBody from "./QuestionBody";
+import QuestionFooter from "./QuestionFooter";
 
 Question.propTypes = {
     question: PropTypes.object,
@@ -75,6 +76,8 @@ function Question(props) {
             {question.options.map((option, j) => (
                 <QuestionBody key={j} question={question} option={option} />
             ))}
+
+            <QuestionFooter />
         </Accordion>
     );
 }
