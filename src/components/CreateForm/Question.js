@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import QuestionBox from "./QuestionBox";
 import QuestionBody from "./QuestionBody";
 import QuestionFooter from "./QuestionFooter";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 Question.propTypes = {
     question: PropTypes.object,
@@ -35,7 +36,7 @@ function Question(props) {
             <CustomAccordionSummary
                 aria-controls="panel1a-content"
                 elevation={1}
-                status={!question.open ? false : true}
+                status={!question.open ? "false" : "true"}
             >
                 {!question.open ? (
                     <SaveQuestion>
@@ -71,6 +72,7 @@ function Question(props) {
                 )}
             </CustomAccordionSummary>
 
+            <CustomAddCircleOutlineIcon />
             <QuestionBox />
 
             {question.options.map((option, j) => (
@@ -85,7 +87,7 @@ function Question(props) {
 const CustomAccordionSummary = styled(AccordionSummary)`
     width: 100%;
     ${(props) =>
-        props.status
+        props.status === "true"
             ? `
         min-height: 0 !important;
         max-height: 0 !important;
@@ -131,6 +133,13 @@ const CustomTypographyOption = styled(Typography)`
     line-height: 20px;
     color: #202124;
     font-family: Roboto, Arial, sans-serif;
+`;
+
+const CustomAddCircleOutlineIcon = styled(AddCircleOutlineIcon)`
+    color: var(--icon-color);
+    font-size: 30px;
+    float: right;
+    cursor: pointer;
 `;
 
 export default Question;

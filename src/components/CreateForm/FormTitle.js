@@ -92,7 +92,7 @@ const Title = styled.div`
     margin-bottom: 15px;
 
     @media (max-width: 768px) {
-        width: 80%;
+        width: 100%;
     }
 `;
 

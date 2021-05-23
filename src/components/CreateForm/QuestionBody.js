@@ -21,7 +21,7 @@ function QuestionBody(props) {
     return (
         <Body>
             {/* <Checkbox  color="primary" inputProps={{ 'aria-label': 'secondary checkbox' }} disabled/> */}
-            {question.questionType != "text" ? (
+            {question.questionType !== "text" ? (
                 <input className="text" type={question.questionType} />
             ) : (
                 <ShortTextIcon className="text" />
@@ -30,7 +30,8 @@ function QuestionBody(props) {
                 <OptionInput
                     type="text"
                     placeholder="option"
-                    value={option.optionText}
+                    defaultValue={option.optionText}
+                    // value={option.optionText}
                     // onChange={(e) => {
                     //     handleOptionValue(e.target.value, i, j);
                     // }}
@@ -73,7 +74,7 @@ const OptionInput = styled.input`
     outline: none;
     border: none;
     height: 40px;
-    width: 570px;
+    width: 550px;
     font-family: Roboto, Arial, sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -89,15 +90,11 @@ const OptionInput = styled.input`
     }
 
     @media only screen and (min-width: 480px) and (max-width: 768px) {
-        width: 200px;
+        width: 270px;
     }
 
     @media only screen and (max-width: 479px) {
-        width: 100px;
-    }
-
-    @media only screen and (min-width: 768px) and (min-height: 1366px) {
-        width: 80px;
+        width: 170px;
     }
 `;
 

@@ -6,6 +6,7 @@ import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import styled from "styled-components";
+import Switch from "@material-ui/core/Switch";
 // import PropTypes from 'prop-types';
 
 // QuestionFooter.propTypes = {
@@ -44,16 +45,16 @@ function QuestionFooter(props) {
                 >
                     <DeleteOutlineOutlinedIcon className="icon" />
                 </CustomIconButton>
-                <span>Required</span>
+                <span id="text">Required</span>
                 &nbsp;
-                {/* <Switch
+                <Switch
                     name="checkedA"
                     color="primary"
-                    checked={ques.required}
-                    onClick={() => {
-                        requiredQuestion(i);
-                    }}
-                /> */}
+                    // checked={ques.required}
+                    // onClick={() => {
+                    //     requiredQuestion(i);
+                    // }}
+                />
                 <CustomIconButton>
                     <MoreVertIcon />
                 </CustomIconButton>
@@ -94,9 +95,10 @@ const Right = styled.div`
     justify-content: flex-end;
     align-items: center;
 
-    & > span {
+    #text {
         color: var(--icon-color);
         font-size: 13px;
+        font-weight: 600;
     }
 `;
 
