@@ -83,6 +83,11 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
                 state.questions[action.i].options.splice(action.j, 1);
             }
             return { ...state };
+
+        case actionType.CHANGE_REQUIRED:
+            state.questions[action.i].required =
+                !state.questions[action.i].required;
+            return { ...state };
         default:
             return { ...state };
     }

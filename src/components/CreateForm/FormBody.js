@@ -112,7 +112,7 @@ function FormBody(props) {
 
                     <QuestionBody index={index} />
 
-                    <QuestionFooter />
+                    <QuestionFooter index={index} />
                 </Accordion>
             </Form>
         );

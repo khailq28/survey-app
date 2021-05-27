@@ -1,33 +1,53 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import AssignmentTurnedInOutlinedIcon from "@material-ui/icons/AssignmentTurnedInOutlined";
+import React, { useState } from "react";
 import { IconButton } from "@material-ui/core";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import styled from "styled-components";
 import Switch from "@material-ui/core/Switch";
-// import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { changeReruied } from "../../actions";
 
-// QuestionFooter.propTypes = {
+QuestionFooter.propTypes = {
+    questions: PropTypes.array,
+    changeReruied: PropTypes.func,
+};
 
-// };
+QuestionFooter.defaultProps = {
+    questions: null,
+    changeReruied: null,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        questions: state.survey.questions,
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        // i: vi tri cau hoi
+        changeReruied: (i) => {
+            dispatch(changeReruied(i));
+        },
+    };
+};
 
 function QuestionFooter(props) {
+    let { questions, index } = props;
+    let question = questions[index];
+
+    let [required, setRequired] = useState(question.required);
+
+    let handleSwitch = () => {
+        let updateRequired = !required;
+        setRequired(updateRequired);
+        props.changeReruied(index);
+    };
+
     return (
         <Footer>
-            <Left>
-                <CustomButton
-                    size="small"
-                    // onClick={() => {
-                    //     addAnswer(i);
-                    // }}
-                >
-                    <AssignmentTurnedInOutlinedIcon className="icon" />
-                    &nbsp;<span>Đáp án</span>
-                </CustomButton>
-            </Left>
-
             <Right>
                 <CustomIconButton
                     aria-label="Copy"
@@ -50,10 +70,8 @@ function QuestionFooter(props) {
                 <Switch
                     name="checkedA"
                     color="primary"
-                    // checked={ques.required}
-                    // onClick={() => {
-                    //     requiredQuestion(i);
-                    // }}
+                    checked={required}
+                    onClick={handleSwitch}
                 />
                 <CustomIconButton>
                     <MoreVertIcon />
@@ -65,35 +83,17 @@ function QuestionFooter(props) {
 
 const Footer = styled.div`
     display: flex;
-    justify-content: space-between;
-    border-top: 1px solid rgba(118, 118, 118, 0.3);
-`;
-
-const Left = styled.div`
-    margin-top: 12px;
-    margin-left: 10px;
-    display: flex;
     justify-content: flex-end;
-    align-items: center;
-`;
-
-const CustomButton = styled(Button)`
-    .icon {
-        color: var(--basic-color);
-        font-size: 25px;
-    }
-
-    span {
-        color: var(--basic-color);
-        font-weight: 600;
-    }
+    border-top: 1px solid rgba(118, 118, 118, 0.3);
 `;
 
 const Right = styled.div`
     margin-top: 12px;
     display: flex;
-    justify-content: flex-end;
+    /* float: right !important; */
     align-items: center;
+    justify-content: center;
+    right: 0;
 
     #text {
         color: var(--icon-color);
@@ -109,4 +109,4 @@ const CustomIconButton = styled(IconButton)`
     }
 `;
 
-export default QuestionFooter;
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionFooter);

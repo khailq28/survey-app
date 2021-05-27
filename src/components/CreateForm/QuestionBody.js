@@ -81,16 +81,16 @@ function QuestionBody(props) {
     let [questionText, setQuestionText] = useState(question.questionText);
     let [type, setType] = useState(question.questionType);
 
-    var handleChangeSelect = (e) => {
-        var target = e.target;
-        var value = target.type === "checked" ? target.checked : target.value;
+    let handleChangeSelect = (e) => {
+        let target = e.target;
+        let value = target.type === "checked" ? target.checked : target.value;
         props.changeTypeQuestion(value, index);
         setType(value);
     };
 
-    var handleQuestionValue = (e) => {
-        var target = e.target;
-        var value = target.type === "checked" ? target.checked : target.value;
+    let handleQuestionValue = (e) => {
+        let target = e.target;
+        let value = target.type === "checked" ? target.checked : target.value;
         setQuestionText(value);
         props.changeTitleQuestion(value, index);
     };

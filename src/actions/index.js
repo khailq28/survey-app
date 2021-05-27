@@ -121,3 +121,10 @@ export function removeOption(i, j) {
         j, //vi tri cua cau tra loi
     };
 }
+
+export function changeReruied(i) {
+    return {
+        type: actionType.CHANGE_REQUIRED,
+        i, //vi tri cua cau hoi
+    };
+}
