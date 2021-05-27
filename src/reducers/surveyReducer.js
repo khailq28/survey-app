@@ -13,7 +13,7 @@ var INITIAL_STATE = {
                 { optionText: "a" },
                 { optionText: "b" },
                 { optionText: "c" },
-                { other: "" },
+                { other: true },
             ],
             open: false,
             required: false,
@@ -25,7 +25,6 @@ var INITIAL_STATE = {
                 { optionText: "a" },
                 { optionText: "b" },
                 { optionText: "c" },
-                { other: "" },
             ],
             open: true,
             required: false,
@@ -38,27 +37,45 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
         case actionType.SET_ID_FORM:
             state.id = action.id;
             return { ...state };
+
         case actionType.SET_TITLE_FORM:
             state.title = action.title;
             return { ...state };
+
         case actionType.SET_DESCRIPTION:
             state.description = action.description;
             return { ...state };
+
         case actionType.SET_AUTHOR:
             state.author = action.author;
             return { ...state };
+
         case actionType.CHANGE_TYPE_QUESTION:
             state.questions[action.index].questionType = action.value;
             return { ...state };
+
         case actionType.CHANGE_TITLE_QUESTION:
             state.questions[action.index].questionText = action.value;
             return { ...state };
+
         case actionType.CHANGE_OPTION:
             state.questions[action.i].options[action.j].optionText =
                 action.value;
             return { ...state };
+
         case actionType.ADD_OPTION:
-            state.questions[action.index].options.push({ optionText: "" });
+            var length = state.questions[action.index].options.length;
+            if (state.questions[action.index].options[length - 1].other) {
+                state.questions[action.index].options.splice(length - 1, 0, {
+                    optionText: "",
+                });
+            } else {
+                state.questions[action.index].options.push({ optionText: "" });
+            }
+            return { ...state };
+
+        case actionType.ADD_OPTION_OTHER:
+            state.questions[action.index].options.push({ other: true });
             return { ...state };
         default:
             return { ...state };

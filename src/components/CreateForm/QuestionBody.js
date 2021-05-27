@@ -17,6 +17,7 @@ import {
     changeTypeQuestion,
     changeTitleQuestion,
     addOption,
+    addOptionOther,
 } from "../../actions";
 
 QuestionBody.propTypes = {
@@ -54,6 +55,10 @@ const mapDispatchToProps = (dispatch, props) => {
         addOption: (index) => {
             dispatch(addOption(index));
         },
+
+        addOptionOther: (index) => {
+            dispatch(addOptionOther(index));
+        },
     };
 };
 
@@ -61,7 +66,7 @@ function QuestionBody(props) {
     let { questions, index } = props;
     let question = questions[index];
 
-    let [option, setOption] = useState(question.options);
+    let [options, setOptions] = useState(question.options);
     let [questionText, setQuestionText] = useState(question.questionText);
     let [type, setType] = useState(question.questionType);
 
@@ -82,21 +87,35 @@ function QuestionBody(props) {
     let handleOptionValue = (e, j) => {
         let target = e.target;
         let value = target.type === "checked" ? target.checked : target.value;
-        let optionTemp = [...option];
+        let optionTemp = [...options];
         optionTemp[j].optionText = value;
 
-        setOption(optionTemp);
+        setOptions(optionTemp);
         props.changeOption(value, index, j);
     };
 
     let handleAddOption = () => {
-        let optionTemp = [...option];
-        optionTemp.push({ optionText: "" });
-        setOption(optionTemp);
+        let optionTemp = [...options];
+        let length = optionTemp.length;
+        if (optionTemp[length - 1].other) {
+            optionTemp.splice(length - 1, 0, {
+                optionText: "",
+            });
+        } else {
+            optionTemp.push({ optionText: "" });
+        }
+        setOptions(optionTemp);
         props.addOption(index);
     };
 
-    let questionUI = question.options.map((op, j) => {
+    let handleAddOther = () => {
+        let optionTemp = [...options];
+        optionTemp.push({ other: true });
+        setOptions(optionTemp);
+        props.addOptionOther(index);
+    };
+
+    let questionUI = question.options.map((option, j) => {
         return (
             <Body key={j}>
                 {/* <Checkbox  color="primary" inputProps={{ 'aria-label': 'secondary checkbox' }} disabled/> */}
@@ -109,31 +128,53 @@ function QuestionBody(props) {
                 ) : (
                     <ShortTextIcon className="text" />
                 )} */}
-                <input className="text" type={type} disabled />
-                <OptionInput
-                    type="text"
-                    placeholder="Lựa chọn"
-                    value={option[j].optionText}
-                    onChange={(e) => handleOptionValue(e, j)}
-                ></OptionInput>
+                {option.other ? (
+                    <div style={{ position: "relative" }}>
+                        <input className="text" type={type} disabled />
+                        <OptionInput
+                            type="text"
+                            placeholder="Khác..."
+                            disabled
+                        ></OptionInput>
+                        <CustomIconButton1
+                            aria-label="delete"
+                            style={{ position: "absolute", right: "-96px" }}
+                            // onClick={() => {
+                            //     removeOption(i, j);
+                            // }}
+                        >
+                            <CloseIcon className="icon-option" />
+                        </CustomIconButton1>
+                    </div>
+                ) : (
+                    <div>
+                        <input className="text" type={type} disabled />
+                        <OptionInput
+                            type="text"
+                            placeholder="Lựa chọn"
+                            value={option.optionText}
+                            onChange={(e) => handleOptionValue(e, j)}
+                        ></OptionInput>
 
-                <CustomIconButton1
-                    aria-label="image"
-                    // onClick={() => {
-                    //     removeOption(i, j);
-                    // }}
-                >
-                    <CropOriginalIcon className="icon-option" />
-                </CustomIconButton1>
+                        <CustomIconButton1
+                            aria-label="image"
+                            // onClick={() => {
+                            //     removeOption(i, j);
+                            // }}
+                        >
+                            <CropOriginalIcon className="icon-option" />
+                        </CustomIconButton1>
 
-                <CustomIconButton1
-                    aria-label="delete"
-                    // onClick={() => {
-                    //     removeOption(i, j);
-                    // }}
-                >
-                    <CloseIcon className="icon-option" />
-                </CustomIconButton1>
+                        <CustomIconButton1
+                            aria-label="delete"
+                            // onClick={() => {
+                            //     removeOption(i, j);
+                            // }}
+                        >
+                            <CloseIcon className="icon-option" />
+                        </CustomIconButton1>
+                    </div>
+                )}
             </Body>
         );
     });
@@ -174,13 +215,24 @@ function QuestionBody(props) {
             </Box>
 
             {questionUI}
+
             <Body>
                 <input className="text" type={type} disabled />
                 <CustomButtonAddOption onClick={handleAddOption}>
                     Thêm tùy chọn
                 </CustomButtonAddOption>
-                &nbsp;<span style={{ textTransform: "none" }}>hoặc</span>&nbsp;
-                <CustomButtonAddOther>Thêm "khác"</CustomButtonAddOther>
+                {!options[options.length - 1].other ? (
+                    <div>
+                        &nbsp;
+                        <span style={{ textTransform: "none" }}>hoặc</span>
+                        &nbsp;
+                        <CustomButtonAddOther onClick={handleAddOther}>
+                            Thêm "khác"
+                        </CustomButtonAddOther>
+                    </div>
+                ) : (
+                    ""
+                )}
             </Body>
         </div>
     );

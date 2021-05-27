@@ -44,7 +44,7 @@ function FormBody(props) {
 
                                 {question.options.map((op, j) => (
                                     <ListOption key={j}>
-                                        {question.options[j].optionText ? (
+                                        {question.options[j].other ? (
                                             <CustomFormControlLabel
                                                 disabled
                                                 control={
@@ -61,10 +61,9 @@ function FormBody(props) {
                                                 }
                                                 label={
                                                     <CustomTypographyOption>
-                                                        {
-                                                            question.options[j]
-                                                                .optionText
-                                                        }
+                                                        <span id="other">
+                                                            Mục khác
+                                                        </span>
                                                     </CustomTypographyOption>
                                                 }
                                             />
@@ -85,9 +84,10 @@ function FormBody(props) {
                                                 }
                                                 label={
                                                     <CustomTypographyOption>
-                                                        <span id="other">
-                                                            Mục khác
-                                                        </span>
+                                                        {
+                                                            question.options[j]
+                                                                .optionText
+                                                        }
                                                     </CustomTypographyOption>
                                                 }
                                             />

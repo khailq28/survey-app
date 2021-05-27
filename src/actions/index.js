@@ -106,3 +106,10 @@ export function addOption(index) {
         index, //vi tri cua cau hoi
     };
 }
+
+export function addOptionOther(index) {
+    return {
+        type: actionType.ADD_OPTION_OTHER,
+        index, //vi tri cua cau hoi
+    };
+}
