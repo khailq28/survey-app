@@ -219,6 +219,7 @@ const DropDown = styled.div`
     display: none;
     cursor: pointer;
     transform: 0.4s;
+    z-index: 5;
 
     &:after {
         content: "";
@@ -230,6 +231,7 @@ const DropDown = styled.div`
         left: 68px;
         top: -14px;
         transform: 0.4s;
+        z-index: 5;
     }
 
     @media (min-width: 1129px) {

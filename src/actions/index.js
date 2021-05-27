@@ -113,3 +113,11 @@ export function addOptionOther(index) {
         index, //vi tri cua cau hoi
     };
 }
+
+export function removeOption(i, j) {
+    return {
+        type: actionType.REMOVE_OPTION,
+        i, //vi tri cua cau hoi
+        j, //vi tri cua cau tra loi
+    };
+}

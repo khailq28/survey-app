@@ -77,6 +77,12 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
         case actionType.ADD_OPTION_OTHER:
             state.questions[action.index].options.push({ other: true });
             return { ...state };
+
+        case actionType.REMOVE_OPTION:
+            if (state.questions[action.i].options.length > 1) {
+                state.questions[action.i].options.splice(action.j, 1);
+            }
+            return { ...state };
         default:
             return { ...state };
     }

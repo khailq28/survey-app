@@ -18,6 +18,7 @@ import {
     changeTitleQuestion,
     addOption,
     addOptionOther,
+    removeOption,
 } from "../../actions";
 
 QuestionBody.propTypes = {
@@ -25,6 +26,9 @@ QuestionBody.propTypes = {
     changeOption: PropTypes.func,
     changeTypeQuestion: PropTypes.func,
     changeTitleQuestion: PropTypes.func,
+    addOption: PropTypes.func,
+    addOptionOther: PropTypes.func,
+    removeOption: PropTypes.func,
 };
 
 QuestionBody.defaultProps = {
@@ -32,6 +36,9 @@ QuestionBody.defaultProps = {
     changeOption: null,
     changeTypeQuestion: null,
     changeTitleQuestion: null,
+    addOption: null,
+    addOptionOther: null,
+    removeOption: null,
 };
 
 const mapStateToProps = (state) => {
@@ -58,6 +65,10 @@ const mapDispatchToProps = (dispatch, props) => {
 
         addOptionOther: (index) => {
             dispatch(addOptionOther(index));
+        },
+
+        removeOption: (i, j) => {
+            dispatch(removeOption(i, j));
         },
     };
 };
@@ -115,6 +126,15 @@ function QuestionBody(props) {
         props.addOptionOther(index);
     };
 
+    let handleRemoveOption = (j) => {
+        let optionTemp = [...options];
+        if (optionTemp.length > 1) {
+            optionTemp.splice(j, 1);
+            setOptions(optionTemp);
+            props.removeOption(index, j);
+        }
+    };
+
     let questionUI = question.options.map((option, j) => {
         return (
             <Body key={j}>
@@ -139,9 +159,9 @@ function QuestionBody(props) {
                         <CustomIconButton1
                             aria-label="delete"
                             style={{ position: "absolute", right: "-96px" }}
-                            // onClick={() => {
-                            //     removeOption(i, j);
-                            // }}
+                            onClick={() => {
+                                handleRemoveOption(j);
+                            }}
                         >
                             <CloseIcon className="icon-option" />
                         </CustomIconButton1>
@@ -167,9 +187,9 @@ function QuestionBody(props) {
 
                         <CustomIconButton1
                             aria-label="delete"
-                            // onClick={() => {
-                            //     removeOption(i, j);
-                            // }}
+                            onClick={() => {
+                                handleRemoveOption(j);
+                            }}
                         >
                             <CloseIcon className="icon-option" />
                         </CustomIconButton1>

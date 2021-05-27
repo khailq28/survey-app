@@ -100,7 +100,6 @@ function FormBody(props) {
                         )}
                     </CustomAccordionSummary>
 
-                    <CustomAddCircleOutlineIcon />
                     {/* <QuestionBox index={index} /> */}
 
                     {/* {question.options.map((option, j) => (
@@ -119,8 +118,36 @@ function FormBody(props) {
         );
     });
 
-    return <div>{questionUI}</div>;
+    return (
+        <div>
+            <CustomAddCircleOutlineIcon />
+            {questionUI}
+        </div>
+    );
 }
+
+const CustomAddCircleOutlineIcon = styled(AddCircleOutlineIcon)`
+    color: var(--icon-color);
+    font-size: 45px !important;
+    cursor: pointer;
+    z-index: 10;
+    position: fixed;
+    top: 113px !important;
+    right: 330px !important;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    border-radius: 8px;
+    background-color: #cee3f6;
+
+    &:hover {
+        color: var(--basic-color);
+    }
+
+    @media (max-width: 768px) {
+        top: 60px !important;
+        right: 10px !important;
+        font-size: 35px !important;
+    }
+`;
 
 const Form = styled.div`
     background-color: white;
@@ -199,13 +226,6 @@ const CustomTypographyOption = styled(Typography)`
         color: var(--icon-color);
         text-transform: none;
     }
-`;
-
-const CustomAddCircleOutlineIcon = styled(AddCircleOutlineIcon)`
-    color: var(--icon-color);
-    font-size: 30px;
-    float: right;
-    cursor: pointer;
 `;
 
 const mapStateToProps = (state) => {
