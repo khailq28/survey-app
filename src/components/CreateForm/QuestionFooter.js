@@ -12,11 +12,13 @@ import { changeReruied } from "../../actions";
 QuestionFooter.propTypes = {
     questions: PropTypes.array,
     changeReruied: PropTypes.func,
+    copyQuestion: PropTypes.func,
 };
 
 QuestionFooter.defaultProps = {
     questions: null,
     changeReruied: null,
+    copyQuestion: null,
 };
 
 const mapStateToProps = (state) => {
@@ -46,14 +48,16 @@ function QuestionFooter(props) {
         props.changeReruied(index);
     };
 
+    let handleCopyQuestion = () => {
+        props.copyQuestion(index);
+    };
+
     return (
         <Footer>
             <Right>
                 <CustomIconButton
                     aria-label="Copy"
-                    // onClick={() => {
-                    //     copyQuestion(i);
-                    // }}
+                    onClick={handleCopyQuestion}
                 >
                     <FileCopyOutlinedIcon className="icon" />
                 </CustomIconButton>

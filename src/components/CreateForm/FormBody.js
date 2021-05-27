@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import Accordion from "@material-ui/core/Accordion";
@@ -12,17 +12,41 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import QuestionBody from "./QuestionBody";
 import QuestionFooter from "./QuestionFooter";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import { addQuestion, copyQuestion } from "../../actions";
 
 FormBody.propTypes = {
     questions: PropTypes.array,
+    addQuestion: PropTypes.func,
+    copyQuestion: PropTypes.func,
 };
 
 FormBody.defaultProps = {
     questions: null,
+    addQuestion: null,
+    copyQuestion: null,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        questions: state.survey.questions,
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        addQuestion: () => {
+            dispatch(addQuestion());
+        },
+
+        copyQuestion: (index) => {
+            dispatch(copyQuestion(index));
+        },
+    };
 };
 
 function FormBody(props) {
-    var questionUI = props.questions.map((question, index) => {
+    let [questions, setQuestions] = useState(props.questions);
+    let questionUI = questions.map((question, index) => {
         return (
             <Form key={index} show={question.open ? "true" : "false"}>
                 <Accordion
@@ -112,15 +136,38 @@ function FormBody(props) {
 
                     <QuestionBody index={index} />
 
-                    <QuestionFooter index={index} />
+                    <QuestionFooter
+                        index={index}
+                        copyQuestion={() => copyQuestion(index)}
+                    />
                 </Accordion>
             </Form>
         );
     });
 
+    let handleAddQuestion = () => {
+        let questionsTemp = [...questions];
+        questionsTemp.push({
+            questionText: "",
+            questionType: "text",
+            options: [{ optionText: "" }],
+            open: true,
+            required: false,
+        });
+        setQuestions(questionsTemp);
+        props.addQuestion();
+    };
+
+    let copyQuestion = (index) => {
+        let questionsTemp = [...questions];
+        questionsTemp.push(questionsTemp[index]);
+        setQuestions(questionsTemp);
+        props.copyQuestion(index);
+    };
+
     return (
         <div>
-            <CustomAddCircleOutlineIcon />
+            <CustomAddCircleOutlineIcon onClick={handleAddQuestion} />
             {questionUI}
         </div>
     );
@@ -227,15 +274,5 @@ const CustomTypographyOption = styled(Typography)`
         text-transform: none;
     }
 `;
-
-const mapStateToProps = (state) => {
-    return {
-        questions: state.survey.questions,
-    };
-};
-
-const mapDispatchToProps = (dispatch, props) => {
-    return {};
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormBody);

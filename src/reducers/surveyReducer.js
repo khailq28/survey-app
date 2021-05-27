@@ -51,7 +51,6 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
 
         case actionType.CHANGE_TYPE_QUESTION:
-            var { value } = action;
             state.questions[action.index].questionType = action.value;
             state.questions[action.index].options = [{ optionText: "" }];
             return { ...state };
@@ -91,6 +90,19 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
                 !state.questions[action.i].required;
             return { ...state };
 
+        case actionType.ADD_QUESTION:
+            state.questions.push({
+                questionText: "",
+                questionType: "text",
+                options: [{ optionText: "" }],
+                open: true,
+                required: false,
+            });
+            return { ...state };
+
+        case actionType.COPY_QUESTION:
+            state.questions.push(state.questions[action.i]);
+            return { ...state };
         default:
             return { ...state };
     }

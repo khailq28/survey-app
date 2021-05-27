@@ -11,3 +11,5 @@ export const ADD_OPTION = "ADD_OPTION";
 export const ADD_OPTION_OTHER = "ADD_OPTION_OTHER";
 export const REMOVE_OPTION = "REMOVE_OPTION";
 export const CHANGE_REQUIRED = "CHANGE_REQUIRED";
+export const ADD_QUESTION = "ADD_QUESTION";
+export const COPY_QUESTION = "COPY_QUESTION";

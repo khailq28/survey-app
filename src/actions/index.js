@@ -128,3 +128,16 @@ export function changeReruied(i) {
         i, //vi tri cua cau hoi
     };
 }
+
+export function addQuestion() {
+    return {
+        type: actionType.ADD_QUESTION,
+    };
+}
+
+export function copyQuestion(i) {
+    return {
+        type: actionType.COPY_QUESTION,
+        i, //vi tri cua cau hoi
+    };
+}
