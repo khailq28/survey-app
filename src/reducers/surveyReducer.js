@@ -14,18 +14,18 @@ var INITIAL_STATE = {
                 { optionText: "b" },
                 { optionText: "c" },
             ],
-            open: true,
+            open: false,
             required: false,
         },
         {
             questionText: "asdffdsa?",
-            questionType: "radio",
+            questionType: "checkbox",
             options: [
                 { optionText: "a" },
                 { optionText: "b" },
                 { optionText: "c" },
             ],
-            open: false,
+            open: true,
             required: false,
         },
     ],
@@ -44,6 +44,16 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
         case actionType.SET_AUTHOR:
             state.author = action.author;
+            return { ...state };
+        case actionType.CHANGE_TYPE_QUESTION:
+            state.questions[action.index].questionType = action.value;
+            return { ...state };
+        case actionType.CHANGE_TITLE_QUESTION:
+            state.questions[action.index].questionText = action.value;
+            return { ...state };
+        case actionType.CHANGE_OPTION:
+            state.questions[action.i].options[action.j].optionText =
+                action.value;
             return { ...state };
         default:
             return { ...state };

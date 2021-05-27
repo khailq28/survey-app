@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import ShortTextIcon from "@material-ui/icons/ShortText";
@@ -15,13 +15,57 @@ import SubjectIcon from "@material-ui/icons/Subject";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import ArrowDropDownCircleIcon from "@material-ui/icons/ArrowDropDownCircle";
 import { IconButton } from "@material-ui/core";
-// import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { changeTypeQuestion, changeTitleQuestion } from "../../actions";
 
-// QuestionBox.propTypes = {
+QuestionBox.propTypes = {
+    questions: PropTypes.array,
+    index: PropTypes.number,
+    changeTypeQuestion: PropTypes.func,
+};
 
-// };
+QuestionBox.defaultProps = {
+    questions: null,
+    index: null,
+    changeTypeQuestion: null,
+};
+
+const mapStateToProps = (state) => {
+    return { questions: state.survey.questions };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        changeTypeQuestion: (value, index) => {
+            dispatch(changeTypeQuestion(value, index));
+        },
+
+        changeTitleQuestion: (value, index) => {
+            dispatch(changeTitleQuestion(value, index));
+        },
+    };
+};
 
 function QuestionBox(props) {
+    let { questions, index } = props;
+    let question = questions[index];
+
+    let [questionText, setQuestionText] = useState(question.questionText);
+
+    var handleChangeSelect = (e) => {
+        var target = e.target;
+        var value = target.type === "checked" ? target.checked : target.value;
+        props.changeTypeQuestion(value, index);
+    };
+
+    var handleQuestionValue = (e) => {
+        var target = e.target;
+        var value = target.type === "checked" ? target.checked : target.value;
+        setQuestionText(value);
+        props.changeTitleQuestion(value, index);
+    };
+
     return (
         <Box>
             <CustomAccordionDetails>
@@ -29,16 +73,17 @@ function QuestionBox(props) {
                     <QuestionInput
                         type="text"
                         placeholder="Câu hỏi"
-                        // value={question.questionText}
-                        // onChange={(e) => {
-                        //     handleQuestionValue(e.target.value, i);
-                        // }}
+                        value={questionText}
+                        onChange={handleQuestionValue}
                     ></QuestionInput>
                     <CustomIconButton>
                         <CustomCropOriginalIcon />
                     </CustomIconButton>
 
-                    <CustomSelect defaultValue="short">
+                    <CustomSelect
+                        defaultValue={question.questionType}
+                        onChange={handleChangeSelect}
+                    >
                         <CustomMenuItem value="short">
                             <ShortTextIcon className="ele-icon" />
                             &nbsp;<span>Trả lời ngắn</span>
@@ -54,7 +99,7 @@ function QuestionBox(props) {
                             />
                             &nbsp;<span>Trắc nghiệm</span>
                         </CustomMenuItem>
-                        <CustomMenuItem value="check">
+                        <CustomMenuItem value="checkbox">
                             <CheckBoxIcon checked className="ele-icon" />
                             &nbsp;<span>Hộp kiểm</span>
                         </CustomMenuItem>
@@ -188,4 +233,4 @@ const CustomIconButton = styled(IconButton)`
     padding: 2px !important;
 `;
 
-export default QuestionBox;
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionBox);

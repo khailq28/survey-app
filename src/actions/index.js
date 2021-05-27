@@ -74,3 +74,28 @@ export function setAuthor(author) {
         author,
     };
 }
+
+export function changeTypeQuestion(value, index) {
+    return {
+        type: actionType.CHANGE_TYPE_QUESTION,
+        value,
+        index, //vi tri cua doi tuong
+    };
+}
+
+export function changeTitleQuestion(value, index) {
+    return {
+        type: actionType.CHANGE_TITLE_QUESTION,
+        value,
+        index, //vi tri cua doi tuong
+    };
+}
+
+export function changeOption(value, i, j) {
+    return {
+        type: actionType.CHANGE_OPTION,
+        value,
+        i, //vi tri cua cau hoi
+        j, //vi tri cua cau tra loi
+    };
+}
