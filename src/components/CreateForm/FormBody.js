@@ -63,19 +63,18 @@ const mapDispatchToProps = (dispatch, props) => {
 
 function FormBody(props) {
     const [questions, setQuestions] = useState(props.questions);
-    let [questionsState, setQuestionsState] = useState(questions);
 
     const handleChangeAccordion = (index) => {
-        let temp = [...questionsState];
+        let temp = [...questions];
         temp.forEach((question, i) => {
             if (index !== i) question.open = false;
         });
 
         temp[index].open = !temp[index].open;
-        setQuestionsState(temp);
+        setQuestions(temp);
         props.changeStatusOpenQuestion();
     };
-    let questionUI = questionsState.map((question, index) => {
+    let questionUI = questions.map((question, index) => {
         return (
             <Form key={index} show={"false"}>
                 <Accordion
@@ -166,11 +165,14 @@ function FormBody(props) {
 
     const handleAddQuestion = () => {
         let questionsTemp = [...questions];
+        questionsTemp.forEach((question, index) => {
+            question.open = false;
+        });
         questionsTemp.push({
             questionText: "",
             questionType: "text",
             options: [{ optionText: "" }],
-            open: false,
+            open: true,
             required: false,
         });
         setQuestions(questionsTemp);
