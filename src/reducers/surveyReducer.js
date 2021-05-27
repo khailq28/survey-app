@@ -103,6 +103,10 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
         case actionType.COPY_QUESTION:
             state.questions.push(state.questions[action.i]);
             return { ...state };
+
+        case actionType.REMOVE_QUESTION:
+            state.questions.splice(action.i, 1);
+            return { ...state };
         default:
             return { ...state };
     }

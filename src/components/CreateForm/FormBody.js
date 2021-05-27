@@ -12,18 +12,20 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import QuestionBody from "./QuestionBody";
 import QuestionFooter from "./QuestionFooter";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { addQuestion, copyQuestion } from "../../actions";
+import { addQuestion, copyQuestion, deleteQuestion } from "../../actions";
 
 FormBody.propTypes = {
     questions: PropTypes.array,
     addQuestion: PropTypes.func,
     copyQuestion: PropTypes.func,
+    deleteQuestion: PropTypes.func,
 };
 
 FormBody.defaultProps = {
     questions: null,
     addQuestion: null,
     copyQuestion: null,
+    deleteQuestion: null,
 };
 
 const mapStateToProps = (state) => {
@@ -40,6 +42,10 @@ const mapDispatchToProps = (dispatch, props) => {
 
         copyQuestion: (index) => {
             dispatch(copyQuestion(index));
+        },
+
+        deleteQuestion: (index) => {
+            dispatch(deleteQuestion(index));
         },
     };
 };
@@ -138,7 +144,8 @@ function FormBody(props) {
 
                     <QuestionFooter
                         index={index}
-                        copyQuestion={() => copyQuestion(index)}
+                        handleCopyQuestion={() => handleCopyQuestion(index)}
+                        handleDeleteQuestion={() => handleDeleteQuestion(index)}
                     />
                 </Accordion>
             </Form>
@@ -158,11 +165,18 @@ function FormBody(props) {
         props.addQuestion();
     };
 
-    let copyQuestion = (index) => {
+    let handleCopyQuestion = (index) => {
         let questionsTemp = [...questions];
         questionsTemp.push(questionsTemp[index]);
         setQuestions(questionsTemp);
         props.copyQuestion(index);
+    };
+
+    let handleDeleteQuestion = (index) => {
+        let questionsTemp = [...questions];
+        questionsTemp.splice(index, 1);
+        setQuestions(questionsTemp);
+        props.deleteQuestion(index);
     };
 
     return (

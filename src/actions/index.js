@@ -141,3 +141,10 @@ export function copyQuestion(i) {
         i, //vi tri cua cau hoi
     };
 }
+
+export function deleteQuestion(i) {
+    return {
+        type: actionType.REMOVE_QUESTION,
+        i, //vi tri cua cau hoi
+    };
+}
