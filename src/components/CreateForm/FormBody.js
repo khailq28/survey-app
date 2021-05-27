@@ -1,24 +1,30 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import {
     // Paper,
     Typography,
 } from "@material-ui/core";
-import PropTypes from "prop-types";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import QuestionBody from "./QuestionBody";
 import QuestionFooter from "./QuestionFooter";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { addQuestion, copyQuestion, deleteQuestion } from "../../actions";
+import {
+    addQuestion,
+    copyQuestion,
+    deleteQuestion,
+    changeStatusOpenQuestion,
+} from "../../actions";
 
 FormBody.propTypes = {
     questions: PropTypes.array,
     addQuestion: PropTypes.func,
     copyQuestion: PropTypes.func,
     deleteQuestion: PropTypes.func,
+    changeStatusOpenQuestion: PropTypes.func,
 };
 
 FormBody.defaultProps = {
@@ -26,6 +32,7 @@ FormBody.defaultProps = {
     addQuestion: null,
     copyQuestion: null,
     deleteQuestion: null,
+    changeStatusOpenQuestion: null,
 };
 
 const mapStateToProps = (state) => {
@@ -47,24 +54,39 @@ const mapDispatchToProps = (dispatch, props) => {
         deleteQuestion: (index) => {
             dispatch(deleteQuestion(index));
         },
+
+        changeStatusOpenQuestion: () => {
+            dispatch(changeStatusOpenQuestion());
+        },
     };
 };
 
 function FormBody(props) {
-    let [questions, setQuestions] = useState(props.questions);
-    let questionUI = questions.map((question, index) => {
+    const [questions, setQuestions] = useState(props.questions);
+    let [questionsState, setQuestionsState] = useState(questions);
+
+    const handleChangeAccordion = (index) => {
+        let temp = [...questionsState];
+        temp.forEach((question, i) => {
+            if (index !== i) question.open = false;
+        });
+
+        temp[index].open = !temp[index].open;
+        setQuestionsState(temp);
+        props.changeStatusOpenQuestion();
+    };
+    let questionUI = questionsState.map((question, index) => {
         return (
-            <Form key={index} show={question.open ? "true" : "false"}>
+            <Form key={index} show={"false"}>
                 <Accordion
-                    // onChange={() => {
-                    //     handleExpand(i);
-                    // }}
                     expanded={question.open}
+                    // onChange={props.handleChange("panel" + (index + 1))}
+                    onChange={() => handleChangeAccordion(index)}
                 >
                     <CustomAccordionSummary
                         aria-controls="panel1a-content"
                         elevation={1}
-                        status={!question.open ? "false" : "true"}
+                        status={question.open ? "true" : "false"}
                     >
                         {!question.open ? (
                             <SaveQuestion>
@@ -130,16 +152,6 @@ function FormBody(props) {
                         )}
                     </CustomAccordionSummary>
 
-                    {/* <QuestionBox index={index} /> */}
-
-                    {/* {question.options.map((option, j) => (
-                        <QuestionBody
-                            key={j}
-                            question={question}
-                            option={option}
-                        />
-                    ))} */}
-
                     <QuestionBody index={index} />
 
                     <QuestionFooter
@@ -152,27 +164,27 @@ function FormBody(props) {
         );
     });
 
-    let handleAddQuestion = () => {
+    const handleAddQuestion = () => {
         let questionsTemp = [...questions];
         questionsTemp.push({
             questionText: "",
             questionType: "text",
             options: [{ optionText: "" }],
-            open: true,
+            open: false,
             required: false,
         });
         setQuestions(questionsTemp);
         props.addQuestion();
     };
 
-    let handleCopyQuestion = (index) => {
+    const handleCopyQuestion = (index) => {
         let questionsTemp = [...questions];
         questionsTemp.push(questionsTemp[index]);
         setQuestions(questionsTemp);
         props.copyQuestion(index);
     };
 
-    let handleDeleteQuestion = (index) => {
+    const handleDeleteQuestion = (index) => {
         let questionsTemp = [...questions];
         questionsTemp.splice(index, 1);
         setQuestions(questionsTemp);
@@ -238,7 +250,7 @@ const CustomAccordionSummary = styled(AccordionSummary)`
     ${(props) =>
         props.status === "true"
             ? `
-        min-height: 0 !important;
+        min-height: 15px !important;
         max-height: 0 !important;
 
         & > .Mui-expanded {

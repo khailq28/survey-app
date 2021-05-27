@@ -26,7 +26,7 @@ var INITIAL_STATE = {
                 { optionText: "b" },
                 { optionText: "c" },
             ],
-            open: true,
+            open: false,
             required: false,
         },
     ],
@@ -107,6 +107,10 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
         case actionType.REMOVE_QUESTION:
             state.questions.splice(action.i, 1);
             return { ...state };
+
+        case actionType.CHANGE_STATUS_OPEN_QUESTION:
+            return { ...state };
+
         default:
             return { ...state };
     }

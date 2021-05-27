@@ -148,3 +148,9 @@ export function deleteQuestion(i) {
         i, //vi tri cua cau hoi
     };
 }
+
+export function changeStatusOpenQuestion() {
+    return {
+        type: actionType.CHANGE_STATUS_OPEN_QUESTION,
+    };
+}
