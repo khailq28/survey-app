@@ -51,7 +51,9 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
 
         case actionType.CHANGE_TYPE_QUESTION:
+            var { value } = action;
             state.questions[action.index].questionType = action.value;
+            state.questions[action.index].options = [{ optionText: "" }];
             return { ...state };
 
         case actionType.CHANGE_TITLE_QUESTION:
@@ -88,6 +90,7 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             state.questions[action.i].required =
                 !state.questions[action.i].required;
             return { ...state };
+
         default:
             return { ...state };
     }

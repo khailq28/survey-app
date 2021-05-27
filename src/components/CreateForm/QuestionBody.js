@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-// import ShortTextIcon from "@material-ui/icons/ShortText";
+import ShortTextIcon from "@material-ui/icons/ShortText";
+import SubjectIcon from "@material-ui/icons/Subject";
 import CropOriginalIcon from "@material-ui/icons/CropOriginal";
 import { IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
@@ -86,6 +87,7 @@ function QuestionBody(props) {
         let value = target.type === "checked" ? target.checked : target.value;
         props.changeTypeQuestion(value, index);
         setType(value);
+        setOptions([{ optionText: "" }]);
     };
 
     let handleQuestionValue = (e) => {
@@ -135,7 +137,7 @@ function QuestionBody(props) {
         }
     };
 
-    let questionUI = question.options.map((option, j) => {
+    let questionCheckOrRadio = question.options.map((option, j) => {
         return (
             <Body key={j}>
                 {/* <Checkbox  color="primary" inputProps={{ 'aria-label': 'secondary checkbox' }} disabled/> */}
@@ -218,6 +220,14 @@ function QuestionBody(props) {
                             defaultValue={question.questionType}
                             onChange={handleChangeSelect}
                         >
+                            <CustomMenuItem value="text">
+                                <ShortTextIcon className="ele-icon" />
+                                &nbsp;<span>Trả lời ngắn</span>
+                            </CustomMenuItem>
+                            <CustomMenuItem value="textarea">
+                                <SubjectIcon className="ele-icon" />
+                                &nbsp;<span>Đoạn</span>
+                            </CustomMenuItem>
                             <CustomMenuItem value="radio">
                                 <RadioButtonCheckedIcon
                                     checked
@@ -234,26 +244,46 @@ function QuestionBody(props) {
                 </CustomAccordionDetails>
             </Box>
 
-            {questionUI}
-
-            <Body>
-                <input className="text" type={type} disabled />
-                <CustomButtonAddOption onClick={handleAddOption}>
-                    Thêm tùy chọn
-                </CustomButtonAddOption>
-                {!options[options.length - 1].other ? (
-                    <div>
-                        &nbsp;
-                        <span style={{ textTransform: "none" }}>hoặc</span>
-                        &nbsp;
-                        <CustomButtonAddOther onClick={handleAddOther}>
-                            Thêm "khác"
-                        </CustomButtonAddOther>
-                    </div>
-                ) : (
-                    ""
-                )}
-            </Body>
+            {question.questionType === "checkbox" ||
+            question.questionType === "radio" ? (
+                <div>
+                    {questionCheckOrRadio}
+                    <Body>
+                        <input className="text" type={type} disabled />
+                        <CustomButtonAddOption onClick={handleAddOption}>
+                            Thêm tùy chọn
+                        </CustomButtonAddOption>
+                        {!options[options.length - 1].other ? (
+                            <div>
+                                &nbsp;
+                                <span style={{ textTransform: "none" }}>
+                                    hoặc
+                                </span>
+                                &nbsp;
+                                <CustomButtonAddOther onClick={handleAddOther}>
+                                    Thêm "khác"
+                                </CustomButtonAddOther>
+                            </div>
+                        ) : (
+                            ""
+                        )}
+                    </Body>
+                </div>
+            ) : question.questionType === "text" ? (
+                <Body>
+                    <CustomText type="text">
+                        Văn bản câu trả lời ngắn
+                    </CustomText>
+                </Body>
+            ) : question.questionType === "textarea" ? (
+                <Body>
+                    <CustomText type="textarea">
+                        Văn bản câu trả lời dài
+                    </CustomText>
+                </Body>
+            ) : (
+                ""
+            )}
         </div>
     );
 }
@@ -404,6 +434,21 @@ const CustomMenuItem = styled(MenuItem)`
 
 const CustomIconButton = styled(IconButton)`
     padding: 2px !important;
+`;
+
+const CustomText = styled.div`
+    padding: 5px 0;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: var(--icon-color);
+    border-bottom: 1px solid #bdbdbd;
+    text-transform: none;
+    width: ${(props) =>
+        props.type === "text"
+            ? "250px"
+            : props.type === "textarea"
+            ? "330px"
+            : ""};
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionBody);

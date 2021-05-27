@@ -133,7 +133,7 @@ const CustomAddCircleOutlineIcon = styled(AddCircleOutlineIcon)`
     z-index: 10;
     position: fixed;
     top: 113px !important;
-    right: 330px !important;
+    right: 325px !important;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
     border-radius: 8px;
     background-color: #cee3f6;
