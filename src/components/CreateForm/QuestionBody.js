@@ -10,11 +10,13 @@ import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import {
     changeOption,
     changeTypeQuestion,
     changeTitleQuestion,
+    addOption,
 } from "../../actions";
 
 QuestionBody.propTypes = {
@@ -47,6 +49,10 @@ const mapDispatchToProps = (dispatch, props) => {
 
         changeTitleQuestion: (value, index) => {
             dispatch(changeTitleQuestion(value, index));
+        },
+
+        addOption: (index) => {
+            dispatch(addOption(index));
         },
     };
 };
@@ -83,6 +89,13 @@ function QuestionBody(props) {
         props.changeOption(value, index, j);
     };
 
+    let handleAddOption = () => {
+        let optionTemp = [...option];
+        optionTemp.push({ optionText: "" });
+        setOption(optionTemp);
+        props.addOption(index);
+    };
+
     let questionUI = question.options.map((op, j) => {
         return (
             <Body key={j}>
@@ -97,14 +110,12 @@ function QuestionBody(props) {
                     <ShortTextIcon className="text" />
                 )} */}
                 <input className="text" type={type} disabled />
-                <div>
-                    <OptionInput
-                        type="text"
-                        placeholder="Lựa chọn"
-                        value={option[j].optionText}
-                        onChange={(e) => handleOptionValue(e, j)}
-                    ></OptionInput>
-                </div>
+                <OptionInput
+                    type="text"
+                    placeholder="Lựa chọn"
+                    value={option[j].optionText}
+                    onChange={(e) => handleOptionValue(e, j)}
+                ></OptionInput>
 
                 <CustomIconButton1
                     aria-label="image"
@@ -163,6 +174,14 @@ function QuestionBody(props) {
             </Box>
 
             {questionUI}
+            <Body>
+                <input className="text" type={type} disabled />
+                <CustomButtonAddOption onClick={handleAddOption}>
+                    Thêm tùy chọn
+                </CustomButtonAddOption>
+                &nbsp;<span style={{ textTransform: "none" }}>hoặc</span>&nbsp;
+                <CustomButtonAddOther>Thêm "khác"</CustomButtonAddOther>
+            </Body>
         </div>
     );
 }
@@ -204,6 +223,20 @@ const OptionInput = styled.input`
     @media only screen and (max-width: 479px) {
         width: 170px;
     }
+`;
+
+const CustomButtonAddOption = styled(Button)`
+    text-transform: none !important;
+    color: var(--icon-color) !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+`;
+
+const CustomButtonAddOther = styled(Button)`
+    text-transform: none !important;
+    color: var(--basic-color) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
 `;
 
 const CustomIconButton1 = styled(IconButton)`

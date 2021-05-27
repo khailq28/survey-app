@@ -99,3 +99,10 @@ export function changeOption(value, i, j) {
         j, //vi tri cua cau tra loi
     };
 }
+
+export function addOption(index) {
+    return {
+        type: actionType.ADD_OPTION,
+        index, //vi tri cua cau hoi
+    };
+}
