@@ -107,41 +107,46 @@ function FormBody(props) {
                                                         style={{
                                                             marginRight: "10px",
                                                         }}
-                                                        required={question.type}
-                                                    />
-                                                }
-                                                label={
-                                                    <CustomTypographyOption>
-                                                        <span id="other">
-                                                            Mục khác
-                                                        </span>
-                                                    </CustomTypographyOption>
-                                                }
-                                            />
-                                        ) : (
-                                            <CustomFormControlLabel
-                                                disabled
-                                                control={
-                                                    <input
-                                                        type={
-                                                            question.questionType
-                                                        }
-                                                        color="primary"
-                                                        style={{
+                                                            required={
+                                                                question.type
+                                                            }
+                                                        />
+                                                    }
+                                                    label={
+                                                        <CustomTypographyOption>
+                                                            <span id="other">
+                                                                Mục khác
+                                                            </span>
+                                                        </CustomTypographyOption>
+                                                    }
+                                                />
+                                            ) : (
+                                                <CustomFormControlLabel
+                                                    disabled
+                                                    control={
+                                                        <input
+                                                            type={
+                                                                question.questionType
+                                                            }
+                                                            color="primary"
+                                                            style={{
                                                             marginRight: "10px",
                                                         }}
-                                                        required={question.type}
-                                                    />
-                                                }
-                                                label={
-                                                    <CustomTypographyOption>
-                                                        {
-                                                            question.options[j]
-                                                                .optionText
-                                                        }
-                                                    </CustomTypographyOption>
-                                                }
-                                            />
+                                                            required={
+                                                                question.type
+                                                            }
+                                                        />
+                                                    }
+                                                    label={
+                                                        <CustomTypographyOption>
+                                                            {
+                                                                question
+                                                                    .options[j]
+                                                                    .optionText
+                                                            }
+                                                        </CustomTypographyOption>
+                                                    }
+                                                />
                                         )}
                                     </ListOption>
                                 ))}
