@@ -24,7 +24,7 @@ const Container = styled.div`
 `;
 
 const Box = styled.div`
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
 
     .add_question {
         background-color: white;

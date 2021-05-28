@@ -97,13 +97,7 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
                 !state.questions[action.i].required;
             return { ...state };
 
-        case actionType.ADD_QUESTION:
-            return { ...state, questions: action.questions };
-
-        case actionType.COPY_QUESTION:
-            return { ...state, questions: action.questions };
-
-        case actionType.REMOVE_QUESTION:
+        case actionType.SET_QUESTIONS:
             return { ...state, questions: action.questions };
 
         case actionType.CHANGE_STATUS_OPEN_QUESTION:

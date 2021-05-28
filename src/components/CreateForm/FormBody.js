@@ -12,26 +12,19 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import QuestionBody from "./QuestionBody";
 import QuestionFooter from "./QuestionFooter";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import {
-    addQuestion,
-    copyQuestion,
-    deleteQuestion,
-    changeStatusOpenQuestion,
-} from "../../actions";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import { setQuestions, changeStatusOpenQuestion } from "../../actions";
 
 FormBody.propTypes = {
     questions: PropTypes.array,
-    addQuestion: PropTypes.func,
-    copyQuestion: PropTypes.func,
-    deleteQuestion: PropTypes.func,
+    setQuestions: PropTypes.func,
     changeStatusOpenQuestion: PropTypes.func,
 };
 
 FormBody.defaultProps = {
     questions: null,
-    addQuestion: null,
-    copyQuestion: null,
-    deleteQuestion: null,
+    setQuestions: null,
     changeStatusOpenQuestion: null,
 };
 
@@ -43,16 +36,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        addQuestion: (questions) => {
-            dispatch(addQuestion(questions));
-        },
-
-        copyQuestion: (questions) => {
-            dispatch(copyQuestion(questions));
-        },
-
-        deleteQuestion: (questions) => {
-            dispatch(deleteQuestion(questions));
+        setQuestions: (questions) => {
+            dispatch(setQuestions(questions));
         },
 
         changeStatusOpenQuestion: (index) => {
@@ -74,112 +59,168 @@ function FormBody(props) {
         setQuestions(temp);
         props.changeStatusOpenQuestion(index);
     };
-    var questionUI = questions.map((question, index) => {
+
+    var questionUI = questions.map((question, i) => {
         return (
-            <Form key={index} show={question.open}>
-                <Accordion
-                    expanded={question.open}
-                    // onChange={props.handleChange("panel" + (index + 1))}
-                    onChange={() => handleChangeAccordion(index)}
-                >
-                    <CustomAccordionSummary
-                        aria-controls="panel1a-content"
-                        elevation={1}
-                        status={question.open ? "true" : "false"}
+            <Draggable key={i} draggableId={i + "id"} index={i}>
+                {(provided, snapshot) => (
+                    <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
                     >
-                        {!question.open ? (
-                            <SaveQuestion>
-                                <CustomTypography>
-                                    {index + 1}. {question.questionText}
-                                </CustomTypography>
+                        <div>
+                            <div style={{ marginBottom: "0px" }}>
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        marginBottom: "0px",
+                                    }}
+                                >
+                                    <DragIndicatorIcon
+                                        style={{
+                                            transform: "rotate(-90deg)",
+                                            color: "#DAE0E2",
+                                            position: "relative",
+                                            left: "300px",
+                                        }}
+                                        fontSize="small"
+                                    />
+                                </div>
+                                <Form show={question.open}>
+                                    <Accordion
+                                        expanded={question.open}
+                                        // onChange={props.handleChange("panel" + (i + 1))}
+                                        onChange={() =>
+                                            handleChangeAccordion(i)
+                                        }
+                                    >
+                                        <CustomAccordionSummary
+                                            aria-controls="panel1a-content"
+                                            elevation={1}
+                                            status={
+                                                question.open ? "true" : "false"
+                                            }
+                                        >
+                                            {!question.open ? (
+                                                <SaveQuestion>
+                                                    <CustomTypography>
+                                                        {i + 1}.{" "}
+                                                        {question.questionText}
+                                                    </CustomTypography>
 
-                                {question.questionType === "radio" ||
-                                question.questionType === "checkbox" ? (
-                                    question.options.map((op, j) => (
-                                        <ListOption key={j}>
-                                            {question.options[j].other ? (
-                                                <CustomFormControlLabel
-                                                    disabled
-                                                    control={
-                                                        <input
-                                                            type={
-                                                                question.questionType
-                                                            }
-                                                            color="primary"
-                                                            style={{
-                                                                marginRight:
-                                                                    "10px",
-                                                            }}
-                                                            required={
-                                                                question.type
-                                                            }
-                                                        />
-                                                    }
-                                                    label={
-                                                        <CustomTypographyOption>
-                                                            <span id="other">
-                                                                Mục khác
-                                                            </span>
-                                                        </CustomTypographyOption>
-                                                    }
-                                                />
+                                                    {question.questionType ===
+                                                        "radio" ||
+                                                    question.questionType ===
+                                                        "checkbox" ? (
+                                                        question.options.map(
+                                                            (op, j) => (
+                                                                <ListOption
+                                                                    key={j}
+                                                                >
+                                                                    {question
+                                                                        .options[
+                                                                        j
+                                                                    ].other ? (
+                                                                        <CustomFormControlLabel
+                                                                            disabled
+                                                                            control={
+                                                                                <input
+                                                                                    type={
+                                                                                        question.questionType
+                                                                                    }
+                                                                                    color="primary"
+                                                                                    style={{
+                                                                                        marginRight:
+                                                                                            "10px",
+                                                                                    }}
+                                                                                    required={
+                                                                                        question.type
+                                                                                    }
+                                                                                />
+                                                                            }
+                                                                            label={
+                                                                                <CustomTypographyOption>
+                                                                                    <span id="other">
+                                                                                        Mục
+                                                                                        khác
+                                                                                    </span>
+                                                                                </CustomTypographyOption>
+                                                                            }
+                                                                        />
+                                                                    ) : (
+                                                                        <CustomFormControlLabel
+                                                                            disabled
+                                                                            control={
+                                                                                <input
+                                                                                    type={
+                                                                                        question.questionType
+                                                                                    }
+                                                                                    color="primary"
+                                                                                    style={{
+                                                                                        marginRight:
+                                                                                            "10px",
+                                                                                    }}
+                                                                                    required={
+                                                                                        question.type
+                                                                                    }
+                                                                                />
+                                                                            }
+                                                                            label={
+                                                                                <CustomTypographyOption>
+                                                                                    {
+                                                                                        question
+                                                                                            .options[
+                                                                                            j
+                                                                                        ]
+                                                                                            .optionText
+                                                                                    }
+                                                                                </CustomTypographyOption>
+                                                                            }
+                                                                        />
+                                                                    )}
+                                                                </ListOption>
+                                                            ),
+                                                        )
+                                                    ) : question.questionType ===
+                                                      "text" ? (
+                                                        <CustomText type="text">
+                                                            Văn bản câu trả lời
+                                                            ngắn
+                                                        </CustomText>
+                                                    ) : question.questionType ===
+                                                      "textarea" ? (
+                                                        <CustomText type="textarea">
+                                                            Văn bản câu trả lời
+                                                            dài
+                                                        </CustomText>
+                                                    ) : (
+                                                        ""
+                                                    )}
+                                                </SaveQuestion>
                                             ) : (
-                                                <CustomFormControlLabel
-                                                    disabled
-                                                    control={
-                                                        <input
-                                                            type={
-                                                                question.questionType
-                                                            }
-                                                            color="primary"
-                                                            style={{
-                                                                marginRight:
-                                                                    "10px",
-                                                            }}
-                                                            required={
-                                                                question.type
-                                                            }
-                                                        />
-                                                    }
-                                                    label={
-                                                        <CustomTypographyOption>
-                                                            {
-                                                                question
-                                                                    .options[j]
-                                                                    .optionText
-                                                            }
-                                                        </CustomTypographyOption>
-                                                    }
-                                                />
+                                                ""
                                             )}
-                                        </ListOption>
-                                    ))
-                                ) : question.questionType === "text" ? (
-                                    <CustomText type="text">
-                                        Văn bản câu trả lời ngắn
-                                    </CustomText>
-                                ) : question.questionType === "textarea" ? (
-                                    <CustomText type="textarea">
-                                        Văn bản câu trả lời dài
-                                    </CustomText>
-                                ) : (
-                                    ""
-                                )}
-                            </SaveQuestion>
-                        ) : (
-                            ""
-                        )}
-                    </CustomAccordionSummary>
+                                        </CustomAccordionSummary>
 
-                    <QuestionBody index={index} />
+                                        <QuestionBody index={i} />
 
-                    <QuestionFooter
-                        index={index}
-                        handleCopyQuestion={() => handleCopyQuestion(index)}
-                        handleDeleteQuestion={() => handleDeleteQuestion(index)}
-                    />
-                </Accordion>
-            </Form>
+                                        <QuestionFooter
+                                            index={i}
+                                            handleCopyQuestion={() =>
+                                                handleCopyQuestion(i)
+                                            }
+                                            handleDeleteQuestion={() =>
+                                                handleDeleteQuestion(i)
+                                            }
+                                        />
+                                    </Accordion>
+                                </Form>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </Draggable>
         );
     });
 
@@ -196,7 +237,7 @@ function FormBody(props) {
             required: false,
         });
         setQuestions(questionsTemp);
-        props.addQuestion(questionsTemp);
+        props.setQuestions(questionsTemp);
     };
 
     const handleCopyQuestion = (index) => {
@@ -213,20 +254,56 @@ function FormBody(props) {
         });
 
         setQuestions(questionsTemp);
-        props.copyQuestion(questionsTemp);
+        props.setQuestions(questionsTemp);
     };
 
     const handleDeleteQuestion = (index) => {
         var questionsTemp = [...questions];
         questionsTemp.splice(index, 1);
         setQuestions(questionsTemp);
-        props.deleteQuestion(questionsTemp);
+        props.setQuestions(questionsTemp);
     };
 
+    const onDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        var itemgg = [...questions];
+        const itemF = reorder(
+            itemgg,
+            result.source.index,
+            result.destination.index,
+        );
+        setQuestions(itemF);
+        props.setQuestions(itemF);
+    };
+
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    };
+
+    // RENDER
     return (
         <div>
             <CustomAddCircleOutlineIcon onClick={handleAddQuestion} />
-            {questionUI}
+
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                    {(provided, snapshot) => (
+                        <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
+                            {questionUI}
+
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
         </div>
     );
 }
@@ -257,12 +334,12 @@ const CustomAddCircleOutlineIcon = styled(AddCircleOutlineIcon)`
 const Form = styled.div`
     background-color: white;
     border-radius: 8px;
-    padding: 10px;
+    /* padding: 10px; */
     text-transform: capitalize;
     width: 750px;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
     height: 100%;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
     ${(props) => (props.show ? `border-left:6px solid #4285f4;` : ``)}
 
     @media (max-width: 768px) {

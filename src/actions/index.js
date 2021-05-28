@@ -129,23 +129,9 @@ export function changeReruied(i) {
     };
 }
 
-export function addQuestion(questions) {
+export function setQuestions(questions) {
     return {
-        type: actionType.ADD_QUESTION,
-        questions,
-    };
-}
-
-export function copyQuestion(questions) {
-    return {
-        type: actionType.COPY_QUESTION,
-        questions,
-    };
-}
-
-export function deleteQuestion(questions) {
-    return {
-        type: actionType.REMOVE_QUESTION,
+        type: actionType.SET_QUESTIONS,
         questions,
     };
 }
