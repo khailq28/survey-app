@@ -333,11 +333,11 @@ const CustomAddCircleOutlineIcon = styled(AddCircleOutlineIcon)`
 
 const Form = styled.div`
     background-color: white;
-    border-radius: 8px;
+    border-radius: 6px;
     /* padding: 10px; */
     text-transform: capitalize;
     width: 750px;
-    box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
     height: 100%;
     /* margin-bottom: 15px; */
     ${(props) => (props.show ? `border-left:6px solid #4285f4;` : ``)}

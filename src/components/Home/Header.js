@@ -19,7 +19,16 @@ Header.defaultProps = {
 function Header(props) {
     return (
         <Container>
-            {!props.user && <Redirect to="/" />}
+            {!props.user && (
+                <Redirect
+                    to={{
+                        pathname: "/",
+                        state: {
+                            from: props.match.url,
+                        },
+                    }}
+                />
+            )}
             <Content>
                 <Logo>
                     <a href="/home">

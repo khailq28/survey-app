@@ -1,39 +1,32 @@
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useEffect } from "react";
-import Login from "./components/Login";
-import HomeBody from "./components/Home/HomeBody";
-import Header from "./components/Home/Header";
 import { connect } from "react-redux";
 import { getUserAuth } from "./actions";
-import { Prompt } from "react-router-dom";
-import FormHeader from "./components/CreateForm/FormHeader";
-import TabHeader from "./components/CreateForm/TabHeader";
+import routes from "./routes";
 
 function App(props) {
     useEffect(() => {
         props.getUserAuth();
     });
 
+    const showContentMenu = (routes) => {
+        var result = null;
+        if (routes.length > 0) {
+            result = routes.map((route, index) => {
+                return (
+                    <Route path={route.path} exact={route.exact} key={index}>
+                        {route.main}
+                    </Route>
+                );
+            });
+        }
+        return result;
+    };
+
     return (
         <Router>
-            <Switch>
-                <Route exact path="/">
-                    <Login />
-                </Route>
-                <Route path="/home">
-                    <Header />
-                    <HomeBody />
-                </Route>
-                <Route path="/form/:id">
-                    <FormHeader />
-                    <TabHeader />
-                    <Prompt
-                        when={true}
-                        message={() => `Bạn chắc chắn muốn thoát?`}
-                    />
-                </Route>
-            </Switch>
+            <Switch>{showContentMenu(routes)}</Switch>
         </Router>
     );
 }

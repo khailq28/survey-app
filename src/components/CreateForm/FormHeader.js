@@ -4,8 +4,8 @@ import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
+import { Redirect } from "react-router";
 import { IconButton } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
 import SlideBar from "./SlideBar";
 import { connect } from "react-redux";
 import { setStatusSlideBar, signOutAPI, setTitleForm } from "../../actions";
@@ -29,13 +29,6 @@ FormHeader.defaultProps = {
 };
 
 function FormHeader(props) {
-    const history = useHistory();
-
-    var signOut = () => {
-        props.signOut();
-        history.replace("/");
-    };
-
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
@@ -44,6 +37,16 @@ function FormHeader(props) {
 
     return (
         <Container>
+            {!props.user && (
+                <Redirect
+                    to={{
+                        pathname: "/",
+                        state: {
+                            from: props.match.url,
+                        },
+                    }}
+                />
+            )}
             <Content>
                 <Logo>
                     <a href="/home">
@@ -113,7 +116,7 @@ function FormHeader(props) {
                             )}
                         </User>
 
-                        <DropDown onClick={signOut}>
+                        <DropDown onClick={() => props.signOut()}>
                             <span>Sign out</span>
                         </DropDown>
                     </SignOut>

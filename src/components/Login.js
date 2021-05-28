@@ -7,7 +7,14 @@ import { Redirect } from "react-router";
 function Login(props) {
     return (
         <Container>
-            {props.user && <Redirect to="/home" />}
+            {props.user && (
+                <Redirect
+                    to={{
+                        pathname: props.location.state.from,
+                        state: { from: props.location.state.from },
+                    }}
+                />
+            )}
             <CTA>
                 <Content>
                     <Title>survey forms</Title>
