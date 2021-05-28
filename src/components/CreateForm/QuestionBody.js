@@ -80,7 +80,6 @@ function QuestionBody(props) {
 
     let [options, setOptions] = useState(question.options);
     let [questionText, setQuestionText] = useState(question.questionText);
-    let [type, setType] = useState(question.questionType);
 
     let handleChangeSelect = (e) => {
         let target = e.target;
@@ -152,7 +151,11 @@ function QuestionBody(props) {
                 )} */}
                 {option.other ? (
                     <div style={{ position: "relative" }}>
-                        <input className="text" type={type} disabled />
+                        <input
+                            className="text"
+                            type={question.questionType}
+                            disabled
+                        />
                         <OptionInput
                             type="text"
                             placeholder="Khác..."
@@ -170,7 +173,11 @@ function QuestionBody(props) {
                     </div>
                 ) : (
                     <div>
-                        <input className="text" type={type} disabled />
+                        <input
+                            className="text"
+                            type={question.questionType}
+                            disabled
+                        />
                         <OptionInput
                             type="text"
                             placeholder="Lựa chọn"
@@ -249,7 +256,11 @@ function QuestionBody(props) {
                 <div>
                     {questionCheckOrRadio}
                     <Body>
-                        <input className="text" type={type} disabled />
+                        <input
+                            className="text"
+                            type={question.questionType}
+                            disabled
+                        />
                         <CustomButtonAddOption onClick={handleAddOption}>
                             Thêm tùy chọn
                         </CustomButtonAddOption>

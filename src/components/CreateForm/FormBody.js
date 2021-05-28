@@ -61,6 +61,7 @@ function FormBody(props) {
     };
 
     var questionUI = questions.map((question, i) => {
+        console.log(question);
         return (
             <Draggable key={i} draggableId={i + "id"} index={i}>
                 {(provided, snapshot) => (
