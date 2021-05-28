@@ -85,7 +85,6 @@ function QuestionBody(props) {
         let target = e.target;
         let value = target.type === "checked" ? target.checked : target.value;
         props.changeTypeQuestion(value, index);
-        setType(value);
         setOptions([{ optionText: "" }]);
     };
 
