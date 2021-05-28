@@ -93,20 +93,23 @@ function FormBody(props) {
                                     {index + 1}. {question.questionText}
                                 </CustomTypography>
 
-                                {question.options.map((op, j) => (
-                                    <ListOption key={j}>
-                                        {question.options[j].other ? (
-                                            <CustomFormControlLabel
-                                                disabled
-                                                control={
-                                                    <input
-                                                        type={
-                                                            question.questionType
-                                                        }
-                                                        color="primary"
-                                                        style={{
-                                                            marginRight: "10px",
-                                                        }}
+                                {question.questionType === "radio" ||
+                                question.questionType === "checkbox" ? (
+                                    question.options.map((op, j) => (
+                                        <ListOption key={j}>
+                                            {question.options[j].other ? (
+                                                <CustomFormControlLabel
+                                                    disabled
+                                                    control={
+                                                        <input
+                                                            type={
+                                                                question.questionType
+                                                            }
+                                                            color="primary"
+                                                            style={{
+                                                                marginRight:
+                                                                    "10px",
+                                                            }}
                                                             required={
                                                                 question.type
                                                             }
@@ -130,8 +133,9 @@ function FormBody(props) {
                                                             }
                                                             color="primary"
                                                             style={{
-                                                            marginRight: "10px",
-                                                        }}
+                                                                marginRight:
+                                                                    "10px",
+                                                            }}
                                                             required={
                                                                 question.type
                                                             }
@@ -147,9 +151,20 @@ function FormBody(props) {
                                                         </CustomTypographyOption>
                                                     }
                                                 />
-                                        )}
-                                    </ListOption>
-                                ))}
+                                            )}
+                                        </ListOption>
+                                    ))
+                                ) : question.questionType === "text" ? (
+                                    <CustomText type="text">
+                                        Văn bản câu trả lời ngắn
+                                    </CustomText>
+                                ) : question.questionType === "textarea" ? (
+                                    <CustomText type="textarea">
+                                        Văn bản câu trả lời dài
+                                    </CustomText>
+                                ) : (
+                                    ""
+                                )}
                             </SaveQuestion>
                         ) : (
                             ""
@@ -315,6 +330,21 @@ const CustomTypographyOption = styled(Typography)`
         color: var(--icon-color);
         text-transform: none;
     }
+`;
+
+const CustomText = styled.div`
+    padding: 5px 0;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: var(--icon-color);
+    border-bottom: 1px solid #bdbdbd;
+    text-transform: none;
+    width: ${(props) =>
+        props.type === "text"
+            ? "250px"
+            : props.type === "textarea"
+            ? "330px"
+            : ""};
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormBody);
