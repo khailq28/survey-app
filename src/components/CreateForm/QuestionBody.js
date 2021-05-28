@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import ShortTextIcon from "@material-ui/icons/ShortText";
 import SubjectIcon from "@material-ui/icons/Subject";
@@ -80,6 +80,10 @@ function QuestionBody(props) {
 
     let [options, setOptions] = useState(question.options);
     let [questionText, setQuestionText] = useState(question.questionText);
+
+    useEffect(() => {
+        setQuestionText(question.questionText);
+    }, [question.questionText]);
 
     let handleChangeSelect = (e) => {
         let target = e.target;
