@@ -47,7 +47,7 @@ function CreateForm(props) {
 const Container = styled.div`
     background-color: ${(props) =>
         props.backgroundColor ? props.backgroundColor : "while"};
-    height: 100vh;
+    height: 100%;
 `;
 
 export default connect(mapStateToProps, null)(CreateForm);

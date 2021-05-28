@@ -223,7 +223,7 @@ const Box = styled.div`
 const Title = styled.div`
     text-transform: uppercase;
     font-size: 14px;
-    font-family: Roboto, Arial, sans-serif;
+    font-family: Roboto, Arial, sans-serif !important;
     font-weight: 400;
     letter-spacing: 0.3px;
     line-height: 16px;
