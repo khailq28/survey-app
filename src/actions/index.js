@@ -129,28 +129,30 @@ export function changeReruied(i) {
     };
 }
 
-export function addQuestion() {
+export function addQuestion(questions) {
     return {
         type: actionType.ADD_QUESTION,
+        questions,
     };
 }
 
-export function copyQuestion(i) {
+export function copyQuestion(questions) {
     return {
         type: actionType.COPY_QUESTION,
-        i, //vi tri cua cau hoi
+        questions,
     };
 }
 
-export function deleteQuestion(i) {
+export function deleteQuestion(questions) {
     return {
         type: actionType.REMOVE_QUESTION,
-        i, //vi tri cua cau hoi
+        questions,
     };
 }
 
-export function changeStatusOpenQuestion() {
+export function changeStatusOpenQuestion(i) {
     return {
         type: actionType.CHANGE_STATUS_OPEN_QUESTION,
+        i, //vi tri cua cau hoi
     };
 }

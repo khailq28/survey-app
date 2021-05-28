@@ -43,20 +43,20 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        addQuestion: () => {
-            dispatch(addQuestion());
+        addQuestion: (questions) => {
+            dispatch(addQuestion(questions));
         },
 
-        copyQuestion: (index) => {
-            dispatch(copyQuestion(index));
+        copyQuestion: (questions) => {
+            dispatch(copyQuestion(questions));
         },
 
-        deleteQuestion: (index) => {
-            dispatch(deleteQuestion(index));
+        deleteQuestion: (questions) => {
+            dispatch(deleteQuestion(questions));
         },
 
-        changeStatusOpenQuestion: () => {
-            dispatch(changeStatusOpenQuestion());
+        changeStatusOpenQuestion: (index) => {
+            dispatch(changeStatusOpenQuestion(index));
         },
     };
 };
@@ -65,18 +65,18 @@ function FormBody(props) {
     const [questions, setQuestions] = useState(props.questions);
 
     const handleChangeAccordion = (index) => {
-        let temp = [...questions];
+        var temp = [...questions];
         temp.forEach((question, i) => {
-            if (index !== i) question.open = false;
+            question.open = false;
         });
 
-        temp[index].open = !temp[index].open;
+        temp[index].open = true;
         setQuestions(temp);
-        props.changeStatusOpenQuestion();
+        props.changeStatusOpenQuestion(index);
     };
-    let questionUI = questions.map((question, index) => {
+    var questionUI = questions.map((question, index) => {
         return (
-            <Form key={index} show={"false"}>
+            <Form key={index} show={question.open}>
                 <Accordion
                     expanded={question.open}
                     // onChange={props.handleChange("panel" + (index + 1))}
@@ -164,7 +164,7 @@ function FormBody(props) {
     });
 
     const handleAddQuestion = () => {
-        let questionsTemp = [...questions];
+        var questionsTemp = [...questions];
         questionsTemp.forEach((question, index) => {
             question.open = false;
         });
@@ -176,21 +176,31 @@ function FormBody(props) {
             required: false,
         });
         setQuestions(questionsTemp);
-        props.addQuestion();
+        props.addQuestion(questionsTemp);
     };
 
     const handleCopyQuestion = (index) => {
-        let questionsTemp = [...questions];
-        questionsTemp.push(questionsTemp[index]);
+        var questionsTemp = [...questions];
+        questionsTemp.forEach((question) => {
+            question.open = false;
+        });
+        questionsTemp.push({
+            questionText: questionsTemp[index].questionText,
+            questionType: questionsTemp[index].questionType,
+            options: questionsTemp[index].options,
+            open: true,
+            required: questionsTemp[index].required,
+        });
+
         setQuestions(questionsTemp);
-        props.copyQuestion(index);
+        props.copyQuestion(questionsTemp);
     };
 
     const handleDeleteQuestion = (index) => {
-        let questionsTemp = [...questions];
+        var questionsTemp = [...questions];
         questionsTemp.splice(index, 1);
         setQuestions(questionsTemp);
-        props.deleteQuestion(index);
+        props.deleteQuestion(questionsTemp);
     };
 
     return (
@@ -233,8 +243,7 @@ const Form = styled.div`
     box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
     height: 100%;
     margin-bottom: 15px;
-    ${(props) =>
-        props.show === "true" ? `border-left:6px solid #4285f4;` : ``}
+    ${(props) => (props.show ? `border-left:6px solid #4285f4;` : ``)}
 
     @media (max-width: 768px) {
         width: 96%;

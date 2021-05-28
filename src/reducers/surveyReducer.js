@@ -91,24 +91,19 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
 
         case actionType.ADD_QUESTION:
-            state.questions.push({
-                questionText: "",
-                questionType: "text",
-                options: [{ optionText: "" }],
-                open: true,
-                required: false,
-            });
-            return { ...state };
+            return { ...state, questions: action.questions };
 
         case actionType.COPY_QUESTION:
-            state.questions.push(state.questions[action.i]);
-            return { ...state };
+            return { ...state, questions: action.questions };
 
         case actionType.REMOVE_QUESTION:
-            state.questions.splice(action.i, 1);
-            return { ...state };
+            return { ...state, questions: action.questions };
 
         case actionType.CHANGE_STATUS_OPEN_QUESTION:
+            state.questions.forEach((question, index) => {
+                question.open = false;
+            });
+            state.questions[action.i].open = true;
             return { ...state };
 
         default:
