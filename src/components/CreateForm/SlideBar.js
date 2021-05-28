@@ -6,22 +6,71 @@ import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
 import { IconButton } from "@material-ui/core";
 import { connect } from "react-redux";
-import { setStatusSlideBar } from "../../actions";
+import {
+    setStatusSlideBar,
+    setInterfaceColor,
+    setBackgroundColor,
+} from "../../actions";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 import PropTypes from "prop-types";
 
 SlideBar.propTypes = {
     slideBar: PropTypes.object,
     setStatusSlideBar: PropTypes.func,
+    colorList: PropTypes.array,
+    setInterfaceColor: PropTypes.func,
+    setBackgroundColor: PropTypes.func,
+    interfaceColor: PropTypes.string,
+    backgroundColor: PropTypes.string,
 };
 
 SlideBar.defaultProps = {
     slideBar: null,
     setStatusSlideBar: null,
+    colorList: null,
+    setInterfaceColor: null,
+    setBackgroundColor: null,
+    interfaceColor: null,
+    backgroundColor: null,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        slideBar: state.slideBar,
+        colorList: state.color,
+        interfaceColor: state.survey.interfaceColor,
+        backgroundColor: state.survey.backgroundColor,
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        setStatusSlideBar: (oStatus) => {
+            dispatch(setStatusSlideBar(oStatus));
+        },
+
+        setInterfaceColor: (interFaceColor) => {
+            dispatch(setInterfaceColor(interFaceColor));
+        },
+
+        setBackgroundColor: (backgroundColor) => {
+            dispatch(setBackgroundColor(backgroundColor));
+        },
+    };
 };
 
 function SlideBar(props) {
     var { status, title } = props.slideBar;
+
+    var { colorList } = props;
+
+    var bgColorTemp;
+    colorList.forEach((color, index) => {
+        if (props.interfaceColor === color.interface) {
+            bgColorTemp = index;
+        }
+    });
 
     var header =
         title === "layout" ? (
@@ -43,6 +92,67 @@ function SlideBar(props) {
             ""
         );
 
+    const handleChooseInterfaceColor = (index) => {
+        props.setInterfaceColor(props.colorList[index].interface);
+        props.setBackgroundColor(props.colorList[index].background[0].color);
+    };
+
+    const handleChooseBackgoundColor = (color) => {
+        props.setBackgroundColor(color);
+    };
+
+    var body =
+        title === "layout" ? (
+            <>
+                <Box>
+                    <Title>màu giao diện</Title>
+                    <Content>
+                        {colorList.map((color, index) => (
+                            <CustomCheckCircleIcon
+                                key={index}
+                                interface={color.interface}
+                                onClick={() =>
+                                    handleChooseInterfaceColor(index)
+                                }
+                                active={
+                                    props.interfaceColor === color.interface
+                                        ? "interface"
+                                        : ""
+                                }
+                            />
+                        ))}
+                    </Content>
+                </Box>
+                <Box>
+                    <Title>màu nền</Title>
+                    <Content>
+                        {colorList[bgColorTemp].background.map(
+                            (color, index) => (
+                                <CustomCheckCircleIcon
+                                    key={index}
+                                    interface={color.color}
+                                    onClick={() =>
+                                        handleChooseBackgoundColor(color.color)
+                                    }
+                                    active={
+                                        props.backgroundColor === color.color
+                                            ? "background"
+                                            : ""
+                                    }
+                                />
+                            ),
+                        )}
+                    </Content>
+                </Box>
+            </>
+        ) : title === "send" ? (
+            ""
+        ) : title === "setting" ? (
+            ""
+        ) : (
+            ""
+        );
+
     return (
         <Slide show={status}>
             <SlideHeader>
@@ -60,6 +170,8 @@ function SlideBar(props) {
                     </IconButton>
                 </SlideRight>
             </SlideHeader>
+
+            {body}
         </Slide>
     );
 }
@@ -103,18 +215,49 @@ const SlideLeft = styled.div`
 const SlideRight = styled.div``;
 const CustomClose = styled(CloseIcon)``;
 
-const mapStateToProps = (state) => {
-    return {
-        slideBar: state.slideBar,
-    };
-};
+const Box = styled.div`
+    border-bottom: 1px solid rgb(0 0 0 / 25%);
+    padding: 20px 15px;
+`;
 
-const mapDispatchToProps = (dispatch, props) => {
-    return {
-        setStatusSlideBar: (oStatus) => {
-            dispatch(setStatusSlideBar(oStatus));
-        },
-    };
-};
+const Title = styled.div`
+    text-transform: uppercase;
+    font-size: 14px;
+    font-family: Roboto, Arial, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    line-height: 16px;
+    margin-bottom: 20px;
+`;
+
+const Content = styled.div`
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+`;
+
+const CustomCheckCircleIcon = styled(CheckCircleIcon)`
+    background-color: ${(props) => props.interface};
+    color: ${(props) => props.interface};
+    border-radius: 50%;
+    font-size: 33px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    cursor: pointer;
+    border: 0.5px solid rgb(0 0 0 / 25%);
+    box-sizing: border-box;
+    transition: 0.4s;
+
+    ${(props) =>
+        props.active === "interface"
+            ? `background-color: rgb(0 0 0 / 15%);`
+            : props.active === "background"
+            ? `background-color: rgb(0 0 0 / 50%);`
+            : ""}
+`;
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlideBar);

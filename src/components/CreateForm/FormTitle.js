@@ -9,6 +9,7 @@ FormTitle.propTypes = {
     setTitleForm: PropTypes.func,
     setDescription: PropTypes.func,
     description: PropTypes.string,
+    interfaceColor: PropTypes.string,
 };
 
 FormTitle.defaultProps = {
@@ -16,12 +17,14 @@ FormTitle.defaultProps = {
     setTitleForm: null,
     setDescription: null,
     description: "",
+    interfaceColor: null,
 };
 
 const mapStateToProps = (state) => {
     return {
         title: state.survey.title,
         description: state.survey.description,
+        interfaceColor: state.survey.interfaceColor,
     };
 };
 
@@ -53,7 +56,7 @@ function FormTitle(props) {
     };
 
     return (
-        <Title>
+        <Title interfaceColor={props.interfaceColor}>
             <QuestionFormName
                 type="'text"
                 value={props.title}
@@ -81,7 +84,8 @@ function FormTitle(props) {
 }
 
 const Title = styled.div`
-    border-top: 8px solid var(--basic-color);
+    border-top: 10px solid
+        ${(props) => (props.interfaceColor ? props.interfaceColor : "")};
     background-color: white;
     border-radius: 6px;
     padding: 25px 20px;

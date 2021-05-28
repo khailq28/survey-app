@@ -1,9 +1,7 @@
 import Login from "./components/Login";
 import HomeBody from "./components/Home/HomeBody";
 import Header from "./components/Home/Header";
-import { Prompt } from "react-router-dom";
-import FormHeader from "./components/CreateForm/FormHeader";
-import TabHeader from "./components/CreateForm/TabHeader";
+import CreateForm from "./components/CreateForm/CreateForm";
 
 import React from "react";
 
@@ -29,14 +27,7 @@ const routes = [
         path: "/form/:id",
         exact: false,
         main: ({ match, location }) => (
-            <>
-                <FormHeader match={match} location={location} />
-                <TabHeader />
-                <Prompt
-                    when={true}
-                    message={() => `Bạn chắc chắn muốn thoát?`}
-                />
-            </>
+            <CreateForm match={match} location={location} />
         ),
     },
 ];

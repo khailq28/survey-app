@@ -4,7 +4,6 @@ import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
-import { Redirect } from "react-router";
 import { IconButton } from "@material-ui/core";
 import SlideBar from "./SlideBar";
 import { connect } from "react-redux";
@@ -37,16 +36,6 @@ function FormHeader(props) {
 
     return (
         <Container>
-            {!props.user && (
-                <Redirect
-                    to={{
-                        pathname: "/",
-                        state: {
-                            from: props.match.url,
-                        },
-                    }}
-                />
-            )}
             <Content>
                 <Logo>
                     <a href="/home">

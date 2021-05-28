@@ -6,29 +6,6 @@ var INITIAL_STATE = {
     title: "Mẫu Không tiêu đề",
     description: "",
     questions: [
-        // {
-        //     questionText: "asdf?",
-        //     questionType: "radio",
-        //     options: [
-        //         { optionText: "a" },
-        //         { optionText: "b" },
-        //         { optionText: "c" },
-        //         { other: true },
-        //     ],
-        //     open: false,
-        //     required: false,
-        // },
-        // {
-        //     questionText: "asdffdsa?",
-        //     questionType: "checkbox",
-        //     options: [
-        //         { optionText: "a" },
-        //         { optionText: "b" },
-        //         { optionText: "c" },
-        //     ],
-        //     open: false,
-        //     required: false,
-        // },
         {
             questionText: "",
             questionType: "text",
@@ -37,6 +14,8 @@ var INITIAL_STATE = {
             required: false,
         },
     ],
+    interfaceColor: "#673AB7",
+    backgroundColor: "#F0EBF8",
 };
 
 const surveyReducer = (state = INITIAL_STATE, action) => {
@@ -107,6 +86,14 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             state.questions[action.i].open = true;
             return { ...state };
 
+        case actionType.SET_INTERFACE_COLOR:
+            state.interfaceColor = action.interfaceColor;
+            return { ...state };
+
+        case actionType.SET_BACKGROUND_COLOR:
+            state.backgroundColor = action.backgroundColor;
+
+            return { ...state };
         default:
             return { ...state };
     }

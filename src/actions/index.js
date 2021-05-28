@@ -142,3 +142,17 @@ export function changeStatusOpenQuestion(i) {
         i, //vi tri cua cau hoi
     };
 }
+
+export function setInterfaceColor(interfaceColor) {
+    return {
+        type: actionType.SET_INTERFACE_COLOR,
+        interfaceColor,
+    };
+}
+
+export function setBackgroundColor(backgroundColor) {
+    return {
+        type: actionType.SET_BACKGROUND_COLOR,
+        backgroundColor,
+    };
+}
