@@ -1,6 +1,5 @@
 import Login from "./components/Login";
-import HomeBody from "./components/Home/HomeBody";
-import Header from "./components/Home/Header";
+import Home from "./components/Home/Home";
 import CreateForm from "./components/CreateForm/CreateForm";
 
 import React from "react";
@@ -17,14 +16,11 @@ const routes = [
         path: "/home",
         exact: false,
         main: ({ match, location }) => (
-            <>
-                <Header match={match} location={location} />
-                <HomeBody />
-            </>
+            <Home match={match} location={location} />
         ),
     },
     {
-        path: "/form/:id",
+        path: "/form/edit/:id",
         exact: false,
         main: ({ match, location }) => (
             <CreateForm match={match} location={location} />

@@ -55,6 +55,13 @@ export function createNewForm(id, author) {
     };
 }
 
+export function findFormById(id) {
+    return {
+        type: actionType.FIND_FORM_BY_ID,
+        id,
+    };
+}
+
 export function setTitleForm(title) {
     return {
         type: actionType.SET_TITLE_FORM,

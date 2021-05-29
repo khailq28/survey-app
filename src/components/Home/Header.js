@@ -3,30 +3,19 @@ import styled from "styled-components";
 import SearchIcon from "@material-ui/icons/Search";
 import { connect } from "react-redux";
 import { signOutAPI } from "../../actions";
-import { Redirect } from "react-router";
 import PropTypes from "prop-types";
 
 Header.propTypes = {
-    user: PropTypes.object,
     signOut: PropTypes.func,
 };
 
 Header.defaultProps = {
-    user: null,
     signOut: null,
 };
 
 function Header(props) {
     return (
         <Container>
-            {!props.user && (
-                <Redirect
-                    to={{
-                        pathname: "/",
-                        state: props.match.url,
-                    }}
-                />
-            )}
             <Content>
                 <Logo>
                     <a href="/home">
@@ -67,7 +56,7 @@ const Container = styled.div`
     position: fixed;
     top: 0;
     width: 100vw;
-    z-index: 100;
+    z-index: 98;
 
     @media only screen and (min-width: 480px) and (max-width: 768px) {
         padding: 0 10px;

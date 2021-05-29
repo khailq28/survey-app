@@ -14,16 +14,19 @@ import PropTypes from "prop-types";
 HomeBody.propTypes = {
     createNewForm: PropTypes.func,
     user: PropTypes.object,
+    listSurvey: PropTypes.array,
 };
 
 HomeBody.defaultProps = {
     createNewForm: null,
     userEmail: null,
+    listSurvey: [],
 };
 
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
+        listSurvey: state.listSurvey,
     };
 };
 
@@ -38,11 +41,17 @@ const mapDispatchToProps = (dispatch, props) => {
 function HomeBody(props) {
     const history = useHistory();
 
+    var { listSurvey } = props;
+
     const CreateForm = () => {
         let id = uuid();
         props.createNewForm(id, props.user.email);
 
-        history.push("/form/" + id);
+        history.push("/form/edit/" + id);
+    };
+
+    const handleRemoveSurvey = (id) => {
+        console.log(id);
     };
 
     return (
@@ -65,18 +74,20 @@ function HomeBody(props) {
                         </IconButton>
                     </Right>
                 </Top>
-                <Content>
-                    <FormRecent />
-                    <FormRecent />
-                    <FormRecent />
-                    <FormRecent />
-                    <FormRecent />
-                    <FormRecent />
-                    <FormRecent />
-                    <FormRecent />
-                    <FormRecent />
-                    <FormRecent />
-                </Content>
+
+                {listSurvey.length === 0 ? (
+                    <ArrayEmpty>Bạn chưa tạo biểu mẫu nào</ArrayEmpty>
+                ) : (
+                    <Content>
+                        {listSurvey.map((survey, index) => (
+                            <FormRecent
+                                surver={survey}
+                                key={index}
+                                handleRemoveSurvey={handleRemoveSurvey}
+                            />
+                        ))}
+                    </Content>
+                )}
             </Body>
         </Container>
     );
@@ -164,7 +175,7 @@ const Content = styled.div`
     display: grid;
     grid-gap: 20px;
     gap: 20px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     width: 100%;
     box-sizing: border-box;
     padding: 8px;
@@ -172,6 +183,15 @@ const Content = styled.div`
     @media (max-width: 768px) {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+`;
+
+const ArrayEmpty = styled.div`
+    border-top: 1px rgb(0 0 0 / 20%) solid;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    color: red;
+    font-size: 16px;
+    font-weight: 600;
 `;
 
 const StorageButton = styled(StorageIcon)`

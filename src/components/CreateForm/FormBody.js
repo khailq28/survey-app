@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -14,18 +14,25 @@ import QuestionFooter from "./QuestionFooter";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-import { setQuestions, changeStatusOpenQuestion } from "../../actions";
+import {
+    setQuestions,
+    changeStatusOpenQuestion,
+    findFormById,
+} from "../../actions";
+import { useParams } from "react-router";
 
 FormBody.propTypes = {
     questions: PropTypes.array,
     setQuestions: PropTypes.func,
     changeStatusOpenQuestion: PropTypes.func,
+    findFormById: PropTypes.func,
 };
 
 FormBody.defaultProps = {
     questions: null,
     setQuestions: null,
     changeStatusOpenQuestion: null,
+    findFormById: null,
 };
 
 const mapStateToProps = (state) => {
@@ -43,10 +50,20 @@ const mapDispatchToProps = (dispatch, props) => {
         changeStatusOpenQuestion: (index) => {
             dispatch(changeStatusOpenQuestion(index));
         },
+
+        findFormById: (id) => {
+            dispatch(findFormById(id));
+        },
     };
 };
 
 function FormBody(props) {
+    // set state by id
+    let { id } = useParams();
+    useEffect(() => {
+        props.findFormById(id);
+    }, []);
+
     const [questions, setQuestions] = useState(props.questions);
 
     const handleChangeAccordion = (index) => {
