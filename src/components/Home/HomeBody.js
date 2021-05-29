@@ -8,27 +8,32 @@ import uuid from "react-uuid";
 import { useHistory } from "react-router-dom";
 import FormRecent from "./FormRecent";
 import { connect } from "react-redux";
-import { createNewForm, setStatusDialog } from "../../actions";
+import { createNewForm, setStatusDialog, sortListSurveys } from "../../actions";
 import PropTypes from "prop-types";
 
 HomeBody.propTypes = {
     createNewForm: PropTypes.func,
     setStatusDialog: PropTypes.func,
+    sortListSurveys: PropTypes.func,
     user: PropTypes.object,
     listSurvey: PropTypes.array,
+    sort: PropTypes.object,
 };
 
 HomeBody.defaultProps = {
     createNewForm: null,
     setStatusDialog: null,
+    sortListSurveys: null,
     userEmail: null,
     listSurvey: [],
+    sort: null,
 };
 
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
         listSurvey: state.listSurvey,
+        sort: state.sort,
     };
 };
 
@@ -41,13 +46,17 @@ const mapDispatchToProps = (dispatch, props) => {
         setStatusDialog: (id) => {
             dispatch(setStatusDialog(id));
         },
+
+        sortListSurveys: () => {
+            dispatch(sortListSurveys());
+        },
     };
 };
 
 function HomeBody(props) {
     const history = useHistory();
 
-    var { listSurvey } = props;
+    var { listSurvey, sort } = props;
 
     const CreateForm = () => {
         let id = uuid();
@@ -59,6 +68,14 @@ function HomeBody(props) {
     const handleRemoveSurvey = (id) => {
         props.setStatusDialog(id);
     };
+
+    // sort
+    listSurvey.sort((a, b) => {
+        if (a.title > b.title) return sort.value;
+        //1 tang, -1 giam
+        else if (a.title < b.title) return -sort.value;
+        else return 0;
+    });
 
     return (
         <Container>
@@ -75,7 +92,7 @@ function HomeBody(props) {
                         <IconButton>
                             <StorageButton />
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={props.sortListSurveys}>
                             <SortByButton />
                         </IconButton>
                     </Right>

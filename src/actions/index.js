@@ -171,3 +171,9 @@ export function removeSurvey(id) {
         id,
     };
 }
+
+export function sortListSurveys() {
+    return {
+        type: actionType.SORT,
+    };
+}

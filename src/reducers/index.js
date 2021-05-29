@@ -5,6 +5,7 @@ import surveyReducer from "./surveyReducer";
 import colorReducer from "./colorReducer";
 import allSurveyReducer from "./allSurveyReducer";
 import dialogReducer from "./dialogReducer";
+import sortReducer from "./sortReducer";
 
 const rootReducers = combineReducers({
     userState: userReducer,
@@ -13,6 +14,7 @@ const rootReducers = combineReducers({
     color: colorReducer,
     listSurvey: allSurveyReducer,
     dialog: dialogReducer,
+    sort: sortReducer,
 });
 
 export default rootReducers;
