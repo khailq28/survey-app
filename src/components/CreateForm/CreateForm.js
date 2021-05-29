@@ -31,9 +31,7 @@ function CreateForm(props) {
                 <Redirect
                     to={{
                         pathname: "/",
-                        state: {
-                            from: props.match.url,
-                        },
+                        state: props.match.url,
                     }}
                 />
             )}
@@ -48,6 +46,8 @@ const Container = styled.div`
     background-color: ${(props) =>
         props.backgroundColor ? props.backgroundColor : "while"};
     height: 100%;
+    min-height: 100vh;
+    padding-bottom: 30px;
 `;
 
 export default connect(mapStateToProps, null)(CreateForm);

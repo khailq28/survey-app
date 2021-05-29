@@ -47,10 +47,11 @@ export function setStatusSlideBar(oStatus) {
     };
 }
 
-export function setIdForm(id) {
+export function createNewForm(id, author) {
     return {
-        type: actionType.SET_ID_FORM,
+        type: actionType.CREATE_NEW_FORM,
         id,
+        author,
     };
 }
 
@@ -65,13 +66,6 @@ export function setDescription(description) {
     return {
         type: actionType.SET_DESCRIPTION,
         description,
-    };
-}
-
-export function setAuthor(author) {
-    return {
-        type: actionType.SET_AUTHOR,
-        author,
     };
 }
 

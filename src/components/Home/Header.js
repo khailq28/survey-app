@@ -23,9 +23,7 @@ function Header(props) {
                 <Redirect
                     to={{
                         pathname: "/",
-                        state: {
-                            from: props.match.url,
-                        },
+                        state: props.match.url,
                     }}
                 />
             )}

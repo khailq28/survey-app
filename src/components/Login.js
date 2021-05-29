@@ -10,8 +10,10 @@ function Login(props) {
             {props.user && (
                 <Redirect
                     to={{
-                        pathname: props.location.state.from,
-                        state: { from: props.location.state.from },
+                        pathname:
+                            props.location.state === undefined
+                                ? "/home"
+                                : props.location.state,
                     }}
                 />
             )}

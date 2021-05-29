@@ -20,9 +20,24 @@ var INITIAL_STATE = {
 
 const surveyReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case actionType.SET_ID_FORM:
-            state.id = action.id;
-            return { ...state };
+        case actionType.CREATE_NEW_FORM:
+            return {
+                id: action.id,
+                author: action.author,
+                title: "Mẫu Không tiêu đề",
+                description: "",
+                questions: [
+                    {
+                        questionText: "",
+                        questionType: "text",
+                        options: [{ optionText: "" }],
+                        open: true,
+                        required: false,
+                    },
+                ],
+                interfaceColor: "#673AB7",
+                backgroundColor: "#F0EBF8",
+            };
 
         case actionType.SET_TITLE_FORM:
             state.title = action.title;
@@ -30,10 +45,6 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
 
         case actionType.SET_DESCRIPTION:
             state.description = action.description;
-            return { ...state };
-
-        case actionType.SET_AUTHOR:
-            state.author = action.author;
             return { ...state };
 
         case actionType.CHANGE_TYPE_QUESTION:
