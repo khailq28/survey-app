@@ -85,6 +85,7 @@ function FormRecent(props) {
 }
 
 const Item = styled.div`
+    overflow-x: hidden;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -140,7 +141,23 @@ const Title = styled.h5`
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    width: 100%;
+    width: 130px;
+
+    @media (max-width: 768px) {
+        width: 80px;
+    }
+
+    @media (max-width: 540px) {
+        width: 130px;
+    }
+
+    @media (max-width: 320px) {
+        width: 60px;
+    }
+
+    @media (max-width: 280px) {
+        width: 40px;
+    }
 `;
 
 const Content = styled.div`
@@ -182,6 +199,7 @@ const DeleteButton = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: left;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormRecent);

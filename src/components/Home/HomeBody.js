@@ -193,6 +193,11 @@ const CreateNewSurvey = styled.div`
     & > p {
         margin-left: 45px;
     }
+
+    @media (max-width: 280px) {
+        width: 90%;
+        font-size: 16px;
+    }
 `;
 
 const AddIcon = styled(PostAddIcon)`

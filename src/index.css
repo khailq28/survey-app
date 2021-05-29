@@ -82,7 +82,7 @@ a {
 
 @keyframes slideLeft {
     from {
-        transform: translateX(50%);
+        transform: translateX(10%);
     }
 
     to {
