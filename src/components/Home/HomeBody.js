@@ -18,15 +18,17 @@ HomeBody.propTypes = {
     user: PropTypes.object,
     listSurvey: PropTypes.array,
     sort: PropTypes.object,
+    keyword: PropTypes.string,
 };
 
 HomeBody.defaultProps = {
     createNewForm: null,
     setStatusDialog: null,
     sortListSurveys: null,
-    userEmail: null,
+    user: null,
     listSurvey: [],
     sort: null,
+    keyword: null,
 };
 
 const mapStateToProps = (state) => {
@@ -34,6 +36,7 @@ const mapStateToProps = (state) => {
         user: state.userState.user,
         listSurvey: state.listSurvey,
         sort: state.sort,
+        keyword: state.search,
     };
 };
 
@@ -56,7 +59,7 @@ const mapDispatchToProps = (dispatch, props) => {
 function HomeBody(props) {
     const history = useHistory();
 
-    var { listSurvey, sort } = props;
+    var { listSurvey, sort, keyword } = props;
 
     const CreateForm = () => {
         let id = uuid();
@@ -68,6 +71,15 @@ function HomeBody(props) {
     const handleRemoveSurvey = (id) => {
         props.setStatusDialog(id);
     };
+
+    // search
+    if (keyword) {
+        listSurvey = listSurvey.filter((survey) => {
+            return (
+                survey.title.toLowerCase().indexOf(keyword.toLowerCase()) !== -1
+            );
+        });
+    }
 
     // sort
     listSurvey.sort((a, b) => {

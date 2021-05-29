@@ -177,3 +177,10 @@ export function sortListSurveys() {
         type: actionType.SORT,
     };
 }
+
+export function searchSurvey(keyword) {
+    return {
+        type: actionType.SEARCH,
+        keyword,
+    };
+}

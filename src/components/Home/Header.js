@@ -2,18 +2,49 @@ import React from "react";
 import styled from "styled-components";
 import SearchIcon from "@material-ui/icons/Search";
 import { connect } from "react-redux";
-import { signOutAPI } from "../../actions";
+import { signOutAPI, searchSurvey } from "../../actions";
 import PropTypes from "prop-types";
 
 Header.propTypes = {
+    user: PropTypes.object,
     signOut: PropTypes.func,
+    searchSurvey: PropTypes.func,
+    keyword: PropTypes.string,
 };
 
 Header.defaultProps = {
+    user: null,
     signOut: null,
+    searchSurvey: null,
+    keyword: null,
+};
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+        keyword: state.search,
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        signOut: () => {
+            dispatch(signOutAPI());
+        },
+
+        searchSurvey: (keyword) => {
+            dispatch(searchSurvey(keyword));
+        },
+    };
 };
 
 function Header(props) {
+    const handleChangeKeyword = (e) => {
+        var target = e.target;
+        var value = target.type === "checkbox" ? target.checked : target.value;
+        props.searchSurvey(value);
+    };
+
     return (
         <Container>
             <Content>
@@ -24,7 +55,12 @@ function Header(props) {
                 </Logo>
                 <Search>
                     <div>
-                        <input type="text" placeholder="Search" />
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            value={props.keyword}
+                            onChange={handleChangeKeyword}
+                        />
                     </div>
                     <Icon>
                         <SearchIcon />
@@ -279,19 +315,5 @@ const SignOut = styled.div`
         }
     }
 `;
-
-const mapStateToProps = (state) => {
-    return {
-        user: state.userState.user,
-    };
-};
-
-const mapDispatchToProps = (dispatch, props) => {
-    return {
-        signOut: () => {
-            dispatch(signOutAPI());
-        },
-    };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

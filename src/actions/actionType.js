@@ -18,3 +18,4 @@ export const SET_BACKGROUND_COLOR = "SET_BACKGROUND_COLOR";
 export const SET_STATUS_DIALOG = "SET_STATUS_DIALOG";
 export const REMOVE_SURVEY = "REMOVE_SURVEY";
 export const SORT = "SORT";
+export const SEARCH = "SEARCH";
