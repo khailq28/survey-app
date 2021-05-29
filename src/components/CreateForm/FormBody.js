@@ -71,22 +71,9 @@ function FormBody(props) {
                     >
                         <div>
                             <div style={{ marginBottom: "0px" }}>
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        marginBottom: "0px",
-                                    }}
-                                >
-                                    <DragIndicatorIcon
-                                        style={{
-                                            transform: "rotate(-90deg)",
-                                            color: "#DAE0E2",
-                                            position: "relative",
-                                            left: "300px",
-                                        }}
-                                        fontSize="small"
-                                    />
-                                </div>
+                                <CustomDivDrag>
+                                    <CustomDragIndicatorIcon fontSize="small" />
+                                </CustomDivDrag>
                                 <Form show={question.open}>
                                     <Accordion
                                         expanded={question.open}
@@ -422,6 +409,19 @@ const CustomText = styled.div`
             : props.type === "textarea"
             ? "330px"
             : ""};
+`;
+
+const CustomDragIndicatorIcon = styled(DragIndicatorIcon)`
+    transform: rotate(-90deg);
+    color: var(--icon-color);
+`;
+
+const CustomDivDrag = styled.div`
+    width: 100%;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormBody);
