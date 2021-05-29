@@ -19,3 +19,4 @@ export const SET_STATUS_DIALOG = "SET_STATUS_DIALOG";
 export const REMOVE_SURVEY = "REMOVE_SURVEY";
 export const SORT = "SORT";
 export const SEARCH = "SEARCH";
+export const SET_VIEW_MODE = "SET_VIEW_MODE";

@@ -7,6 +7,7 @@ import allSurveyReducer from "./allSurveyReducer";
 import dialogReducer from "./dialogReducer";
 import sortReducer from "./sortReducer";
 import searchReducer from "./searchReducer";
+import viewModeReducer from "./viewModeReducer";
 
 const rootReducers = combineReducers({
     userState: userReducer,
@@ -17,6 +18,7 @@ const rootReducers = combineReducers({
     dialog: dialogReducer,
     sort: sortReducer,
     search: searchReducer,
+    viewMode: viewModeReducer,
 });
 
 export default rootReducers;

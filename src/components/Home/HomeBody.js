@@ -2,33 +2,43 @@ import React from "react";
 import styled from "styled-components";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import StorageIcon from "@material-ui/icons/Storage";
+import ViewComfyIcon from "@material-ui/icons/ViewComfy";
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import { IconButton } from "@material-ui/core";
 import uuid from "react-uuid";
 import { useHistory } from "react-router-dom";
 import FormRecent from "./FormRecent";
 import { connect } from "react-redux";
-import { createNewForm, setStatusDialog, sortListSurveys } from "../../actions";
+import {
+    createNewForm,
+    setStatusDialog,
+    sortListSurveys,
+    setViewMode,
+} from "../../actions";
 import PropTypes from "prop-types";
 
 HomeBody.propTypes = {
     createNewForm: PropTypes.func,
     setStatusDialog: PropTypes.func,
     sortListSurveys: PropTypes.func,
+    setViewMode: PropTypes.func,
     user: PropTypes.object,
     listSurvey: PropTypes.array,
     sort: PropTypes.object,
     keyword: PropTypes.string,
+    viewMode: PropTypes.string,
 };
 
 HomeBody.defaultProps = {
     createNewForm: null,
     setStatusDialog: null,
     sortListSurveys: null,
+    setViewMode: null,
     user: null,
     listSurvey: [],
     sort: null,
     keyword: null,
+    viewMode: null,
 };
 
 const mapStateToProps = (state) => {
@@ -37,6 +47,7 @@ const mapStateToProps = (state) => {
         listSurvey: state.listSurvey,
         sort: state.sort,
         keyword: state.search,
+        viewMode: state.viewMode,
     };
 };
 
@@ -53,13 +64,17 @@ const mapDispatchToProps = (dispatch, props) => {
         sortListSurveys: () => {
             dispatch(sortListSurveys());
         },
+
+        setViewMode: () => {
+            dispatch(setViewMode());
+        },
     };
 };
 
 function HomeBody(props) {
     const history = useHistory();
 
-    var { listSurvey, sort, keyword } = props;
+    var { listSurvey, sort, keyword, viewMode } = props;
 
     const CreateForm = () => {
         let id = uuid();
@@ -101,8 +116,12 @@ function HomeBody(props) {
                     <Left>Biểu mẫu gần đây</Left>
 
                     <Right>
-                        <IconButton>
-                            <StorageButton />
+                        <IconButton onClick={props.setViewMode}>
+                            {viewMode === "grid" ? (
+                                <StorageButton />
+                            ) : (
+                                <ViewComfyButton />
+                            )}
                         </IconButton>
                         <IconButton onClick={props.sortListSurveys}>
                             <SortByButton />
@@ -112,16 +131,28 @@ function HomeBody(props) {
 
                 {listSurvey.length === 0 ? (
                     <ArrayEmpty>Bạn chưa tạo biểu mẫu nào</ArrayEmpty>
-                ) : (
+                ) : viewMode === "grid" ? (
                     <Content>
                         {listSurvey.map((survey, index) => (
                             <FormRecent
                                 surver={survey}
                                 key={index}
+                                viewMode={viewMode}
                                 handleRemoveSurvey={handleRemoveSurvey}
                             />
                         ))}
                     </Content>
+                ) : (
+                    <ContentList>
+                        {listSurvey.map((survey, index) => (
+                            <FormRecent
+                                surver={survey}
+                                key={index}
+                                viewMode={viewMode}
+                                handleRemoveSurvey={handleRemoveSurvey}
+                            />
+                        ))}
+                    </ContentList>
                 )}
             </Body>
         </Container>
@@ -205,6 +236,13 @@ const Right = styled.div`
     border-left: 1px rgb(0 0 0 / 20%) solid;
 `;
 
+const ContentList = styled.div`
+    padding: 8px;
+    border-top: 1px rgb(0 0 0 / 20%) solid;
+    width: 100%;
+    box-sizing: border-box;
+`;
+
 const Content = styled.div`
     border-top: 1px rgb(0 0 0 / 20%) solid;
     display: grid;
@@ -230,6 +268,11 @@ const ArrayEmpty = styled.div`
 `;
 
 const StorageButton = styled(StorageIcon)`
+    font-size: 26px;
+    color: black;
+`;
+
+const ViewComfyButton = styled(ViewComfyIcon)`
     font-size: 26px;
     color: black;
 `;

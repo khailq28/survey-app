@@ -178,6 +178,12 @@ export function sortListSurveys() {
     };
 }
 
+export function setViewMode() {
+    return {
+        type: actionType.SET_VIEW_MODE,
+    };
+}
+
 export function searchSurvey(keyword) {
     return {
         type: actionType.SEARCH,

@@ -8,12 +8,14 @@ import { useHistory } from "react-router";
 
 FormRecent.propTypes = {
     surver: PropTypes.object,
+    viewMode: PropTypes.string,
     handleOnClick: PropTypes.func,
     handleRemoveSurvey: PropTypes.func,
 };
 
 FormRecent.defaultProps = {
     surver: null,
+    viewMode: null,
     handleOnClick: null,
     handleRemoveSurvey: null,
 };
@@ -27,7 +29,7 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function FormRecent(props) {
-    var { surver } = props;
+    var { surver, viewMode } = props;
     const history = useHistory();
 
     const handleOnClick = (id) => {
@@ -35,29 +37,76 @@ function FormRecent(props) {
     };
 
     return (
-        <Card>
-            <img
-                src="/images/home/form.png"
-                alt=""
-                onClick={() => handleOnClick(surver.id)}
-            />
-            <Body>
-                <Content>
-                    <ContentBody onClick={() => handleOnClick(surver.id)}>
+        <>
+            {viewMode === "grid" ? (
+                <Card>
+                    <img
+                        src="/images/home/form.png"
+                        alt=""
+                        onClick={() => handleOnClick(surver.id)}
+                    />
+                    <Body>
+                        <Content>
+                            <ContentBody
+                                onClick={() => handleOnClick(surver.id)}
+                            >
+                                <StorageButton />
+                                &nbsp;
+                                <Title>{surver.title}</Title>
+                            </ContentBody>
+                            <DeleteButton
+                                onClick={() =>
+                                    props.handleRemoveSurvey(surver.id)
+                                }
+                            >
+                                <CustomDeleteIcon />
+                            </DeleteButton>
+                        </Content>
+                    </Body>
+                </Card>
+            ) : (
+                <Item>
+                    <Left onClick={() => handleOnClick(surver.id)}>
                         <StorageButton />
                         &nbsp;
                         <Title>{surver.title}</Title>
-                    </ContentBody>
-                    <DeleteButton
-                        onClick={() => props.handleRemoveSurvey(surver.id)}
-                    >
-                        <CustomDeleteIcon />
-                    </DeleteButton>
-                </Content>
-            </Body>
-        </Card>
+                    </Left>
+                    <Right>
+                        <DeleteButton
+                            onClick={() => props.handleRemoveSurvey(surver.id)}
+                        >
+                            <CustomDeleteIcon />
+                        </DeleteButton>
+                    </Right>
+                </Item>
+            )}
+        </>
     );
 }
+
+const Item = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    animation: slideLeft 0.8s ease forwards;
+
+    &:hover {
+        border: 1px solid #6e2594;
+    }
+`;
+const Left = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+`;
+const Right = styled.div``;
 
 const Card = styled.div`
     display: flex;
@@ -87,7 +136,6 @@ const Body = styled.div`
 `;
 
 const Title = styled.h5`
-    overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
