@@ -1,0 +1,25 @@
+[debug] [2021-05-29T10:14:29.273Z] ----------------------------------------------------------------------
+[debug] [2021-05-29T10:14:29.278Z] Command:       D:\nodejs\node.exe C:\Users\TGDD\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2021-05-29T10:14:29.279Z] CLI Version:   9.11.0
+[debug] [2021-05-29T10:14:29.280Z] Platform:      win32
+[debug] [2021-05-29T10:14:29.280Z] Node Version:  v15.14.0
+[debug] [2021-05-29T10:14:29.282Z] Time:          Sat May 29 2021 17:14:29 GMT+0700 (Indochina Time)
+[debug] [2021-05-29T10:14:29.283Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-05-29T10:14:29.300Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-05-29T10:14:29.301Z] > authorizing via signed-in user (khailuong61@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  E:\2021\DACNTT2\survey-app-clone
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+

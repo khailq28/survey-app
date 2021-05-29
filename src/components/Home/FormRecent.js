@@ -104,7 +104,6 @@ const Item = styled.div`
 const Left = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-grow: 1;
 `;
 const Right = styled.div``;
@@ -190,7 +189,7 @@ const CustomDeleteIcon = styled(DeleteIcon)`
     transition: 0.4s;
 
     &:hover {
-        font-size: 30px;
+        font-size: 22px;
         color: var(--basic-color);
     }
 `;

@@ -130,7 +130,7 @@ function HomeBody(props) {
                 </Top>
 
                 {listSurvey.length === 0 ? (
-                    <ArrayEmpty>Bạn chưa tạo biểu mẫu nào</ArrayEmpty>
+                    <ArrayEmpty>Không có nội dung hiển thị</ArrayEmpty>
                 ) : viewMode === "grid" ? (
                     <Content>
                         {listSurvey.map((survey, index) => (
@@ -187,7 +187,8 @@ const CreateNewSurvey = styled.div`
     animation: animateDown infinite 1.5s forwards;
 
     &:hover {
-        background-color: #0483ee;
+        border: 4px solid rgba(14, 42, 71, 0.9);
+        transition-duration: 200ms;
     }
 
     & > p {
