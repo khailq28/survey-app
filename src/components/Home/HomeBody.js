@@ -8,17 +8,19 @@ import uuid from "react-uuid";
 import { useHistory } from "react-router-dom";
 import FormRecent from "./FormRecent";
 import { connect } from "react-redux";
-import { createNewForm } from "../../actions";
+import { createNewForm, setStatusDialog } from "../../actions";
 import PropTypes from "prop-types";
 
 HomeBody.propTypes = {
     createNewForm: PropTypes.func,
+    setStatusDialog: PropTypes.func,
     user: PropTypes.object,
     listSurvey: PropTypes.array,
 };
 
 HomeBody.defaultProps = {
     createNewForm: null,
+    setStatusDialog: null,
     userEmail: null,
     listSurvey: [],
 };
@@ -34,6 +36,10 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         createNewForm: (id, author) => {
             dispatch(createNewForm(id, author));
+        },
+
+        setStatusDialog: (id) => {
+            dispatch(setStatusDialog(id));
         },
     };
 };
@@ -51,7 +57,7 @@ function HomeBody(props) {
     };
 
     const handleRemoveSurvey = (id) => {
-        console.log(id);
+        props.setStatusDialog(id);
     };
 
     return (

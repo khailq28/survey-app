@@ -26,6 +26,16 @@ const allSurveyReducer = (state = INITIAL_STATE, action) => {
             localStorage.setItem("surveys", JSON.stringify(state));
             return [...state];
 
+        case actionType.REMOVE_SURVEY:
+            var arr = [...state];
+            arr.forEach((survey, index) => {
+                if (survey.id === action.id) {
+                    arr.splice(index, 1);
+                }
+            });
+            localStorage.setItem("surveys", JSON.stringify(arr));
+            return [...arr];
+
         default:
             return [...state];
     }

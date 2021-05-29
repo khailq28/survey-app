@@ -157,3 +157,17 @@ export function setBackgroundColor(backgroundColor) {
         backgroundColor,
     };
 }
+
+export function setStatusDialog(id) {
+    return {
+        type: actionType.SET_STATUS_DIALOG,
+        id,
+    };
+}
+
+export function removeSurvey(id) {
+    return {
+        type: actionType.REMOVE_SURVEY,
+        id,
+    };
+}

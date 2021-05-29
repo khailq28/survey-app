@@ -4,6 +4,7 @@ import slideBarReducer from "./slideBarReducer";
 import surveyReducer from "./surveyReducer";
 import colorReducer from "./colorReducer";
 import allSurveyReducer from "./allSurveyReducer";
+import dialogReducer from "./dialogReducer";
 
 const rootReducers = combineReducers({
     userState: userReducer,
@@ -11,6 +12,7 @@ const rootReducers = combineReducers({
     survey: surveyReducer,
     color: colorReducer,
     listSurvey: allSurveyReducer,
+    dialog: dialogReducer,
 });
 
 export default rootReducers;

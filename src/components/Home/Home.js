@@ -7,26 +7,47 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router";
 import { IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import { setStatusDialog, removeSurvey } from "../../actions";
 
 Home.propTypes = {
     user: PropTypes.object,
+    dialog: PropTypes.object,
+    setStatusDialog: PropTypes.func,
+    removeSurvey: PropTypes.func,
 };
 
 Home.defaultProps = {
     user: null,
+    dialog: null,
+    setStatusDialog: null,
+    removeSurvey: null,
 };
 
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
+        dialog: state.dialog,
     };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-    return {};
+    return {
+        setStatusDialog: (id) => {
+            dispatch(setStatusDialog(id));
+        },
+
+        removeSurvey: (id) => {
+            dispatch(removeSurvey(id));
+        },
+    };
 };
 
 function Home(props) {
+    const handleRemoveSurvey = () => {
+        props.removeSurvey(props.dialog.id);
+        props.setStatusDialog("");
+    };
+
     return (
         <>
             {!props.user && (
@@ -37,17 +58,23 @@ function Home(props) {
                     }}
                 />
             )}
-            <BackgroundDialog>
+            <BackgroundDialog show={props.dialog.show}>
                 <Dialog>
                     <DialogHeader>
                         <Title>Bạn có chắc chắn muốn xóa biểu mẫu?</Title>
-                        <IconButton>
+                        <IconButton onClick={() => props.setStatusDialog("")}>
                             <CloseIcon />
                         </IconButton>
                     </DialogHeader>
                     <DialogBody>
-                        <YesButton>Có</YesButton>
-                        <NoButton>Không</NoButton>
+                        <YesButton onClick={handleRemoveSurvey}>Có</YesButton>
+                        <NoButton
+                            onClick={() =>
+                                props.setStatusDialog(props.dialog.id)
+                            }
+                        >
+                            Không
+                        </NoButton>
                     </DialogBody>
                 </Dialog>
             </BackgroundDialog>
@@ -58,13 +85,23 @@ function Home(props) {
 }
 
 const BackgroundDialog = styled.div`
-    z-index: 99;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(14, 42, 71, 0.9);
+    transition: 0.4s;
+    ${(props) =>
+        props.show
+            ? `
+                z-index: 99;
+                opacity: 1;
+            `
+            : `
+                z-index: 0;
+                opacity: 0;
+            `}
 `;
 
 const Dialog = styled.div`
