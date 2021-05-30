@@ -1,4 +1,5 @@
 import Login from "./components/Login";
+import NotFound from "./components/NotFound";
 import Home from "./components/Home/Home";
 import CreateForm from "./components/CreateForm/CreateForm";
 
@@ -25,6 +26,11 @@ const routes = [
         main: ({ match, location }) => (
             <CreateForm match={match} location={location} />
         ),
+    },
+    {
+        path: "",
+        exact: false,
+        main: () => <NotFound />,
     },
 ];
 

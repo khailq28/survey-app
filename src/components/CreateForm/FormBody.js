@@ -19,6 +19,7 @@ import {
     changeStatusOpenQuestion,
     findFormById,
 } from "../../actions";
+import uuid from "react-uuid";
 import { useParams } from "react-router";
 
 FormBody.propTypes = {
@@ -230,10 +231,12 @@ function FormBody(props) {
 
     const handleAddQuestion = () => {
         var questionsTemp = [...questions];
+        var id = uuid();
         questionsTemp.forEach((question, index) => {
             question.open = false;
         });
         questionsTemp.push({
+            id,
             questionText: "",
             questionType: "text",
             options: [{ optionText: "" }],
@@ -246,11 +249,13 @@ function FormBody(props) {
     };
 
     const handleCopyQuestion = (index) => {
+        var id = uuid();
         var questionsTemp = [...questions];
         questionsTemp.forEach((question) => {
             question.open = false;
         });
         questionsTemp.push({
+            id,
             questionText: questionsTemp[index].questionText,
             questionType: questionsTemp[index].questionType,
             options: questionsTemp[index].options,

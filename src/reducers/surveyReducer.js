@@ -7,6 +7,7 @@ var INITIAL_STATE = {
     description: "",
     questions: [
         {
+            id: "",
             questionText: "",
             questionType: "text",
             options: [{ optionText: "" }],
@@ -41,12 +42,13 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
                 if (survey.id === action.id) {
                     // set updateDate
                     survey.updateDate = formatDate();
-                    state = survey;
                     position = index;
+                    localStorage.setItem("surveys", JSON.stringify(surveys));
+                    console.log("s");
+                    return { ...survey };
                 }
             });
 
-            localStorage.setItem("surveys", JSON.stringify(surveys));
             return { ...state };
 
         case actionType.SET_TITLE_FORM:
