@@ -98,7 +98,7 @@ function HomeBody(props) {
         let id = uuid();
         socket.emit("CLIENT_CREATE_NEW_FORM", id);
 
-        history.push("/form/edit/" + id);
+        // history.push("/form/edit/" + id);
     };
 
     const handleRemoveSurvey = (id) => {
