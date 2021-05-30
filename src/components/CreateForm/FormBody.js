@@ -239,6 +239,7 @@ function FormBody(props) {
             options: [{ optionText: "" }],
             open: true,
             required: false,
+            answers: [],
         });
         setQuestions(questionsTemp);
         props.setQuestions(questionsTemp);

@@ -135,7 +135,7 @@ function HomeBody(props) {
                     <Content>
                         {listSurvey.map((survey, index) => (
                             <FormRecent
-                                surver={survey}
+                                survey={survey}
                                 key={index}
                                 viewMode={viewMode}
                                 handleRemoveSurvey={handleRemoveSurvey}
@@ -146,7 +146,7 @@ function HomeBody(props) {
                     <ContentList>
                         {listSurvey.map((survey, index) => (
                             <FormRecent
-                                surver={survey}
+                                survey={survey}
                                 key={index}
                                 viewMode={viewMode}
                                 handleRemoveSurvey={handleRemoveSurvey}

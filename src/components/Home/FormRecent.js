@@ -7,14 +7,14 @@ import PropTypes from "prop-types";
 import { useHistory } from "react-router";
 
 FormRecent.propTypes = {
-    surver: PropTypes.object,
+    survey: PropTypes.object,
     viewMode: PropTypes.string,
     handleOnClick: PropTypes.func,
     handleRemoveSurvey: PropTypes.func,
 };
 
 FormRecent.defaultProps = {
-    surver: null,
+    survey: {},
     viewMode: null,
     handleOnClick: null,
     handleRemoveSurvey: null,
@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function FormRecent(props) {
-    var { surver, viewMode } = props;
+    var { survey, viewMode } = props;
     const history = useHistory();
 
     const handleOnClick = (id) => {
@@ -43,20 +43,20 @@ function FormRecent(props) {
                     <img
                         src="/images/home/form.png"
                         alt=""
-                        onClick={() => handleOnClick(surver.id)}
+                        onClick={() => handleOnClick(survey.id)}
                     />
                     <Body>
+                        <ContentBody onClick={() => handleOnClick(survey.id)}>
+                            <Title>{survey.title}</Title>
+                        </ContentBody>
                         <Content>
-                            <ContentBody
-                                onClick={() => handleOnClick(surver.id)}
-                            >
+                            <Detail>
                                 <StorageButton />
-                                &nbsp;
-                                <Title>{surver.title}</Title>
-                            </ContentBody>
+                                <span>Đã mở {survey.updateDate}</span>
+                            </Detail>
                             <DeleteButton
                                 onClick={() =>
-                                    props.handleRemoveSurvey(surver.id)
+                                    props.handleRemoveSurvey(survey.id)
                                 }
                             >
                                 <CustomDeleteIcon />
@@ -66,14 +66,15 @@ function FormRecent(props) {
                 </Card>
             ) : (
                 <Item>
-                    <Left onClick={() => handleOnClick(surver.id)}>
+                    <Left onClick={() => handleOnClick(survey.id)}>
                         <StorageButton />
                         &nbsp;
-                        <Title>{surver.title}</Title>
+                        <Title>{survey.title}</Title>
                     </Left>
                     <Right>
+                        <span>Đã mở {survey.updateDate}</span>
                         <DeleteButton
-                            onClick={() => props.handleRemoveSurvey(surver.id)}
+                            onClick={() => props.handleRemoveSurvey(survey.id)}
                         >
                             <CustomDeleteIcon />
                         </DeleteButton>
@@ -106,7 +107,22 @@ const Left = styled.div`
     align-items: center;
     flex-grow: 1;
 `;
-const Right = styled.div``;
+
+const Right = styled.div`
+    display: inline-flex;
+    align-items: center;
+
+    & > span {
+        font-size: 14px;
+        color: var(--icon-color);
+        margin-right: 10px;
+
+        @media (max-width: 768px) {
+            margin-right: 1px;
+            width: 90px;
+        }
+    }
+`;
 
 const Card = styled.div`
     display: flex;
@@ -165,13 +181,10 @@ const Content = styled.div`
     justify-content: space-between;
     margin-top: 5px;
     width: 100%;
+    margin-bottom: 5px;
 `;
 
 const ContentBody = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
     width: 100%;
 `;
 
@@ -183,6 +196,25 @@ const StorageButton = styled(StorageIcon)`
     margin-right: 3px;
     border-radius: 2px;
 `;
+
+const Detail = styled.div`
+    display: inline-flex;
+    align-items: center;
+
+    & > span {
+        font-size: 13px;
+        color: var(--icon-color);
+        margin-left: 5px;
+    }
+
+    @media (max-width: 768px) {
+        & > ${StorageButton} {
+            opacity: 0;
+            position: absolute;
+        }
+    }
+`;
+
 const CustomDeleteIcon = styled(DeleteIcon)`
     color: var(--icon-color);
     font-size: 20px;

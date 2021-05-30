@@ -18,10 +18,12 @@ const allSurveyReducer = (state = INITIAL_STATE, action) => {
                         options: [{ optionText: "" }],
                         open: true,
                         required: false,
+                        answers: [],
                     },
                 ],
                 interfaceColor: "#673AB7",
                 backgroundColor: "#F0EBF8",
+                updateDate: "",
             });
             localStorage.setItem("surveys", JSON.stringify(state));
             return [...state];

@@ -12,12 +12,26 @@ var INITIAL_STATE = {
             options: [{ optionText: "" }],
             open: true,
             required: false,
+            answers: [],
         },
     ],
     interfaceColor: "#673AB7",
     backgroundColor: "#F0EBF8",
+    updateDate: "",
 };
+
 let position = 1;
+
+const formatDate = () => {
+    var date = new Date();
+    var hour = `0${date.getHours()}`.slice(-2);
+    var minute = `0${date.getMinutes()}`.slice(-2);
+    var day = `0${date.getDate()}`.slice(-2);
+    var mounth = `0${date.getMonth() + 1}`.slice(-2);
+    var year = date.getFullYear();
+
+    return `${hour}:${minute} ${day}/${mounth}/${year}`;
+};
 
 const surveyReducer = (state = INITIAL_STATE, action) => {
     var surveys = JSON.parse(localStorage.getItem("surveys"));
@@ -25,11 +39,14 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
         case actionType.FIND_FORM_BY_ID:
             surveys.forEach((survey, index) => {
                 if (survey.id === action.id) {
+                    // set updateDate
+                    survey.updateDate = formatDate();
                     state = survey;
                     position = index;
-                    console.log(position);
                 }
             });
+
+            localStorage.setItem("surveys", JSON.stringify(surveys));
             return { ...state };
 
         case actionType.SET_TITLE_FORM:
