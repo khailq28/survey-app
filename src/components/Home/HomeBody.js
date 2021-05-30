@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import StorageIcon from "@material-ui/icons/Storage";
@@ -14,14 +14,17 @@ import {
     setStatusDialog,
     sortListSurveys,
     setViewMode,
+    setSurveysHome,
 } from "../../actions";
 import PropTypes from "prop-types";
+import socket from "../../socket";
 
 HomeBody.propTypes = {
     createNewForm: PropTypes.func,
     setStatusDialog: PropTypes.func,
     sortListSurveys: PropTypes.func,
     setViewMode: PropTypes.func,
+    setSurveysHome: PropTypes.func,
     user: PropTypes.object,
     listSurvey: PropTypes.array,
     sort: PropTypes.object,
@@ -33,6 +36,7 @@ HomeBody.defaultProps = {
     createNewForm: null,
     setStatusDialog: null,
     sortListSurveys: null,
+    setSurveysHome: null,
     setViewMode: null,
     user: null,
     listSurvey: [],
@@ -68,6 +72,10 @@ const mapDispatchToProps = (dispatch, props) => {
         setViewMode: () => {
             dispatch(setViewMode());
         },
+
+        setSurveysHome: (aSurvey) => {
+            dispatch(setSurveysHome(aSurvey));
+        },
     };
 };
 
@@ -76,9 +84,19 @@ function HomeBody(props) {
 
     var { listSurvey, sort, keyword, viewMode } = props;
 
+    // set state surveys
+    socket.on("SERVER_SEND_SURVEYS", (aData) => {
+        props.setSurveysHome(aData);
+    });
+    useEffect(() => {
+        if (props.user) {
+            socket.emit("CLIENT_GET_SURVEY_BY_AUTHOR", props.user.email);
+        }
+    }, []);
+
     const CreateForm = () => {
         let id = uuid();
-        props.createNewForm(id, props.user.email);
+        socket.emit("CLIENT_CREATE_NEW_FORM", id);
 
         history.push("/form/edit/" + id);
     };

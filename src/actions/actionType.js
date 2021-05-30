@@ -1,6 +1,20 @@
 export const SET_USER = "SET_USER";
+
+// tool
 export const SET_STATUS_SLIDE_BAR = "SET_STATUS_SLIDE_BAR";
+export const SET_STATUS_DIALOG = "SET_STATUS_DIALOG";
+
+// sign out
+export const CLEARN_ALL_SURVEY_REDUCER = "CLEARN_ALL_SURVEY_REDUCER";
+export const CLEARN_SURVER_REDUCER = "CLEARN_SURVER_REDUCER";
+
+// home page
+export const SET_SURVER_IN_HOME_PAGE = "SET_SURVER_IN_HOME_PAGE";
+export const SORT = "SORT";
+export const SEARCH = "SEARCH";
+export const SET_VIEW_MODE = "SET_VIEW_MODE";
 export const CREATE_NEW_FORM = "CREATE_NEW_FORM";
+
 export const FIND_FORM_BY_ID = "FIND_FORM_BY_ID";
 export const SET_TITLE_FORM = "SET_TITLE_FORM";
 export const SET_DESCRIPTION = "SET_DESCRIPTION";
@@ -15,8 +29,3 @@ export const SET_QUESTIONS = "SET_QUESTIONS";
 export const CHANGE_STATUS_OPEN_QUESTION = "CHANGE_STATUS_OPEN_QUESTION";
 export const SET_INTERFACE_COLOR = "SET_INTERFACE_COLOR";
 export const SET_BACKGROUND_COLOR = "SET_BACKGROUND_COLOR";
-export const SET_STATUS_DIALOG = "SET_STATUS_DIALOG";
-export const REMOVE_SURVEY = "REMOVE_SURVEY";
-export const SORT = "SORT";
-export const SEARCH = "SEARCH";
-export const SET_VIEW_MODE = "SET_VIEW_MODE";

@@ -149,6 +149,9 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             localStorage.setItem("surveys", JSON.stringify(surveys));
 
             return { ...state };
+
+        case actionType.CLEARN_SURVER_REDUCER:
+            return {};
         default:
             return { ...state };
     }

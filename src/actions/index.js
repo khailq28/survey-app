@@ -11,10 +11,24 @@ export function signInAPI() {
         auth.signInWithPopup(provider)
             .then((payload) => {
                 dispatch(setUser(payload.user));
+                dispatch(clearnAllSurveys());
+                dispatch(clearnSurvey());
             })
             .catch((error) => {
                 alert(error.message);
             });
+    };
+}
+
+export function clearnAllSurveys() {
+    return {
+        type: actionType.CLEARN_ALL_SURVEY_REDUCER,
+    };
+}
+
+export function clearnSurvey() {
+    return {
+        type: actionType.CLEARN_SURVER_REDUCER,
     };
 }
 
@@ -44,6 +58,13 @@ export function setStatusSlideBar(oStatus) {
     return {
         type: actionType.SET_STATUS_SLIDE_BAR,
         oStatus,
+    };
+}
+
+export function setSurveysHome(aSurvey) {
+    return {
+        type: actionType.SET_SURVER_IN_HOME_PAGE,
+        aSurvey,
     };
 }
 
@@ -161,13 +182,6 @@ export function setBackgroundColor(backgroundColor) {
 export function setStatusDialog(id) {
     return {
         type: actionType.SET_STATUS_DIALOG,
-        id,
-    };
-}
-
-export function removeSurvey(id) {
-    return {
-        type: actionType.REMOVE_SURVEY,
         id,
     };
 }

@@ -7,20 +7,19 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router";
 import { IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { setStatusDialog, removeSurvey } from "../../actions";
+import { setStatusDialog } from "../../actions";
+import socket from "../../socket";
 
 Home.propTypes = {
     user: PropTypes.object,
     dialog: PropTypes.object,
     setStatusDialog: PropTypes.func,
-    removeSurvey: PropTypes.func,
 };
 
 Home.defaultProps = {
     user: null,
     dialog: null,
     setStatusDialog: null,
-    removeSurvey: null,
 };
 
 const mapStateToProps = (state) => {
@@ -35,16 +34,12 @@ const mapDispatchToProps = (dispatch, props) => {
         setStatusDialog: (id) => {
             dispatch(setStatusDialog(id));
         },
-
-        removeSurvey: (id) => {
-            dispatch(removeSurvey(id));
-        },
     };
 };
 
 function Home(props) {
     const handleRemoveSurvey = () => {
-        props.removeSurvey(props.dialog.id);
+        socket.emit("CLIENT_REMOVE_SURVEY", props.dialog.id);
         props.setStatusDialog("");
     };
 
