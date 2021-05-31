@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setTitleForm, setDescription } from "../../actions";
+import socket from "../../socket";
 
 FormTitle.propTypes = {
     title: PropTypes.string,
@@ -45,6 +46,8 @@ function FormTitle(props) {
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
+        value = value === "" ? "Mẫu không tiêu đề" : value;
+        socket.emit("CLIENT_CHANGE_TITLE_FORM", value);
         props.setTitleForm(value);
     };
 
@@ -52,6 +55,7 @@ function FormTitle(props) {
     var handleChangeDesc = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
+        socket.emit("CLIENT_CHANGE_DESCRIPTION_FORM", value);
         props.setDescription(value);
     };
 
