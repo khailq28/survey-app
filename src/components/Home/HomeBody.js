@@ -14,6 +14,7 @@ import {
     sortListSurveys,
     setViewMode,
     setSurveysHome,
+    changeStatusProgess,
 } from "../../actions";
 import PropTypes from "prop-types";
 import socket from "../../socket";
@@ -23,6 +24,7 @@ HomeBody.propTypes = {
     sortListSurveys: PropTypes.func,
     setViewMode: PropTypes.func,
     setSurveysHome: PropTypes.func,
+    changeStatusProgess: PropTypes.func,
     user: PropTypes.object,
     listSurvey: PropTypes.array,
     sort: PropTypes.object,
@@ -35,6 +37,7 @@ HomeBody.defaultProps = {
     sortListSurveys: null,
     setSurveysHome: null,
     setViewMode: null,
+    changeStatusProgess: null,
     user: null,
     listSurvey: [],
     sort: null,
@@ -69,6 +72,10 @@ const mapDispatchToProps = (dispatch, props) => {
         setSurveysHome: (aSurvey) => {
             dispatch(setSurveysHome(aSurvey));
         },
+
+        changeStatusProgess: (bStatus) => {
+            dispatch(changeStatusProgess(bStatus));
+        },
     };
 };
 
@@ -80,9 +87,11 @@ function HomeBody(props) {
     // set state surveys
     socket.on("SERVER_SEND_SURVEYS", (aData) => {
         props.setSurveysHome(aData);
+        props.changeStatusProgess(false);
     });
     useEffect(() => {
         if (props.user) {
+            props.changeStatusProgess(true);
             socket.emit("CLIENT_GET_SURVEY_BY_AUTHOR", props.user.email);
         }
     }, []);
