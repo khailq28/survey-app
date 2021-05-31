@@ -1,11 +1,11 @@
 import * as actionType from "../actions/actionType";
 var INITIAL_STATE = {
-    show: false,
+    show: true,
 };
 
-const progressReducer = (state = INITIAL_STATE, action) => {
+const promptReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case actionType.CHANGE_STATUS_PROPGRESS:
+        case actionType.CHANGE_STATUS_PROMPT:
             state.show = action.status;
             return { ...state };
         default:
@@ -13,4 +13,4 @@ const progressReducer = (state = INITIAL_STATE, action) => {
     }
 };
 
-export default progressReducer;
+export default promptReducer;

@@ -29,7 +29,6 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
 
         case actionType.SET_TITLE_FORM:
             state.title = action.title;
-
             return { ...state };
 
         case actionType.SET_DESCRIPTION:

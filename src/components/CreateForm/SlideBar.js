@@ -37,7 +37,7 @@ SlideBar.defaultProps = {
 
 const mapStateToProps = (state) => {
     return {
-        slideBar: state.slideBar,
+        slideBar: state.tools.slideBar,
         colorList: state.color,
         interfaceColor: state.survey.interfaceColor,
         backgroundColor: state.survey.backgroundColor,

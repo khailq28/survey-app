@@ -65,14 +65,19 @@ function FormBody(props) {
     var history = useHistory();
 
     useEffect(() => {
-        socket.emit("CLIENT_GET_DATA_SURVEY", id);
+        if (props.user) {
+            socket.emit("CLIENT_GET_DATA_SURVEY", {
+                id,
+                author: props.user.email,
+            });
+        }
 
         socket.on("SERVER_SEND_SURVEY_TO_CREATE_FORM_PAGE", (oSurvey) => {
-            if (props.user && props.user.email === oSurvey.author) {
-                props.setSurvey(oSurvey);
-            } else {
-                history.replace("/");
-            }
+            props.setSurvey(oSurvey);
+        });
+
+        socket.on("SERVER_SEND_MESSAGE_NO_ACCESS", () => {
+            history.replace("/notfound");
         });
     }, []);
 
@@ -81,6 +86,7 @@ function FormBody(props) {
     const handleChangeAccordion = (index) => {
         var temp = [...questions];
         temp.forEach((question, i) => {
+            console.log("s");
             question.open = false;
         });
 

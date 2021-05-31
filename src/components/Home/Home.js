@@ -13,16 +13,18 @@ import socket from "../../socket";
 
 Home.propTypes = {
     user: PropTypes.object,
-    dialog: PropTypes.object,
-    progress: PropTypes.object,
+    dialogShow: PropTypes.bool,
+    idSurveyToRemove: PropTypes.string,
+    progress: PropTypes.bool,
     setStatusDialog: PropTypes.func,
     changeStatusProgess: PropTypes.func,
 };
 
 Home.defaultProps = {
     user: null,
-    dialog: null,
-    progress: null,
+    dialogShow: false,
+    idSurveyToRemove: null,
+    progress: false,
     setStatusDialog: null,
     changeStatusProgess: null,
 };
@@ -30,8 +32,9 @@ Home.defaultProps = {
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
-        dialog: state.dialog,
-        progress: state.progress,
+        dialogShow: state.tools.dialog.show,
+        idSurveyToRemove: state.tools.dialog.id,
+        progress: state.tools.progress.show,
     };
 };
 
@@ -50,7 +53,7 @@ const mapDispatchToProps = (dispatch, props) => {
 function Home(props) {
     const handleRemoveSurvey = () => {
         props.changeStatusProgess(true);
-        socket.emit("CLIENT_REMOVE_SURVEY", props.dialog.id);
+        socket.emit("CLIENT_REMOVE_SURVEY", props.idSurveyToRemove);
         props.setStatusDialog("");
     };
 
@@ -64,7 +67,7 @@ function Home(props) {
                     }}
                 />
             )}
-            <Background show={props.dialog.show}>
+            <Background show={props.dialogShow}>
                 <Dialog>
                     <DialogHeader>
                         <Title>Bạn có chắc chắn muốn xóa biểu mẫu?</Title>
@@ -76,7 +79,7 @@ function Home(props) {
                         <YesButton onClick={handleRemoveSurvey}>Có</YesButton>
                         <NoButton
                             onClick={() =>
-                                props.setStatusDialog(props.dialog.id)
+                                props.setStatusDialog(props.dialogShow)
                             }
                         >
                             Không
@@ -84,7 +87,7 @@ function Home(props) {
                     </DialogBody>
                 </Dialog>
             </Background>
-            <Background show={props.progress.show}>
+            <Background show={props.progress}>
                 <Container>
                     <CustomCircularProgress />
                 </Container>

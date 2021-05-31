@@ -41,7 +41,7 @@ HomeBody.defaultProps = {
     user: null,
     listSurvey: [],
     sort: null,
-    keyword: null,
+    keyword: "",
     viewMode: null,
 };
 
@@ -49,9 +49,9 @@ const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
         listSurvey: state.listSurvey,
-        sort: state.sort,
-        keyword: state.search,
-        viewMode: state.viewMode,
+        sort: state.tools.sort,
+        keyword: state.tools.search,
+        viewMode: state.tools.viewMode,
     };
 };
 

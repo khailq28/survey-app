@@ -16,13 +16,13 @@ Header.defaultProps = {
     user: null,
     signOut: null,
     searchSurvey: null,
-    keyword: null,
+    keyword: "",
 };
 
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
-        keyword: state.search,
+        keyword: state.tools.search,
     };
 };
 
