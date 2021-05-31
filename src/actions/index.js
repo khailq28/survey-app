@@ -68,10 +68,10 @@ export function setSurveysHome(aSurvey) {
     };
 }
 
-export function findFormById(id) {
+export function setSurvey(oSurvey) {
     return {
-        type: actionType.FIND_FORM_BY_ID,
-        id,
+        type: actionType.SET_SURVEY,
+        oSurvey,
     };
 }
 

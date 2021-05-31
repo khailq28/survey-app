@@ -15,7 +15,7 @@ export const SEARCH = "SEARCH";
 export const SET_VIEW_MODE = "SET_VIEW_MODE";
 
 // create new survey
-export const FIND_FORM_BY_ID = "FIND_FORM_BY_ID";
+export const SET_SURVEY = "SET_SURVEY";
 export const SET_TITLE_FORM = "SET_TITLE_FORM";
 export const SET_DESCRIPTION = "SET_DESCRIPTION";
 export const CHANGE_TYPE_QUESTION = "CHANGE_TYPE_QUESTION";

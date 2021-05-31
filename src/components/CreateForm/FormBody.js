@@ -4,10 +4,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
-import {
-    // Paper,
-    Typography,
-} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import QuestionBody from "./QuestionBody";
 import QuestionFooter from "./QuestionFooter";
@@ -17,28 +14,32 @@ import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import {
     setQuestions,
     changeStatusOpenQuestion,
-    findFormById,
+    setSurvey,
 } from "../../actions";
 import uuid from "react-uuid";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
+import socket from "../../socket";
 
 FormBody.propTypes = {
     questions: PropTypes.array,
     setQuestions: PropTypes.func,
     changeStatusOpenQuestion: PropTypes.func,
-    findFormById: PropTypes.func,
+    setSurvey: PropTypes.func,
+    user: PropTypes.object,
 };
 
 FormBody.defaultProps = {
     questions: null,
     setQuestions: null,
     changeStatusOpenQuestion: null,
-    findFormById: null,
+    setSurvey: null,
+    user: null,
 };
 
 const mapStateToProps = (state) => {
     return {
         questions: state.survey.questions,
+        user: state.userState.user,
     };
 };
 
@@ -52,18 +53,24 @@ const mapDispatchToProps = (dispatch, props) => {
             dispatch(changeStatusOpenQuestion(index));
         },
 
-        findFormById: (id) => {
-            dispatch(findFormById(id));
+        setSurvey: (oSurvey) => {
+            dispatch(setSurvey(oSurvey));
         },
     };
 };
 
 function FormBody(props) {
-    // set state by id
+    // set state
     let { id } = useParams();
-    useEffect(() => {
-        props.findFormById(id);
-    }, []);
+    var history = useHistory();
+    socket.emit("CLIENT_GET_DATA_SURVEY", id);
+    socket.on("SERVER_SEND_SURVEY_TO_CREATE_FORM_PAGE", (oSurvey) => {
+        if (props.user && props.user.email === oSurvey.author) {
+            props.setSurvey(oSurvey);
+        } else {
+            history.replace("/");
+        }
+    });
 
     const [questions, setQuestions] = useState(props.questions);
 
