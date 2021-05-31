@@ -70,8 +70,9 @@ function FormBody(props) {
     let { id } = useParams();
     var history = useHistory();
     const [questions, setQuestions] = useState(props.questions);
-    props.changeStatusProgess(true);
+
     useEffect(() => {
+        props.changeStatusProgess(true);
         if (props.user) {
             socket.emit("CLIENT_GET_DATA_SURVEY", {
                 id,

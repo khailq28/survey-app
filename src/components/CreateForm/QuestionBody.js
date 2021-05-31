@@ -98,7 +98,10 @@ function QuestionBody(props) {
         let value = target.type === "checked" ? target.checked : target.value;
         setQuestionText(value);
         props.changeTitleQuestion(value, index);
-        socket.emit("CLIENT_CHANGE_TITLE_QUESTION", question._id);
+        socket.emit("CLIENT_CHANGE_TITLE_QUESTION", {
+            id: question._id,
+            value,
+        });
     };
 
     let handleOptionValue = (e, j) => {
