@@ -84,16 +84,22 @@ function HomeBody(props) {
 
     var { listSurvey, sort, keyword, viewMode } = props;
 
-    // set state surveys
-    socket.on("SERVER_SEND_SURVEYS", (aData) => {
-        props.setSurveysHome(aData);
-        props.changeStatusProgess(false);
-    });
     useEffect(() => {
         if (props.user) {
             props.changeStatusProgess(true);
             socket.emit("CLIENT_GET_SURVEY_BY_AUTHOR", props.user.email);
         }
+
+        // set state surveys
+        socket.on("SERVER_SEND_SURVEYS", (aData) => {
+            props.setSurveysHome(aData);
+            props.changeStatusProgess(false);
+        });
+
+        socket.on("SERVER_SEND_SURVEYS_ALL", (aData) => {
+            props.setSurveysHome(aData);
+            props.changeStatusProgess(false);
+        });
     }, []);
 
     const CreateForm = () => {

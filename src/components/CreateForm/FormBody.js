@@ -63,14 +63,18 @@ function FormBody(props) {
     // set state
     let { id } = useParams();
     var history = useHistory();
-    socket.emit("CLIENT_GET_DATA_SURVEY", id);
-    socket.on("SERVER_SEND_SURVEY_TO_CREATE_FORM_PAGE", (oSurvey) => {
-        if (props.user && props.user.email === oSurvey.author) {
-            props.setSurvey(oSurvey);
-        } else {
-            history.replace("/");
-        }
-    });
+
+    useEffect(() => {
+        socket.emit("CLIENT_GET_DATA_SURVEY", id);
+
+        socket.on("SERVER_SEND_SURVEY_TO_CREATE_FORM_PAGE", (oSurvey) => {
+            if (props.user && props.user.email === oSurvey.author) {
+                props.setSurvey(oSurvey);
+            } else {
+                history.replace("/");
+            }
+        });
+    }, []);
 
     const [questions, setQuestions] = useState(props.questions);
 

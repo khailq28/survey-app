@@ -48,10 +48,6 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function Home(props) {
-    socket.on("REMOVE_SURVEY_SUCCESS", () => {
-        props.changeStatusProgess(false);
-    });
-
     const handleRemoveSurvey = () => {
         props.changeStatusProgess(true);
         socket.emit("CLIENT_REMOVE_SURVEY", props.dialog.id);
