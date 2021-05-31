@@ -263,6 +263,7 @@ function FormBody(props) {
         });
         setQuestions(questionsTemp);
         props.setQuestions(questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
     };
 
     const handleCopyQuestion = (index) => {
@@ -282,6 +283,7 @@ function FormBody(props) {
 
         setQuestions(questionsTemp);
         props.setQuestions(questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
     };
 
     const handleDeleteQuestion = (index) => {
@@ -289,6 +291,7 @@ function FormBody(props) {
         questionsTemp.splice(index, 1);
         setQuestions(questionsTemp);
         props.setQuestions(questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
     };
 
     const onDragEnd = (result) => {
@@ -303,6 +306,7 @@ function FormBody(props) {
         );
         setQuestions(itemF);
         props.setQuestions(itemF);
+        socket.emit("CLIENT_SET_QUESTIONS", itemF);
     };
 
     const reorder = (list, startIndex, endIndex) => {
