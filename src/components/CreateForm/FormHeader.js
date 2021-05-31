@@ -8,8 +8,8 @@ import { IconButton } from "@material-ui/core";
 import SlideBar from "./SlideBar";
 import { connect } from "react-redux";
 import { setStatusSlideBar, signOutAPI, setTitleForm } from "../../actions";
-// import { INITIAL_STATE, surveyReducer } from "../../reducers/surveyReducer";
 import PropTypes from "prop-types";
+import socket from "../../socket";
 
 FormHeader.propTypes = {
     user: PropTypes.object,
@@ -31,6 +31,8 @@ function FormHeader(props) {
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
+        value = value === "" ? "Mẫu không tiêu đề" : value;
+        socket.emit("CLIENT_CHANGE_TITLE_FORM", value);
         props.setTitleForm(value);
     };
 

@@ -37,7 +37,7 @@ function CreateForm(props) {
             )}
             <FormHeader />
             <TabHeader />
-            <Prompt when={true} message={() => `Bạn chắc chắn muốn thoát?`} />
+            {/* <Prompt when={true} message={() => `Bạn chắc chắn muốn thoát?`} /> */}
         </Container>
     );
 }

@@ -70,6 +70,32 @@ export function changeStatusProgess(status) {
     };
 }
 
+export function setStatusDialog(id) {
+    return {
+        type: actionType.SET_STATUS_DIALOG,
+        id,
+    };
+}
+
+export function sortListSurveys() {
+    return {
+        type: actionType.SORT,
+    };
+}
+
+export function setViewMode() {
+    return {
+        type: actionType.SET_VIEW_MODE,
+    };
+}
+
+export function searchSurvey(keyword) {
+    return {
+        type: actionType.SEARCH,
+        keyword,
+    };
+}
+
 // home
 export function setSurveysHome(aSurvey) {
     return {
@@ -178,31 +204,5 @@ export function setBackgroundColor(backgroundColor) {
     return {
         type: actionType.SET_BACKGROUND_COLOR,
         backgroundColor,
-    };
-}
-
-export function setStatusDialog(id) {
-    return {
-        type: actionType.SET_STATUS_DIALOG,
-        id,
-    };
-}
-
-export function sortListSurveys() {
-    return {
-        type: actionType.SORT,
-    };
-}
-
-export function setViewMode() {
-    return {
-        type: actionType.SET_VIEW_MODE,
-    };
-}
-
-export function searchSurvey(keyword) {
-    return {
-        type: actionType.SEARCH,
-        keyword,
     };
 }
