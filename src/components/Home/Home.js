@@ -7,25 +7,31 @@ import PropTypes from "prop-types";
 import { Redirect } from "react-router";
 import { IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { setStatusDialog } from "../../actions";
+import { setStatusDialog, changeStatusProgess } from "../../actions";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import socket from "../../socket";
 
 Home.propTypes = {
     user: PropTypes.object,
     dialog: PropTypes.object,
+    progress: PropTypes.object,
     setStatusDialog: PropTypes.func,
+    changeStatusProgess: PropTypes.func,
 };
 
 Home.defaultProps = {
     user: null,
     dialog: null,
+    progress: null,
     setStatusDialog: null,
+    changeStatusProgess: null,
 };
 
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
         dialog: state.dialog,
+        progress: state.progress,
     };
 };
 
@@ -34,11 +40,20 @@ const mapDispatchToProps = (dispatch, props) => {
         setStatusDialog: (id) => {
             dispatch(setStatusDialog(id));
         },
+
+        changeStatusProgess: (bStatus) => {
+            dispatch(changeStatusProgess(bStatus));
+        },
     };
 };
 
 function Home(props) {
+    socket.on("REMOVE_SURVEY_SUCCESS", () => {
+        props.changeStatusProgess(false);
+    });
+
     const handleRemoveSurvey = () => {
+        props.changeStatusProgess(true);
         socket.emit("CLIENT_REMOVE_SURVEY", props.dialog.id);
         props.setStatusDialog("");
     };
@@ -53,7 +68,7 @@ function Home(props) {
                     }}
                 />
             )}
-            <BackgroundDialog show={props.dialog.show}>
+            <Background show={props.dialog.show}>
                 <Dialog>
                     <DialogHeader>
                         <Title>Bạn có chắc chắn muốn xóa biểu mẫu?</Title>
@@ -72,14 +87,19 @@ function Home(props) {
                         </NoButton>
                     </DialogBody>
                 </Dialog>
-            </BackgroundDialog>
+            </Background>
+            <Background show={props.progress.show}>
+                <Container>
+                    <CustomCircularProgress />
+                </Container>
+            </Background>
             <Header />
             <HomeBody />
         </>
     );
 }
 
-const BackgroundDialog = styled.div`
+const Background = styled.div`
     position: absolute;
     top: 0;
     left: 0;
@@ -107,10 +127,11 @@ const Dialog = styled.div`
     position: fixed;
     top: 50%;
     left: 50%;
+    justify-content: center;
     transform: translateX(-50%) translateY(-50%);
 
     @media (max-width: 768px) {
-        width: 100%;
+        width: 90%;
     }
 `;
 
@@ -161,6 +182,20 @@ const YesButton = styled.div`
 
 const NoButton = styled(YesButton)`
     background-color: red;
+`;
+
+const Container = styled.div`
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    justify-content: center;
+    transform: translateX(-50%) translateY(-50%);
+`;
+
+const CustomCircularProgress = styled(CircularProgress)`
+    color: #e6f500 !important;
+    width: 70px !important;
+    height: 70px !important;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

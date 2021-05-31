@@ -1,6 +1,7 @@
 import { auth, provider } from "../firebase";
 import * as actionType from "./actionType";
 
+// user
 export const setUser = (payload) => ({
     type: actionType.SET_USER,
     user: payload,
@@ -54,6 +55,7 @@ export function signOutAPI() {
     };
 }
 
+// tool
 export function setStatusSlideBar(oStatus) {
     return {
         type: actionType.SET_STATUS_SLIDE_BAR,
@@ -61,6 +63,14 @@ export function setStatusSlideBar(oStatus) {
     };
 }
 
+export function changeStatusProgess(status) {
+    return {
+        type: actionType.CHANGE_STATUS_PROPGRESS,
+        status,
+    };
+}
+
+// home
 export function setSurveysHome(aSurvey) {
     return {
         type: actionType.SET_SURVER_IN_HOME_PAGE,

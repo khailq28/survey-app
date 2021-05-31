@@ -8,6 +8,7 @@ import dialogReducer from "./dialogReducer";
 import sortReducer from "./sortReducer";
 import searchReducer from "./searchReducer";
 import viewModeReducer from "./viewModeReducer";
+import progressReducer from "./progressReducer";
 
 const rootReducers = combineReducers({
     userState: userReducer,
@@ -19,6 +20,7 @@ const rootReducers = combineReducers({
     sort: sortReducer,
     search: searchReducer,
     viewMode: viewModeReducer,
+    progress: progressReducer,
 });
 
 export default rootReducers;
