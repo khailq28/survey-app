@@ -12,7 +12,7 @@ import {
     setBackgroundColor,
 } from "../../actions";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-
+import socket from "../../socket";
 import PropTypes from "prop-types";
 
 SlideBar.propTypes = {
@@ -95,10 +95,15 @@ function SlideBar(props) {
     const handleChooseInterfaceColor = (index) => {
         props.setInterfaceColor(props.colorList[index].interface);
         props.setBackgroundColor(props.colorList[index].background[0].color);
+        socket.emit(
+            "CLIENT_CHANGE_INTERFACE_COLOR",
+            props.colorList[index].interface,
+        );
     };
 
     const handleChooseBackgoundColor = (color) => {
         props.setBackgroundColor(color);
+        socket.emit("CLIENT_CHANGE_BACKGROUND_COLOR", color);
     };
 
     var body =
