@@ -1,7 +1,6 @@
 import * as actionType from "../actions/actionType";
 
 var INITIAL_STATE = {
-    id: "",
     author: "",
     title: "Mẫu Không tiêu đề",
     description: "",

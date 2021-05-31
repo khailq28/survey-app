@@ -5,7 +5,6 @@ import StorageIcon from "@material-ui/icons/Storage";
 import ViewComfyIcon from "@material-ui/icons/ViewComfy";
 import SortByAlphaIcon from "@material-ui/icons/SortByAlpha";
 import { IconButton } from "@material-ui/core";
-import uuid from "react-uuid";
 import { useHistory } from "react-router-dom";
 import FormRecent from "./FormRecent";
 import { connect } from "react-redux";
@@ -100,13 +99,15 @@ function HomeBody(props) {
             props.setSurveysHome(aData);
             props.changeStatusProgess(false);
         });
+
+        socket.on("SERVER_SEND_MESSAGE_CREATE_SURVEY_SUCCESS", (id) => {
+            history.push("/form/edit/" + id);
+        });
     }, []);
 
     const CreateForm = () => {
-        let id = uuid();
-        socket.emit("CLIENT_CREATE_NEW_FORM", id);
-
-        history.push("/form/edit/" + id);
+        props.changeStatusProgess(true);
+        socket.emit("CLIENT_CREATE_NEW_FORM");
     };
 
     const handleRemoveSurvey = (id) => {

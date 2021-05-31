@@ -16,7 +16,6 @@ import {
     changeStatusOpenQuestion,
     setSurvey,
 } from "../../actions";
-import uuid from "react-uuid";
 import { useHistory, useParams } from "react-router";
 import socket from "../../socket";
 
@@ -63,6 +62,7 @@ function FormBody(props) {
     // set state
     let { id } = useParams();
     var history = useHistory();
+    const [questions, setQuestions] = useState(props.questions);
 
     useEffect(() => {
         if (props.user) {
@@ -74,6 +74,7 @@ function FormBody(props) {
 
         socket.on("SERVER_SEND_SURVEY_TO_CREATE_FORM_PAGE", (oSurvey) => {
             props.setSurvey(oSurvey);
+            setQuestions(oSurvey.questions);
         });
 
         socket.on("SERVER_SEND_MESSAGE_NO_ACCESS", () => {
@@ -81,18 +82,16 @@ function FormBody(props) {
         });
     }, []);
 
-    const [questions, setQuestions] = useState(props.questions);
-
     const handleChangeAccordion = (index) => {
         var temp = [...questions];
         temp.forEach((question, i) => {
-            console.log("s");
             question.open = false;
         });
 
         temp[index].open = true;
         setQuestions(temp);
         props.changeStatusOpenQuestion(index);
+        socket.emit("CLIENT_CHANGE_OPEN_QUESTION", questions[index]._id);
     };
 
     var questionUI = questions.map((question, i) => {
@@ -112,7 +111,6 @@ function FormBody(props) {
                                 <Form show={question.open}>
                                     <Accordion
                                         expanded={question.open}
-                                        // onChange={props.handleChange("panel" + (i + 1))}
                                         onChange={() =>
                                             handleChangeAccordion(i)
                                         }
@@ -248,12 +246,10 @@ function FormBody(props) {
 
     const handleAddQuestion = () => {
         var questionsTemp = [...questions];
-        var id = uuid();
         questionsTemp.forEach((question, index) => {
             question.open = false;
         });
         questionsTemp.push({
-            id,
             questionText: "",
             questionType: "text",
             options: [{ optionText: "" }],
@@ -267,13 +263,11 @@ function FormBody(props) {
     };
 
     const handleCopyQuestion = (index) => {
-        var id = uuid();
         var questionsTemp = [...questions];
         questionsTemp.forEach((question) => {
             question.open = false;
         });
         questionsTemp.push({
-            id,
             questionText: questionsTemp[index].questionText,
             questionType: questionsTemp[index].questionType,
             options: questionsTemp[index].options,

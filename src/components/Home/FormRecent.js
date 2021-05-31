@@ -43,10 +43,10 @@ function FormRecent(props) {
                     <img
                         src="/images/home/form.png"
                         alt=""
-                        onClick={() => handleOnClick(survey.id)}
+                        onClick={() => handleOnClick(survey._id)}
                     />
                     <Body>
-                        <ContentBody onClick={() => handleOnClick(survey.id)}>
+                        <ContentBody onClick={() => handleOnClick(survey._id)}>
                             <Title>{survey.title}</Title>
                         </ContentBody>
                         <Content>
@@ -56,7 +56,7 @@ function FormRecent(props) {
                             </Detail>
                             <DeleteButton
                                 onClick={() =>
-                                    props.handleRemoveSurvey(survey.id)
+                                    props.handleRemoveSurvey(survey._id)
                                 }
                             >
                                 <CustomDeleteIcon />
@@ -66,7 +66,7 @@ function FormRecent(props) {
                 </Card>
             ) : (
                 <Item>
-                    <Left onClick={() => handleOnClick(survey.id)}>
+                    <Left onClick={() => handleOnClick(survey._id)}>
                         <StorageButton />
                         &nbsp;
                         <Title>{survey.title}</Title>
@@ -74,7 +74,7 @@ function FormRecent(props) {
                     <Right>
                         <span>Đã mở {survey.updateDate}</span>
                         <DeleteButton
-                            onClick={() => props.handleRemoveSurvey(survey.id)}
+                            onClick={() => props.handleRemoveSurvey(survey._id)}
                         >
                             <CustomDeleteIcon />
                         </DeleteButton>
