@@ -15,6 +15,7 @@ import {
     setQuestions,
     changeStatusOpenQuestion,
     setSurvey,
+    changeStatusProgess,
 } from "../../actions";
 import { useHistory, useParams } from "react-router";
 import socket from "../../socket";
@@ -24,6 +25,7 @@ FormBody.propTypes = {
     setQuestions: PropTypes.func,
     changeStatusOpenQuestion: PropTypes.func,
     setSurvey: PropTypes.func,
+    changeStatusProgess: PropTypes.func,
     user: PropTypes.object,
 };
 
@@ -32,6 +34,7 @@ FormBody.defaultProps = {
     setQuestions: null,
     changeStatusOpenQuestion: null,
     setSurvey: null,
+    changeStatusProgess: null,
     user: null,
 };
 
@@ -55,6 +58,10 @@ const mapDispatchToProps = (dispatch, props) => {
         setSurvey: (oSurvey) => {
             dispatch(setSurvey(oSurvey));
         },
+
+        changeStatusProgess: (bStatus) => {
+            dispatch(changeStatusProgess(bStatus));
+        },
     };
 };
 
@@ -63,7 +70,7 @@ function FormBody(props) {
     let { id } = useParams();
     var history = useHistory();
     const [questions, setQuestions] = useState(props.questions);
-
+    props.changeStatusProgess(true);
     useEffect(() => {
         if (props.user) {
             socket.emit("CLIENT_GET_DATA_SURVEY", {
@@ -75,6 +82,7 @@ function FormBody(props) {
         socket.on("SERVER_SEND_SURVEY_TO_CREATE_FORM_PAGE", (oSurvey) => {
             props.setSurvey(oSurvey);
             setQuestions(oSurvey.questions);
+            props.changeStatusProgess(false);
         });
 
         socket.on("SERVER_SEND_MESSAGE_NO_ACCESS", () => {

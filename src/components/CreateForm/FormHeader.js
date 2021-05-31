@@ -125,7 +125,7 @@ const Container = styled.div`
     position: fixed;
     top: 0;
     width: 100vw;
-    z-index: 100;
+    z-index: 90;
 
     @media only screen and (min-width: 480px) and (max-width: 768px) {
         padding: 0 10px;
