@@ -10,7 +10,6 @@ import { useHistory } from "react-router-dom";
 import FormRecent from "./FormRecent";
 import { connect } from "react-redux";
 import {
-    createNewForm,
     setStatusDialog,
     sortListSurveys,
     setViewMode,
@@ -20,7 +19,6 @@ import PropTypes from "prop-types";
 import socket from "../../socket";
 
 HomeBody.propTypes = {
-    createNewForm: PropTypes.func,
     setStatusDialog: PropTypes.func,
     sortListSurveys: PropTypes.func,
     setViewMode: PropTypes.func,
@@ -33,7 +31,6 @@ HomeBody.propTypes = {
 };
 
 HomeBody.defaultProps = {
-    createNewForm: null,
     setStatusDialog: null,
     sortListSurveys: null,
     setSurveysHome: null,
@@ -57,10 +54,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        createNewForm: (id, author) => {
-            dispatch(createNewForm(id, author));
-        },
-
         setStatusDialog: (id) => {
             dispatch(setStatusDialog(id));
         },
@@ -98,7 +91,7 @@ function HomeBody(props) {
         let id = uuid();
         socket.emit("CLIENT_CREATE_NEW_FORM", id);
 
-        // history.push("/form/edit/" + id);
+        history.push("/form/edit/" + id);
     };
 
     const handleRemoveSurvey = (id) => {

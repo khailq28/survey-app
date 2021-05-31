@@ -5,16 +5,16 @@ export const SET_STATUS_SLIDE_BAR = "SET_STATUS_SLIDE_BAR";
 export const SET_STATUS_DIALOG = "SET_STATUS_DIALOG";
 
 // sign out
-export const CLEARN_ALL_SURVEY_REDUCER = "CLEARN_ALL_SURVEY_REDUCER";
-export const CLEARN_SURVER_REDUCER = "CLEARN_SURVER_REDUCER";
+export const CLEAN_ALL_SURVEY_REDUCER = "CLEAN_ALL_SURVEY_REDUCER";
+export const CLEAN_SURVER_REDUCER = "CLEAN_SURVER_REDUCER";
 
 // home page
 export const SET_SURVER_IN_HOME_PAGE = "SET_SURVER_IN_HOME_PAGE";
 export const SORT = "SORT";
 export const SEARCH = "SEARCH";
 export const SET_VIEW_MODE = "SET_VIEW_MODE";
-export const CREATE_NEW_FORM = "CREATE_NEW_FORM";
 
+// create new survey
 export const FIND_FORM_BY_ID = "FIND_FORM_BY_ID";
 export const SET_TITLE_FORM = "SET_TITLE_FORM";
 export const SET_DESCRIPTION = "SET_DESCRIPTION";

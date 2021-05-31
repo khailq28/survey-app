@@ -150,7 +150,7 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
 
             return { ...state };
 
-        case actionType.CLEARN_SURVER_REDUCER:
+        case actionType.CLEAN_SURVER_REDUCER:
             return {};
         default:
             return { ...state };

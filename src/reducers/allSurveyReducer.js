@@ -13,31 +13,9 @@ const allSurveyReducer = (state = INITIAL_STATE, action) => {
             state = action.aSurvey;
             return [...state];
 
-        case actionType.CLEARN_ALL_SURVEY_REDUCER:
+        case actionType.CLEAN_ALL_SURVEY_REDUCER:
             return [];
 
-        // case actionType.CREATE_NEW_FORM:
-        //     state.push({
-        //         id: action.id,
-        //         author: action.author,
-        //         title: "Mẫu Không tiêu đề",
-        //         description: "",
-        //         questions: [
-        //             {
-        //                 questionText: "",
-        //                 questionType: "text",
-        //                 options: [{ optionText: "" }],
-        //                 open: true,
-        //                 required: false,
-        //                 answers: [],
-        //             },
-        //         ],
-        //         interfaceColor: "#673AB7",
-        //         backgroundColor: "#F0EBF8",
-        //         updateDate: "",
-        //     });
-        //     localStorage.setItem("surveys", JSON.stringify(state));
-        //     return [...state];
         default:
             return [...state];
     }

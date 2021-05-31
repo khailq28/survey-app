@@ -11,8 +11,8 @@ export function signInAPI() {
         auth.signInWithPopup(provider)
             .then((payload) => {
                 dispatch(setUser(payload.user));
-                dispatch(clearnAllSurveys());
-                dispatch(clearnSurvey());
+                dispatch(cleanAllSurveys());
+                dispatch(cleanSurvey());
             })
             .catch((error) => {
                 alert(error.message);
@@ -20,15 +20,15 @@ export function signInAPI() {
     };
 }
 
-export function clearnAllSurveys() {
+export function cleanAllSurveys() {
     return {
-        type: actionType.CLEARN_ALL_SURVEY_REDUCER,
+        type: actionType.CLEAN_ALL_SURVEY_REDUCER,
     };
 }
 
-export function clearnSurvey() {
+export function cleanSurvey() {
     return {
-        type: actionType.CLEARN_SURVER_REDUCER,
+        type: actionType.CLEAN_SURVER_REDUCER,
     };
 }
 
@@ -65,14 +65,6 @@ export function setSurveysHome(aSurvey) {
     return {
         type: actionType.SET_SURVER_IN_HOME_PAGE,
         aSurvey,
-    };
-}
-
-export function createNewForm(id, author) {
-    return {
-        type: actionType.CREATE_NEW_FORM,
-        id,
-        author,
     };
 }
 
