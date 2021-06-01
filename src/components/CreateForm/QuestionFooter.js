@@ -46,6 +46,12 @@ function QuestionFooter(props) {
     let [required, setRequired] = useState(question.required);
 
     useEffect(() => {
+        setRequired(question.required);
+    }, [question.required]);
+
+    console.log(required);
+
+    useEffect(() => {
         socket.on("SERVER_SEND_NEW_REQUIRED", (oData) => {
             props.changeReruied(oData.index);
             setRequired(oData.bRequire);

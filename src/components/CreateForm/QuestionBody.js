@@ -70,7 +70,7 @@ function QuestionBody(props) {
         setQuestionText(question.questionText);
         setQuestionType(question.questionType);
         setOptions(question.options);
-    }, [question.questionText, question.questionType, options]);
+    }, [question.questionText, question.questionType, question.options]);
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_TYPE_QUESTION", (oData) => {
@@ -212,7 +212,12 @@ function QuestionBody(props) {
                 )} */}
                 {option.other ? (
                     <div style={{ position: "relative" }}>
-                        <input className="text" type={questionType} disabled />
+                        <input
+                            style={{}}
+                            className="text"
+                            type={questionType}
+                            disabled
+                        />
                         <OptionInput
                             type="text"
                             placeholder="Khác..."
@@ -220,7 +225,6 @@ function QuestionBody(props) {
                         ></OptionInput>
                         <CustomIconButton1
                             aria-label="delete"
-                            style={{ position: "absolute", right: "-96px" }}
                             onClick={() => {
                                 handleRemoveOption(j);
                             }}
@@ -242,14 +246,11 @@ function QuestionBody(props) {
                             onChange={(e) => handleOptionValue(e, j)}
                         ></OptionInput>
 
-                        <CustomIconButton1
+                        {/* <CustomIconButton1
                             aria-label="image"
-                            // onClick={() => {
-                            //     removeOption(i, j);
-                            // }}
                         >
                             <CropOriginalIcon className="icon-option" />
-                        </CustomIconButton1>
+                        </CustomIconButton1> */}
 
                         <CustomIconButton1
                             aria-label="delete"
@@ -276,9 +277,9 @@ function QuestionBody(props) {
                             value={questionText}
                             onChange={handleQuestionValue}
                         ></QuestionInput>
-                        <CustomIconButton>
+                        {/* <CustomIconButton>
                             <CustomCropOriginalIcon />
-                        </CustomIconButton>
+                        </CustomIconButton> */}
 
                         <CustomSelect
                             defaultValue={questionType}
@@ -401,6 +402,7 @@ const CustomButtonAddOption = styled(Button)`
     color: var(--icon-color) !important;
     font-size: 13px !important;
     font-weight: 400 !important;
+    padding-left: 0 !important;
 `;
 
 const CustomButtonAddOther = styled(Button)`

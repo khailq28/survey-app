@@ -25,6 +25,18 @@ a {
     text-decoration: none;
 }
 
+input[type="radio"] {
+    -ms-transform: scale(1.7);
+    -webkit-transform: scale(1.7);
+    transform: scale(1.7);
+}
+
+input[type="checkbox"] {
+    -ms-transform: scale(1.7);
+    -webkit-transform: scale(1.7);
+    transform: scale(1.7);
+}
+
 @media only screen and (min-width: 768px) {
     body {
         font-size: 16px;
