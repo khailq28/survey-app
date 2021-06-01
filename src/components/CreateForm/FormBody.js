@@ -207,8 +207,9 @@ function FormBody(props) {
                                                                                     }
                                                                                     color="primary"
                                                                                     style={{
-                                                                                        marginRight:
-                                                                                            "10px",
+                                                                                        margin: "13px",
+                                                                                        fontSize:
+                                                                                            "13px",
                                                                                     }}
                                                                                     required={
                                                                                         question.type
@@ -258,6 +259,7 @@ function FormBody(props) {
                                         />
 
                                         <QuestionFooter
+                                            index={i}
                                             question={question}
                                             handleCopyQuestion={() =>
                                                 handleCopyQuestion(i)
@@ -448,8 +450,8 @@ const ListOption = styled.div`
 `;
 
 const CustomFormControlLabel = styled(FormControlLabel)`
-    margin-left: "5px";
-    margin-bottom: "5px";
+    margin-left: 10px;
+    margin-bottom: 5px;
 `;
 
 const CustomTypographyOption = styled(Typography)`

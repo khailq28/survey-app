@@ -46,7 +46,9 @@ function FormTitle(props) {
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_TITLE", (sTitle) => {
-            if (sTitle !== props.title) props.setTitleForm(sTitle);
+            if (sTitle !== props.title) {
+                props.setTitleForm(sTitle);
+            }
         });
     }, [props.title]);
 

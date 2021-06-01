@@ -15,32 +15,23 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import socket from "../../socket";
 import {
-    changeOption,
     changeTypeQuestion,
     changeTitleQuestion,
-    addOption,
-    addOptionOther,
-    removeOption,
+    setOptions,
 } from "../../actions";
 
 QuestionBody.propTypes = {
     question: PropTypes.object,
-    changeOption: PropTypes.func,
     changeTypeQuestion: PropTypes.func,
     changeTitleQuestion: PropTypes.func,
-    addOption: PropTypes.func,
-    addOptionOther: PropTypes.func,
-    removeOption: PropTypes.func,
+    setOptions: PropTypes.func,
 };
 
 QuestionBody.defaultProps = {
     question: null,
-    changeOption: null,
     changeTypeQuestion: null,
     changeTitleQuestion: null,
-    addOption: null,
-    addOptionOther: null,
-    removeOption: null,
+    setOptions: null,
 };
 
 const mapStateToProps = (state) => {
@@ -51,10 +42,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        changeOption: (value, i, j) => {
-            dispatch(changeOption(value, i, j));
-        },
-
         changeTypeQuestion: (value, index) => {
             dispatch(changeTypeQuestion(value, index));
         },
@@ -63,16 +50,8 @@ const mapDispatchToProps = (dispatch, props) => {
             dispatch(changeTitleQuestion(value, index));
         },
 
-        addOption: (index) => {
-            dispatch(addOption(index));
-        },
-
-        addOptionOther: (index) => {
-            dispatch(addOptionOther(index));
-        },
-
-        removeOption: (i, j) => {
-            dispatch(removeOption(i, j));
+        setOptions: (aOption, index) => {
+            dispatch(setOptions(aOption, index));
         },
     };
 };
@@ -90,7 +69,8 @@ function QuestionBody(props) {
     useEffect(() => {
         setQuestionText(question.questionText);
         setQuestionType(question.questionType);
-    }, [question.questionText, question.questionType]);
+        setOptions(question.options);
+    }, [question.questionText, question.questionType, options]);
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_TYPE_QUESTION", (oData) => {
@@ -105,7 +85,6 @@ function QuestionBody(props) {
         let target = e.target;
         let value = target.type === "checked" ? target.checked : target.value;
         props.changeTypeQuestion(value, index);
-        setQuestionType(value);
         setOptions([{ optionText: "", other: false }]);
         socket.emit("CLIENT_CHANGE_QUESTION_TYPE", {
             id: question._id,
@@ -150,8 +129,27 @@ function QuestionBody(props) {
         optionTemp[j].optionText = value;
 
         setOptions(optionTemp);
-        props.changeOption(value, index, j);
+        props.setOptions(optionTemp, index);
+
+        if (typingTimeOutRef.current) {
+            clearTimeout(typingTimeOutRef.current);
+        }
+
+        typingTimeOutRef.current = setTimeout(() => {
+            socket.emit("CLIENT_SET_OPTIONS", {
+                id: question._id,
+                options: optionTemp,
+                index,
+            });
+        }, 300);
     };
+
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_OPTIONS", (oData) => {
+            setOptions(oData.options);
+            props.setOptions(oData.options, oData.index);
+        });
+    }, [options]);
 
     let handleAddOption = () => {
         let optionTemp = [...options];
@@ -159,26 +157,29 @@ function QuestionBody(props) {
         if (optionTemp[length - 1].other) {
             optionTemp.splice(length - 1, 0, {
                 optionText: "",
+                other: false,
             });
         } else {
-            optionTemp.push({ optionText: "" });
+            optionTemp.push({ optionText: "", other: false });
         }
         setOptions(optionTemp);
-        props.addOption(index);
-        socket.emit("CLIENT_ADD_OPTION", {
+        props.setOptions(optionTemp, index);
+        socket.emit("CLIENT_SET_OPTIONS", {
             id: question._id,
             options: optionTemp,
+            index,
         });
     };
 
     let handleAddOther = () => {
         let optionTemp = [...options];
-        optionTemp.push({ other: true });
+        optionTemp.push({ optionText: "", other: true });
         setOptions(optionTemp);
-        props.addOptionOther(index);
-        socket.emit("AAA", {
+        props.setOptions(optionTemp, index);
+        socket.emit("CLIENT_SET_OPTIONS", {
             id: question._id,
             options: optionTemp,
+            index,
         });
     };
 
@@ -187,7 +188,12 @@ function QuestionBody(props) {
         if (optionTemp.length > 1) {
             optionTemp.splice(j, 1);
             setOptions(optionTemp);
-            props.removeOption(index, j);
+            props.setOptions(optionTemp, index);
+            socket.emit("CLIENT_SET_OPTIONS", {
+                id: question._id,
+                options: optionTemp,
+                index,
+            });
         }
     };
 

@@ -9,7 +9,7 @@ var INITIAL_STATE = {
             id: "",
             questionText: "",
             questionType: "text",
-            options: [{ optionText: "" }],
+            options: [{ optionText: "", other: false }],
             open: true,
             required: false,
             answers: [],
@@ -45,36 +45,8 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             state.questions[action.index].questionText = action.value;
             return { ...state };
 
-        case actionType.CHANGE_OPTION:
-            state.questions[action.i].options[action.j].optionText =
-                action.value;
-            return { ...state };
-
-        case actionType.ADD_OPTION:
-            var length = state.questions[action.index].options.length;
-            if (state.questions[action.index].options[length - 1].other) {
-                state.questions[action.index].options.splice(length - 1, 0, {
-                    optionText: "",
-                });
-            } else {
-                state.questions[action.index].options.push({ optionText: "" });
-            }
-            return { ...state };
-
-        case actionType.ADD_OPTION_OTHER:
-            state.questions[action.index].options.push({ other: true });
-            return { ...state };
-
-        case actionType.REMOVE_OPTION:
-            if (state.questions[action.i].options.length > 1) {
-                state.questions[action.i].options.splice(action.j, 1);
-                localStorage.setItem(
-                    "surveys",
-                    JSON.stringify(
-                        JSON.parse(localStorage.getItem("surveys")).push(state),
-                    ),
-                );
-            }
+        case actionType.SET_OPTION:
+            state.questions[action.index].options = action.options;
             return { ...state };
 
         case actionType.CHANGE_REQUIRED:

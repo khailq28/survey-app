@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconButton } from "@material-ui/core";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
@@ -8,6 +8,7 @@ import Switch from "@material-ui/core/Switch";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { changeReruied } from "../../actions";
+import socket from "../../socket";
 
 QuestionFooter.propTypes = {
     question: PropTypes.object,
@@ -44,10 +45,23 @@ function QuestionFooter(props) {
 
     let [required, setRequired] = useState(question.required);
 
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_REQUIRED", (oData) => {
+            props.changeReruied(oData.index);
+            setRequired(oData.bRequire);
+        });
+    }, [required]);
+
     let handleSwitch = () => {
         let updateRequired = !required;
         setRequired(updateRequired);
         props.changeReruied(index);
+
+        socket.emit("CLIENT_CHANGE_REQUIRE", {
+            id: question._id,
+            value: updateRequired,
+            index,
+        });
     };
 
     return (

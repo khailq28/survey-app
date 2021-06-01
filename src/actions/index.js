@@ -141,34 +141,11 @@ export function changeTitleQuestion(value, index) {
     };
 }
 
-export function changeOption(value, i, j) {
+export function setOptions(options, index) {
     return {
-        type: actionType.CHANGE_OPTION,
-        value,
-        i, //vi tri cua cau hoi
-        j, //vi tri cua cau tra loi
-    };
-}
-
-export function addOption(index) {
-    return {
-        type: actionType.ADD_OPTION,
-        index, //vi tri cua cau hoi
-    };
-}
-
-export function addOptionOther(index) {
-    return {
-        type: actionType.ADD_OPTION_OTHER,
-        index, //vi tri cua cau hoi
-    };
-}
-
-export function removeOption(i, j) {
-    return {
-        type: actionType.REMOVE_OPTION,
-        i, //vi tri cua cau hoi
-        j, //vi tri cua cau tra loi
+        type: actionType.SET_OPTION,
+        options,
+        index,
     };
 }
 
