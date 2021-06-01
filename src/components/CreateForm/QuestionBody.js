@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import ShortTextIcon from "@material-ui/icons/ShortText";
 import SubjectIcon from "@material-ui/icons/Subject";
@@ -24,7 +24,7 @@ import {
 } from "../../actions";
 
 QuestionBody.propTypes = {
-    questions: PropTypes.array,
+    question: PropTypes.object,
     changeOption: PropTypes.func,
     changeTypeQuestion: PropTypes.func,
     changeTitleQuestion: PropTypes.func,
@@ -34,7 +34,7 @@ QuestionBody.propTypes = {
 };
 
 QuestionBody.defaultProps = {
-    questions: null,
+    question: null,
     changeOption: null,
     changeTypeQuestion: null,
     changeTitleQuestion: null,
@@ -44,7 +44,9 @@ QuestionBody.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-    return { questions: state.survey.questions };
+    return {
+        // questions: state.survey.questions,
+    };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -76,36 +78,69 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function QuestionBody(props) {
-    let { questions, index } = props;
-    let question = questions[index];
+    let { question, index } = props;
+    // let question = questions[index];
 
     let [options, setOptions] = useState(question.options);
     let [questionText, setQuestionText] = useState(question.questionText);
+    let [questionType, setQuestionType] = useState(question.questionType);
+
+    const typingTimeOutRef = useRef(null);
 
     useEffect(() => {
         setQuestionText(question.questionText);
-    }, [question.questionText]);
+        setQuestionType(question.questionType);
+    }, [question.questionText, question.questionType]);
+
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_TYPE_QUESTION", (oData) => {
+            if (index === oData.index && questionType !== oData.type) {
+                setQuestionType(oData.type);
+            }
+            props.changeTypeQuestion(oData.type, oData.index);
+        });
+    }, [questionType]);
 
     let handleChangeSelect = (e) => {
         let target = e.target;
         let value = target.type === "checked" ? target.checked : target.value;
         props.changeTypeQuestion(value, index);
-        setOptions([{ optionText: "" }]);
+        setQuestionType(value);
+        setOptions([{ optionText: "", other: false }]);
         socket.emit("CLIENT_CHANGE_QUESTION_TYPE", {
             id: question._id,
             value,
+            index,
         });
     };
+
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_TITLE_QUESTION", (oData) => {
+            if (index === oData.index && questionText !== oData.title) {
+                setQuestionText(oData.title);
+            }
+
+            props.changeTitleQuestion(oData.title, oData.index);
+        });
+    }, [questionText]);
 
     let handleQuestionValue = (e) => {
         let target = e.target;
         let value = target.type === "checked" ? target.checked : target.value;
         setQuestionText(value);
         props.changeTitleQuestion(value, index);
-        socket.emit("CLIENT_CHANGE_TITLE_QUESTION", {
-            id: question._id,
-            value,
-        });
+
+        if (typingTimeOutRef.current) {
+            clearTimeout(typingTimeOutRef.current);
+        }
+
+        typingTimeOutRef.current = setTimeout(() => {
+            socket.emit("CLIENT_CHANGE_TITLE_QUESTION", {
+                id: question._id,
+                value,
+                index,
+            });
+        }, 300);
     };
 
     let handleOptionValue = (e, j) => {
@@ -171,11 +206,7 @@ function QuestionBody(props) {
                 )} */}
                 {option.other ? (
                     <div style={{ position: "relative" }}>
-                        <input
-                            className="text"
-                            type={question.questionType}
-                            disabled
-                        />
+                        <input className="text" type={questionType} disabled />
                         <OptionInput
                             type="text"
                             placeholder="Khác..."
@@ -244,7 +275,8 @@ function QuestionBody(props) {
                         </CustomIconButton>
 
                         <CustomSelect
-                            defaultValue={question.questionType}
+                            defaultValue={questionType}
+                            value={questionType}
                             onChange={handleChangeSelect}
                         >
                             <CustomMenuItem value="text">

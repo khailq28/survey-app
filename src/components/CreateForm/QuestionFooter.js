@@ -10,14 +10,14 @@ import { connect } from "react-redux";
 import { changeReruied } from "../../actions";
 
 QuestionFooter.propTypes = {
-    questions: PropTypes.array,
+    question: PropTypes.object,
     changeReruied: PropTypes.func,
     handleCopyQuestion: PropTypes.func,
     handleDeleteQuestion: PropTypes.func,
 };
 
 QuestionFooter.defaultProps = {
-    questions: null,
+    question: null,
     changeReruied: null,
     handleCopyQuestion: null,
     handleDeleteQuestion: null,
@@ -25,7 +25,7 @@ QuestionFooter.defaultProps = {
 
 const mapStateToProps = (state) => {
     return {
-        questions: state.survey.questions,
+        // questions: state.survey.questions,
     };
 };
 
@@ -39,8 +39,8 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function QuestionFooter(props) {
-    let { questions, index } = props;
-    let question = questions[index];
+    let { question, index } = props;
+    // let question = questions[index];
 
     let [required, setRequired] = useState(question.required);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import CloseIcon from "@material-ui/icons/Close";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
@@ -92,12 +92,30 @@ function SlideBar(props) {
             ""
         );
 
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_BACKGROUND_COLOR", (sColor) => {
+            if (props.backgroundColor !== sColor)
+                props.setBackgroundColor(sColor);
+        });
+    }, [props.backgroundColor]);
+
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_INTERFACE_COLOR", (sColor) => {
+            if (props.interfaceColor !== sColor)
+                props.setInterfaceColor(sColor);
+        });
+    }, [props.interFaceColor]);
+
     const handleChooseInterfaceColor = (index) => {
         props.setInterfaceColor(props.colorList[index].interface);
         props.setBackgroundColor(props.colorList[index].background[0].color);
         socket.emit(
             "CLIENT_CHANGE_INTERFACE_COLOR",
             props.colorList[index].interface,
+        );
+        socket.emit(
+            "CLIENT_CHANGE_BACKGROUND_COLOR",
+            props.colorList[index].background[0].color,
         );
     };
 

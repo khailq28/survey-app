@@ -72,6 +72,15 @@ function FormBody(props) {
     const [questions, setQuestions] = useState(props.questions);
 
     useEffect(() => {
+        socket.on("SERVER_SEND_NEW_QUESTIONS", (aQuestions) => {
+            if (questions !== aQuestions) {
+                setQuestions(aQuestions);
+                props.setQuestions(aQuestions);
+            }
+        });
+    }, [questions]);
+
+    useEffect(() => {
         props.changeStatusProgess(true);
         if (props.user) {
             socket.emit("CLIENT_GET_DATA_SURVEY", {
@@ -91,6 +100,15 @@ function FormBody(props) {
         });
     }, []);
 
+    var [changeAccordion, setChangeAccordion] = useState(false);
+
+    useEffect(() => {
+        socket.on("SERVER_CHANGED_STATUS_OPEN_QUESTION", (oSurvey) => {
+            props.setSurvey(oSurvey);
+            setQuestions(oSurvey.questions);
+        });
+    }, [changeAccordion]);
+
     const handleChangeAccordion = (index) => {
         var temp = [...questions];
         temp.forEach((question, i) => {
@@ -101,6 +119,8 @@ function FormBody(props) {
         setQuestions(temp);
         props.changeStatusOpenQuestion(index);
         socket.emit("CLIENT_CHANGE_OPEN_QUESTION", questions[index]._id);
+
+        setChangeAccordion(!changeAccordion);
     };
 
     var questionUI = questions.map((question, i) => {
@@ -232,10 +252,13 @@ function FormBody(props) {
                                             )}
                                         </CustomAccordionSummary>
 
-                                        <QuestionBody index={i} />
+                                        <QuestionBody
+                                            index={i}
+                                            question={question}
+                                        />
 
                                         <QuestionFooter
-                                            index={i}
+                                            question={question}
                                             handleCopyQuestion={() =>
                                                 handleCopyQuestion(i)
                                             }
@@ -261,7 +284,7 @@ function FormBody(props) {
         questionsTemp.push({
             questionText: "",
             questionType: "text",
-            options: [{ optionText: "" }],
+            options: [{ optionText: "", other: false }],
             open: true,
             required: false,
             answers: [],
