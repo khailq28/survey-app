@@ -130,6 +130,10 @@ function QuestionBody(props) {
         }
         setOptions(optionTemp);
         props.addOption(index);
+        socket.emit("CLIENT_ADD_OPTION", {
+            id: question._id,
+            options: optionTemp,
+        });
     };
 
     let handleAddOther = () => {
@@ -137,6 +141,10 @@ function QuestionBody(props) {
         optionTemp.push({ other: true });
         setOptions(optionTemp);
         props.addOptionOther(index);
+        socket.emit("AAA", {
+            id: question._id,
+            options: optionTemp,
+        });
     };
 
     let handleRemoveOption = (j) => {

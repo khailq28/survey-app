@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
@@ -28,12 +28,20 @@ FormHeader.defaultProps = {
 };
 
 function FormHeader(props) {
+    const typingTimeOutRef = useRef(null);
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
         value = value === "" ? "Mẫu không tiêu đề" : value;
-        socket.emit("CLIENT_CHANGE_TITLE_FORM", value);
         props.setTitleForm(value);
+
+        if (typingTimeOutRef.current) {
+            clearTimeout(typingTimeOutRef.current);
+        }
+
+        typingTimeOutRef.current = setTimeout(() => {
+            socket.emit("CLIENT_CHANGE_TITLE_FORM", value);
+        }, 300);
     };
 
     return (

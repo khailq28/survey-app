@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -42,21 +42,50 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function FormTitle(props) {
+    const typingTimeOutRef = useRef(null);
+
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_TITLE", (sTitle) => {
+            if (sTitle !== props.title) props.setTitleForm(sTitle);
+        });
+    }, [props.title]);
+
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_DESCRIPTION", (sDescription) => {
+            if (sDescription !== props.description)
+                props.setDescription(sDescription);
+        });
+    }, [props.description]);
+
     // handle change Title
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
         value = value === "" ? "Mẫu không tiêu đề" : value;
-        socket.emit("CLIENT_CHANGE_TITLE_FORM", value);
         props.setTitleForm(value);
+
+        if (typingTimeOutRef.current) {
+            clearTimeout(typingTimeOutRef.current);
+        }
+
+        typingTimeOutRef.current = setTimeout(() => {
+            socket.emit("CLIENT_CHANGE_TITLE_FORM", value);
+        }, 300);
     };
 
     // handle change description
     var handleChangeDesc = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
-        socket.emit("CLIENT_CHANGE_DESCRIPTION_FORM", value);
         props.setDescription(value);
+
+        if (typingTimeOutRef.current) {
+            clearTimeout(typingTimeOutRef.current);
+        }
+
+        typingTimeOutRef.current = setTimeout(() => {
+            socket.emit("CLIENT_CHANGE_DESCRIPTION_FORM", value);
+        }, 300);
     };
 
     return (
