@@ -16,7 +16,6 @@ import { connect } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import socket from "../../socket";
-import { Upload, Icon, message } from "antd";
 import { ENDPOINT } from "../../constant";
 import {
     changeTypeQuestion,
@@ -43,7 +42,7 @@ QuestionBody.defaultProps = {
 
 const mapStateToProps = (state) => {
     return {
-        // questions: state.survey.questions,
+        questions: state.survey,
     };
 };
 
@@ -61,8 +60,8 @@ const mapDispatchToProps = (dispatch, props) => {
             dispatch(setOptions(aOption, index));
         },
 
-        setQuestionImage: (oImage, index) => {
-            dispatch(setQuestionImage(oImage, index));
+        setQuestionImage: (sImage, index) => {
+            dispatch(setQuestionImage(sImage, index));
         },
     };
 };
@@ -77,6 +76,12 @@ function QuestionBody(props) {
     var [shareImage, setShareImage] = useState(question.image);
 
     const typingTimeOutRef = useRef(null);
+
+    useEffect(() => {
+        socket.on("SERVER_SEND_MSG_QUESTION_IMAGE", (oImage) => {
+            props.setQuestionImage(oImage.image, oImage.index);
+        });
+    }, []);
 
     useEffect(() => {
         setQuestionText(question.questionText);
@@ -281,36 +286,42 @@ function QuestionBody(props) {
     };
 
     // upload file
-    const propsUpload = {
-        name: "photo",
-        multiple: false,
-        action: ENDPOINT + "/photo",
-        onChange(info) {
-            const { status } = info.file;
-            if (status !== "uploading") {
-                console.log(info.file, info.fileList);
-            }
-
-            if (status === "done") {
-                message.success(
-                    `${info.file.name} file uploaded successfully.`,
-                );
-            } else if (status === "error") {
-                message.error(`${info.file.name} file upload failed.`);
-            }
-        },
-    };
-
     const handleChangeShareImg = (e) => {
         const image = e.target.files[0];
         if (image === "" || image === undefined) {
             alert("file phải là ảnh");
             return;
         }
-        setShareImage(image);
-        props.setQuestionImage(image, index);
-        socket.emit("CLIENT_SEND_QUESTION_IMAGE", image);
+
+        const formData = new FormData();
+
+        formData.append("photo", image);
+        formData.append("idForm", props.questions._id);
+        formData.append("idQues", question._id);
+        formData.append("index", index);
+
+        fetch(ENDPOINT + "/setQuestionImage", {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                socket.emit("CLIENT_SET_QUESTION_IMAGE", {
+                    image: result.image,
+                    index,
+                });
+            })
+            .catch();
     };
+
+    const handleDeleteQuesImg = () => {
+        socket.emit("CLIENT_DELETE_QUESTION_IMAGE", {
+            sIdForm: props.questions._id,
+            sIdQuestion: question._id,
+            path: question.image,
+            index,
+        });
+    }
 
     let questionCheckOrRadio = question.options.map((option, j) => {
         if (option.other) {
@@ -398,6 +409,7 @@ function QuestionBody(props) {
     });
 
     var idQuesImg = "imgQues" + index;
+    var linkQuesImg = ENDPOINT + "/" + shareImage.slice(7);
     return (
         <div>
             <Box>
@@ -409,7 +421,7 @@ function QuestionBody(props) {
                             value={questionText}
                             onChange={handleQuestionValue}
                         ></QuestionInput>
-                        {/* <CustomIconButton>
+                        <CustomIconButton>
                             <input
                                 type="file"
                                 accept="image/png, image/jpeg"
@@ -420,15 +432,7 @@ function QuestionBody(props) {
                             <label htmlFor={idQuesImg}>
                                 <CustomCropOriginalIcon />
                             </label>
-                        </CustomIconButton> */}
-
-                        <Upload {...propsUpload} accept="image/png, image/jpeg">
-                            <div style={{ width: "100%" }}>
-                                <p className="ant-upload-text">
-                                    <CustomCropOriginalIcon />
-                                </p>
-                            </div>
-                        </Upload>
+                        </CustomIconButton>
 
                         <CustomSelect
                             defaultValue={questionType}
@@ -459,7 +463,12 @@ function QuestionBody(props) {
                 </CustomAccordionDetails>
             </Box>
 
-            {/* {shareImage && <img style={{ width: "100%" }} src={shareImage} />} */}
+            {shareImage && (
+                <QuestionImage onClick={handleDeleteQuesImg}>
+                    <img src={linkQuesImg} />
+                    <div><CloseIcon /></div>
+                </QuestionImage>
+            )}
 
             {question.questionType === "checkbox" ||
             question.questionType === "radio" ? (
@@ -692,6 +701,29 @@ const CustomDivDrag = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const QuestionImage = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    & > img {
+        width: 80%;
+    }
+
+    & > div {
+        border: 1.5px solid rgb(181 154 63 / 95%);
+        border-radius: 50%;
+        background-color: #68645f69;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-left: 5px;
+    }
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionBody);

@@ -66,7 +66,7 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
 
         case actionType.SET_QUESTION_IMAGE:
             console.log(action.image);
-            // state.questions[action.index].image = action.image;
+            state.questions[action.index].image = action.image;
             return { ...state };
 
         case actionType.CLEAN_SURVER_REDUCER:

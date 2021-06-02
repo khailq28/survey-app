@@ -146,6 +146,12 @@ function FormBody(props) {
         setQuestions(questionsTemp);
         props.setQuestions(questionsTemp);
         socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
+        if (props.user) {
+            socket.emit("CLIENT_GET_DATA_SURVEY", {
+                id,
+                author: props.user.email,
+            });
+        }
     };
 
     const handleCopyQuestion = (index) => {
