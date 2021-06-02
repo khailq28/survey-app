@@ -16,10 +16,13 @@ import { connect } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import socket from "../../socket";
+import { Upload, Icon, message } from "antd";
+import { ENDPOINT } from "../../constant";
 import {
     changeTypeQuestion,
     changeTitleQuestion,
     setOptions,
+    setQuestionImage,
 } from "../../actions";
 
 QuestionBody.propTypes = {
@@ -27,6 +30,7 @@ QuestionBody.propTypes = {
     changeTypeQuestion: PropTypes.func,
     changeTitleQuestion: PropTypes.func,
     setOptions: PropTypes.func,
+    setQuestionImage: PropTypes.func,
 };
 
 QuestionBody.defaultProps = {
@@ -34,6 +38,7 @@ QuestionBody.defaultProps = {
     changeTypeQuestion: null,
     changeTitleQuestion: null,
     setOptions: null,
+    setQuestionImage: null,
 };
 
 const mapStateToProps = (state) => {
@@ -55,6 +60,10 @@ const mapDispatchToProps = (dispatch, props) => {
         setOptions: (aOption, index) => {
             dispatch(setOptions(aOption, index));
         },
+
+        setQuestionImage: (oImage, index) => {
+            dispatch(setQuestionImage(oImage, index));
+        },
     };
 };
 
@@ -65,6 +74,7 @@ function QuestionBody(props) {
     let [options, setOptions] = useState(question.options);
     let [questionText, setQuestionText] = useState(question.questionText);
     let [questionType, setQuestionType] = useState(question.questionType);
+    var [shareImage, setShareImage] = useState(question.image);
 
     const typingTimeOutRef = useRef(null);
 
@@ -72,7 +82,13 @@ function QuestionBody(props) {
         setQuestionText(question.questionText);
         setQuestionType(question.questionType);
         setOptions(question.options);
-    }, [question.questionText, question.questionType, question.options]);
+        setShareImage(question.image);
+    }, [
+        question.questionText,
+        question.questionType,
+        question.options,
+        question.image,
+    ]);
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_TYPE_QUESTION", (oData) => {
@@ -87,7 +103,7 @@ function QuestionBody(props) {
         let target = e.target;
         let value = target.type === "checked" ? target.checked : target.value;
         props.changeTypeQuestion(value, index);
-        setOptions([{ optionText: "", other: false }]);
+        setOptions([{ optionText: "", image: "", other: false }]);
         socket.emit("CLIENT_CHANGE_QUESTION_TYPE", {
             id: question._id,
             value,
@@ -159,10 +175,11 @@ function QuestionBody(props) {
         if (optionTemp[length - 1].other) {
             optionTemp.splice(length - 1, 0, {
                 optionText: "",
+                image: "",
                 other: false,
             });
         } else {
-            optionTemp.push({ optionText: "", other: false });
+            optionTemp.push({ optionText: "", image: "", other: false });
         }
         optionTemp.forEach((option, i) => {
             if (option.optionText === "" && !option.other) {
@@ -231,6 +248,68 @@ function QuestionBody(props) {
         optionTemp[j].optionText = value;
         setOptions(optionTemp);
         props.setOptions(optionTemp, index);
+    };
+
+    // according
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    };
+
+    const onDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        var itemgg = [...options];
+        var lastItem = itemgg[itemgg.length - 1];
+        itemgg.splice(itemgg.length - 1, 1);
+        const itemF = reorder(
+            itemgg,
+            result.source.index,
+            result.destination.index,
+        );
+        itemF.push(lastItem);
+        setOptions(itemF);
+        props.setOptions(itemF, index);
+        socket.emit("CLIENT_SET_OPTIONS", {
+            id: question._id,
+            options: itemF,
+            index,
+        });
+    };
+
+    // upload file
+    const propsUpload = {
+        name: "photo",
+        multiple: false,
+        action: ENDPOINT + "/photo",
+        onChange(info) {
+            const { status } = info.file;
+            if (status !== "uploading") {
+                console.log(info.file, info.fileList);
+            }
+
+            if (status === "done") {
+                message.success(
+                    `${info.file.name} file uploaded successfully.`,
+                );
+            } else if (status === "error") {
+                message.error(`${info.file.name} file upload failed.`);
+            }
+        },
+    };
+
+    const handleChangeShareImg = (e) => {
+        const image = e.target.files[0];
+        if (image === "" || image === undefined) {
+            alert("file phải là ảnh");
+            return;
+        }
+        setShareImage(image);
+        props.setQuestionImage(image, index);
+        socket.emit("CLIENT_SEND_QUESTION_IMAGE", image);
     };
 
     let questionCheckOrRadio = question.options.map((option, j) => {
@@ -318,36 +397,7 @@ function QuestionBody(props) {
         }
     });
 
-    // according
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-        return result;
-    };
-
-    const onDragEnd = (result) => {
-        if (!result.destination) {
-            return;
-        }
-        var itemgg = [...options];
-        var lastItem = itemgg[itemgg.length - 1];
-        itemgg.splice(itemgg.length - 1, 1);
-        const itemF = reorder(
-            itemgg,
-            result.source.index,
-            result.destination.index,
-        );
-        itemF.push(lastItem);
-        setOptions(itemF);
-        props.setOptions(itemF, index);
-        socket.emit("CLIENT_SET_OPTIONS", {
-            id: question._id,
-            options: itemF,
-            index,
-        });
-    };
-
+    var idQuesImg = "imgQues" + index;
     return (
         <div>
             <Box>
@@ -359,9 +409,26 @@ function QuestionBody(props) {
                             value={questionText}
                             onChange={handleQuestionValue}
                         ></QuestionInput>
-                        <CustomIconButton>
-                            <CustomCropOriginalIcon />
-                        </CustomIconButton>
+                        {/* <CustomIconButton>
+                            <input
+                                type="file"
+                                accept="image/png, image/jpeg"
+                                id={idQuesImg}
+                                style={{ display: "none" }}
+                                onChange={handleChangeShareImg}
+                            />
+                            <label htmlFor={idQuesImg}>
+                                <CustomCropOriginalIcon />
+                            </label>
+                        </CustomIconButton> */}
+
+                        <Upload {...propsUpload} accept="image/png, image/jpeg">
+                            <div style={{ width: "100%" }}>
+                                <p className="ant-upload-text">
+                                    <CustomCropOriginalIcon />
+                                </p>
+                            </div>
+                        </Upload>
 
                         <CustomSelect
                             defaultValue={questionType}
@@ -391,6 +458,8 @@ function QuestionBody(props) {
                     </Top>
                 </CustomAccordionDetails>
             </Box>
+
+            {/* {shareImage && <img style={{ width: "100%" }} src={shareImage} />} */}
 
             {question.questionType === "checkbox" ||
             question.questionType === "radio" ? (
@@ -424,9 +493,9 @@ function QuestionBody(props) {
                                     hoặc
                                 </span>
                                 &nbsp;
-                                <CustomButtonAddOther onClick={handleAddOther}>
+                                <CustomButtonAddOption onClick={handleAddOther}>
                                     Thêm "khác"
-                                </CustomButtonAddOther>
+                                </CustomButtonAddOption>
                             </div>
                         ) : (
                             ""
@@ -493,14 +562,6 @@ const OptionInput = styled.input`
 
 const CustomButtonAddOption = styled(Button)`
     text-transform: none !important;
-    color: var(--icon-color) !important;
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    padding-left: 0 !important;
-`;
-
-const CustomButtonAddOther = styled(Button)`
-    text-transform: none !important;
     color: var(--basic-color) !important;
     font-size: 13px !important;
     font-weight: 600 !important;
@@ -533,6 +594,10 @@ const Top = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+
+    & > span > .ant-upload-list.ant-upload-list-text {
+        display: none;
+    }
 `;
 
 const QuestionInput = styled.input`
@@ -563,6 +628,7 @@ const QuestionInput = styled.input`
 
 const CustomCropOriginalIcon = styled(CropOriginalIcon)`
     color: var(--icon-color);
+    cursor: pointer;
 `;
 
 const CustomSelect = styled(Select)`

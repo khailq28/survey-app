@@ -123,6 +123,81 @@ function FormBody(props) {
         setChangeAccordion(!changeAccordion);
     };
 
+    const handleAddQuestion = () => {
+        var questionsTemp = [...questions];
+        questionsTemp.forEach((question, index) => {
+            question.open = false;
+        });
+        questionsTemp.push({
+            questionText: "",
+            questionType: "text",
+            image: "",
+            options: [
+                {
+                    optionText: "Tùy chọn 1",
+                    image: "",
+                    other: false,
+                },
+            ],
+            open: true,
+            required: false,
+            answers: [],
+        });
+        setQuestions(questionsTemp);
+        props.setQuestions(questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
+    };
+
+    const handleCopyQuestion = (index) => {
+        var questionsTemp = [...questions];
+        questionsTemp.forEach((question) => {
+            question.open = false;
+        });
+        questionsTemp.push({
+            questionText: questionsTemp[index].questionText,
+            questionType: questionsTemp[index].questionType,
+            image: questionsTemp[index].image,
+            options: questionsTemp[index].options,
+            open: true,
+            required: questionsTemp[index].required,
+        });
+
+        setQuestions(questionsTemp);
+        props.setQuestions(questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
+    };
+
+    const handleDeleteQuestion = (index) => {
+        var questionsTemp = [...questions];
+        questionsTemp.splice(index, 1);
+        setQuestions(questionsTemp);
+        props.setQuestions(questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
+    };
+
+    const onDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        var itemgg = [...questions];
+        const itemF = reorder(
+            itemgg,
+            result.source.index,
+            result.destination.index,
+        );
+        setQuestions(itemF);
+        props.setQuestions(itemF);
+        socket.emit("CLIENT_SET_QUESTIONS", itemF);
+    };
+
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    };
+
+    // RENDER
     var questionUI = questions.map((question, i) => {
         return (
             <Draggable key={i} draggableId={i + "id"} index={i}>
@@ -275,78 +350,6 @@ function FormBody(props) {
         );
     });
 
-    const handleAddQuestion = () => {
-        var questionsTemp = [...questions];
-        questionsTemp.forEach((question, index) => {
-            question.open = false;
-        });
-        questionsTemp.push({
-            questionText: "",
-            questionType: "text",
-            options: [
-                {
-                    optionText: "Tùy chọn 1",
-                    other: false,
-                },
-            ],
-            open: true,
-            required: false,
-            answers: [],
-        });
-        setQuestions(questionsTemp);
-        props.setQuestions(questionsTemp);
-        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
-    };
-
-    const handleCopyQuestion = (index) => {
-        var questionsTemp = [...questions];
-        questionsTemp.forEach((question) => {
-            question.open = false;
-        });
-        questionsTemp.push({
-            questionText: questionsTemp[index].questionText,
-            questionType: questionsTemp[index].questionType,
-            options: questionsTemp[index].options,
-            open: true,
-            required: questionsTemp[index].required,
-        });
-
-        setQuestions(questionsTemp);
-        props.setQuestions(questionsTemp);
-        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
-    };
-
-    const handleDeleteQuestion = (index) => {
-        var questionsTemp = [...questions];
-        questionsTemp.splice(index, 1);
-        setQuestions(questionsTemp);
-        props.setQuestions(questionsTemp);
-        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
-    };
-
-    const onDragEnd = (result) => {
-        if (!result.destination) {
-            return;
-        }
-        var itemgg = [...questions];
-        const itemF = reorder(
-            itemgg,
-            result.source.index,
-            result.destination.index,
-        );
-        setQuestions(itemF);
-        props.setQuestions(itemF);
-        socket.emit("CLIENT_SET_QUESTIONS", itemF);
-    };
-
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-        return result;
-    };
-
-    // RENDER
     return (
         <div>
             <CustomAddCircleOutlineIcon onClick={handleAddQuestion} />

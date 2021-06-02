@@ -163,6 +163,14 @@ export function setQuestions(questions) {
     };
 }
 
+export function setQuestionImage(image, index) {
+    return {
+        type: actionType.SET_QUESTION_IMAGE,
+        image,
+        index,
+    };
+}
+
 export function changeStatusOpenQuestion(i) {
     return {
         type: actionType.CHANGE_STATUS_OPEN_QUESTION,

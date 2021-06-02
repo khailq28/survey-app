@@ -4,17 +4,8 @@ var INITIAL_STATE = {
     author: "",
     title: "Mẫu Không tiêu đề",
     description: "",
-    questions: [
-        {
-            id: "",
-            questionText: "",
-            questionType: "text",
-            options: [{ optionText: "Tùy chọn 1", other: false }],
-            open: true,
-            required: false,
-            answers: [],
-        },
-    ],
+    image: "",
+    questions: [],
     interfaceColor: "#673AB7",
     backgroundColor: "#F0EBF8",
     updateDate: "",
@@ -37,7 +28,7 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
         case actionType.CHANGE_TYPE_QUESTION:
             state.questions[action.index].questionType = action.value;
             state.questions[action.index].options = [
-                { optionText: "Tùy chọn 1", other: false },
+                { optionText: "Tùy chọn 1", image: "", other: false },
             ];
             return { ...state };
 
@@ -71,7 +62,11 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
 
         case actionType.SET_BACKGROUND_COLOR:
             state.backgroundColor = action.backgroundColor;
+            return { ...state };
 
+        case actionType.SET_QUESTION_IMAGE:
+            console.log(action.image);
+            // state.questions[action.index].image = action.image;
             return { ...state };
 
         case actionType.CLEAN_SURVER_REDUCER:
