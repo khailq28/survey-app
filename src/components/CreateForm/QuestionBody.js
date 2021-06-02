@@ -13,6 +13,8 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import socket from "../../socket";
 import {
     changeTypeQuestion,
@@ -232,68 +234,119 @@ function QuestionBody(props) {
     };
 
     let questionCheckOrRadio = question.options.map((option, j) => {
-        return (
-            <Body key={j}>
-                {/* <Checkbox  color="primary" inputProps={{ 'aria-label': 'secondary checkbox' }} disabled/> */}
-                {/* {question.questionType !== "text" ? (
-                    <input
-                        className="text"
-                        type={question.questionType}
+        if (option.other) {
+            return (
+                <div style={{ position: "relative", marginLeft: "38px" }}>
+                    <input className="text" type={questionType} disabled />
+                    <OptionInput
+                        type="text"
+                        placeholder="   Khác..."
                         disabled
-                    />
-                ) : (
-                    <ShortTextIcon className="text" />
-                )} */}
-                {option.other ? (
-                    <div style={{ position: "relative" }}>
-                        <input className="text" type={questionType} disabled />
-                        <OptionInput
-                            type="text"
-                            placeholder="Khác..."
-                            disabled
-                        ></OptionInput>
-                        <CustomIconButton1
-                            style={{ marginLeft: "49px" }}
-                            aria-label="delete"
-                            onClick={() => {
-                                handleRemoveOption(j);
-                            }}
+                    ></OptionInput>
+                    <CustomIconButton1
+                        style={{ marginLeft: "62px" }}
+                        aria-label="delete"
+                        onClick={() => {
+                            handleRemoveOption(j);
+                        }}
+                    >
+                        <CloseIcon className="icon-option" />
+                    </CustomIconButton1>
+                </div>
+            );
+        } else {
+            return (
+                <Draggable key={j} draggableId={j + "id"} index={j}>
+                    {(provided, snapshot) => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
                         >
-                            <CloseIcon className="icon-option" />
-                        </CustomIconButton1>
-                    </div>
-                ) : (
-                    <div>
-                        <input
-                            className="text"
-                            type={question.questionType}
-                            disabled
-                        />
-                        <OptionInput
-                            type="text"
-                            placeholder="Lựa chọn"
-                            value={option.optionText}
-                            onChange={(e) => handleOptionValue(e, j)}
-                            onBlur={(e) => handleBlur(e, option, j)}
-                        ></OptionInput>
+                            <div>
+                                <div
+                                    style={{
+                                        marginBottom: "0px",
+                                        display: "flex",
+                                    }}
+                                >
+                                    <CustomDivDrag>
+                                        <CustomDragIndicatorIcon fontSize="small" />
+                                    </CustomDivDrag>
+                                    <Body>
+                                        <div>
+                                            <input
+                                                className="text"
+                                                type={question.questionType}
+                                                disabled
+                                            />
+                                            <OptionInput
+                                                type="text"
+                                                placeholder="Lựa chọn"
+                                                value={option.optionText}
+                                                onFocus={(e) =>
+                                                    e.target.select()
+                                                }
+                                                onChange={(e) =>
+                                                    handleOptionValue(e, j)
+                                                }
+                                                onBlur={(e) =>
+                                                    handleBlur(e, option, j)
+                                                }
+                                            ></OptionInput>
 
-                        <CustomIconButton1 aria-label="image">
-                            <CropOriginalIcon className="icon-option" />
-                        </CustomIconButton1>
+                                            <CustomIconButton1 aria-label="image">
+                                                <CropOriginalIcon className="icon-option" />
+                                            </CustomIconButton1>
 
-                        <CustomIconButton1
-                            aria-label="delete"
-                            onClick={() => {
-                                handleRemoveOption(j);
-                            }}
-                        >
-                            <CloseIcon className="icon-option" />
-                        </CustomIconButton1>
-                    </div>
-                )}
-            </Body>
-        );
+                                            <CustomIconButton1
+                                                aria-label="delete"
+                                                onClick={() => {
+                                                    handleRemoveOption(j);
+                                                }}
+                                            >
+                                                <CloseIcon className="icon-option" />
+                                            </CustomIconButton1>
+                                        </div>
+                                    </Body>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </Draggable>
+            );
+        }
     });
+
+    // according
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    };
+
+    const onDragEnd = (result) => {
+        if (!result.destination) {
+            return;
+        }
+        var itemgg = [...options];
+        var lastItem = itemgg[itemgg.length - 1];
+        itemgg.splice(itemgg.length - 1, 1);
+        const itemF = reorder(
+            itemgg,
+            result.source.index,
+            result.destination.index,
+        );
+        itemF.push(lastItem);
+        setOptions(itemF);
+        props.setOptions(itemF, index);
+        socket.emit("CLIENT_SET_OPTIONS", {
+            id: question._id,
+            options: itemF,
+            index,
+        });
+    };
 
     return (
         <div>
@@ -342,8 +395,20 @@ function QuestionBody(props) {
             {question.questionType === "checkbox" ||
             question.questionType === "radio" ? (
                 <div>
-                    {questionCheckOrRadio}
-                    <Body>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="droppable">
+                            {(provided, snapshot) => (
+                                <div
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                >
+                                    {questionCheckOrRadio}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                    <Body style={{ marginLeft: "37px" }}>
                         <input
                             className="text"
                             type={question.questionType}
@@ -549,6 +614,18 @@ const CustomText = styled.div`
             : props.type === "textarea"
             ? "330px"
             : ""};
+`;
+
+const CustomDragIndicatorIcon = styled(DragIndicatorIcon)`
+    color: var(--icon-color);
+`;
+
+const CustomDivDrag = styled.div`
+    cursor: all-scroll;
+    padding-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionBody);

@@ -180,8 +180,7 @@ function FormBody(props) {
                                                                                     }
                                                                                     color="primary"
                                                                                     style={{
-                                                                                        marginRight:
-                                                                                            "10px",
+                                                                                        margin: "13px",
                                                                                     }}
                                                                                     required={
                                                                                         question.type
@@ -208,8 +207,6 @@ function FormBody(props) {
                                                                                     color="primary"
                                                                                     style={{
                                                                                         margin: "13px",
-                                                                                        fontSize:
-                                                                                            "13px",
                                                                                     }}
                                                                                     required={
                                                                                         question.type
