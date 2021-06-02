@@ -49,8 +49,6 @@ function QuestionFooter(props) {
         setRequired(question.required);
     }, [question.required]);
 
-    console.log(required);
-
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_REQUIRED", (oData) => {
             props.changeReruied(oData.index);

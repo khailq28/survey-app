@@ -9,7 +9,7 @@ var INITIAL_STATE = {
             id: "",
             questionText: "",
             questionType: "text",
-            options: [{ optionText: "", other: false }],
+            options: [{ optionText: "Tùy chọn 1", other: false }],
             open: true,
             required: false,
             answers: [],
@@ -37,7 +37,7 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
         case actionType.CHANGE_TYPE_QUESTION:
             state.questions[action.index].questionType = action.value;
             state.questions[action.index].options = [
-                { optionText: "", other: false },
+                { optionText: "Tùy chọn 1", other: false },
             ];
             return { ...state };
 

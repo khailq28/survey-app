@@ -162,6 +162,16 @@ function QuestionBody(props) {
         } else {
             optionTemp.push({ optionText: "", other: false });
         }
+        optionTemp.forEach((option, i) => {
+            if (option.optionText === "" && !option.other) {
+                optionTemp.forEach((option2, j) => {
+                    if (option2.optionText === "Tùy chọn " + (i + 1)) {
+                        option2.optionText = "Tùy chọn " + (j + 1);
+                    }
+                });
+                option.optionText = "Tùy chọn " + (i + 1);
+            }
+        });
         setOptions(optionTemp);
         props.setOptions(optionTemp, index);
         socket.emit("CLIENT_SET_OPTIONS", {
@@ -187,6 +197,11 @@ function QuestionBody(props) {
         let optionTemp = [...options];
         if (optionTemp.length > 1) {
             optionTemp.splice(j, 1);
+            optionTemp.forEach((option, i) => {
+                if (option.optionText.slice(0, 8) === "Tùy chọn") {
+                    option.optionText = "Tùy chọn " + (i + 1);
+                }
+            });
             setOptions(optionTemp);
             props.setOptions(optionTemp, index);
             socket.emit("CLIENT_SET_OPTIONS", {
@@ -195,6 +210,25 @@ function QuestionBody(props) {
                 index,
             });
         }
+    };
+
+    const handleBlur = (e, option, j) => {
+        let target = e.target;
+        let value = target.type === "checked" ? target.checked : target.value;
+        // truong hop chuoi rong
+        if (!value) {
+            value = "Tùy chọn " + (j + 1);
+        }
+        //  gia tri giong nhau
+        let optionTemp = [...options];
+        optionTemp.forEach((option, i) => {
+            if (value === option.optionText && i !== j) {
+                value = "Tùy chọn " + (j + 1);
+            }
+        });
+        optionTemp[j].optionText = value;
+        setOptions(optionTemp);
+        props.setOptions(optionTemp, index);
     };
 
     let questionCheckOrRadio = question.options.map((option, j) => {
@@ -212,18 +246,14 @@ function QuestionBody(props) {
                 )} */}
                 {option.other ? (
                     <div style={{ position: "relative" }}>
-                        <input
-                            style={{}}
-                            className="text"
-                            type={questionType}
-                            disabled
-                        />
+                        <input className="text" type={questionType} disabled />
                         <OptionInput
                             type="text"
                             placeholder="Khác..."
                             disabled
                         ></OptionInput>
                         <CustomIconButton1
+                            style={{ marginLeft: "49px" }}
                             aria-label="delete"
                             onClick={() => {
                                 handleRemoveOption(j);
@@ -244,13 +274,12 @@ function QuestionBody(props) {
                             placeholder="Lựa chọn"
                             value={option.optionText}
                             onChange={(e) => handleOptionValue(e, j)}
+                            onBlur={(e) => handleBlur(e, option, j)}
                         ></OptionInput>
 
-                        {/* <CustomIconButton1
-                            aria-label="image"
-                        >
+                        <CustomIconButton1 aria-label="image">
                             <CropOriginalIcon className="icon-option" />
-                        </CustomIconButton1> */}
+                        </CustomIconButton1>
 
                         <CustomIconButton1
                             aria-label="delete"
@@ -277,9 +306,9 @@ function QuestionBody(props) {
                             value={questionText}
                             onChange={handleQuestionValue}
                         ></QuestionInput>
-                        {/* <CustomIconButton>
+                        <CustomIconButton>
                             <CustomCropOriginalIcon />
-                        </CustomIconButton> */}
+                        </CustomIconButton>
 
                         <CustomSelect
                             defaultValue={questionType}

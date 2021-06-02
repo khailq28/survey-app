@@ -286,7 +286,12 @@ function FormBody(props) {
         questionsTemp.push({
             questionText: "",
             questionType: "text",
-            options: [{ optionText: "", other: false }],
+            options: [
+                {
+                    optionText: "Tùy chọn 1",
+                    other: false,
+                },
+            ],
             open: true,
             required: false,
             answers: [],
