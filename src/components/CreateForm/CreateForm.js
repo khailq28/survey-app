@@ -8,6 +8,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { changeStatusProgess } from "../../actions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import DialogUpload from "./DialogUpload";
 
 CreateForm.propTypes = {
     user: PropTypes.object,
@@ -50,8 +51,11 @@ function CreateForm(props) {
                     }}
                 />
             )}
-            <FormHeader />
+
             <TabHeader />
+            <FormHeader />
+            <DialogUpload />
+
             <Background show={props.progress}>
                 <ContainerProgress>
                     <CustomCircularProgress />

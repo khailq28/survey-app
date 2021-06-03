@@ -16,6 +16,7 @@ import socket from "../../socket";
 import PropTypes from "prop-types";
 
 SlideBar.propTypes = {
+    idForm: PropTypes.string,
     slideBar: PropTypes.object,
     setStatusSlideBar: PropTypes.func,
     colorList: PropTypes.array,
@@ -26,6 +27,7 @@ SlideBar.propTypes = {
 };
 
 SlideBar.defaultProps = {
+    idForm: null,
     slideBar: null,
     setStatusSlideBar: null,
     colorList: null,
@@ -37,6 +39,7 @@ SlideBar.defaultProps = {
 
 const mapStateToProps = (state) => {
     return {
+        idForm: state.survey._id,
         slideBar: state.tools.slideBar,
         colorList: state.color,
         interfaceColor: state.survey.interfaceColor,
@@ -93,35 +96,49 @@ function SlideBar(props) {
         );
 
     useEffect(() => {
-        socket.on("SERVER_SEND_NEW_BACKGROUND_COLOR", (sColor) => {
-            if (props.backgroundColor !== sColor)
-                props.setBackgroundColor(sColor);
+        socket.on("SERVER_SEND_NEW_BACKGROUND_COLOR", (oColor) => {
+            if (
+                props.backgroundColor !== oColor.color &&
+                oColor.idForm === props.idForm &&
+                props.idForm !== ""
+            ) {
+                props.setBackgroundColor(oColor.color);
+            }
         });
-    }, [props.backgroundColor]);
+    }, [props.backgroundColor, props.idForm]);
 
     useEffect(() => {
-        socket.on("SERVER_SEND_NEW_INTERFACE_COLOR", (sColor) => {
-            if (props.interfaceColor !== sColor)
-                props.setInterfaceColor(sColor);
+        socket.on("SERVER_SEND_NEW_INTERFACE_COLOR", (oColor) => {
+            if (
+                props.interfaceColor !== oColor.color &&
+                oColor.idForm === props.idForm &&
+                props.idForm !== ""
+            ) {
+                console.log("hihi");
+                props.setInterfaceColor(oColor.color);
+            }
         });
-    }, [props.interFaceColor]);
+    }, [props.interFaceColor, props.idForm]);
 
     const handleChooseInterfaceColor = (index) => {
         props.setInterfaceColor(props.colorList[index].interface);
         props.setBackgroundColor(props.colorList[index].background[0].color);
-        socket.emit(
-            "CLIENT_CHANGE_INTERFACE_COLOR",
-            props.colorList[index].interface,
-        );
-        socket.emit(
-            "CLIENT_CHANGE_BACKGROUND_COLOR",
-            props.colorList[index].background[0].color,
-        );
+        socket.emit("CLIENT_CHANGE_INTERFACE_COLOR", {
+            color: props.colorList[index].interface,
+            idForm: props.idForm,
+        });
+        socket.emit("CLIENT_CHANGE_BACKGROUND_COLOR", {
+            color: props.colorList[index].background[0].color,
+            idForm: props.idForm,
+        });
     };
 
     const handleChooseBackgoundColor = (color) => {
         props.setBackgroundColor(color);
-        socket.emit("CLIENT_CHANGE_BACKGROUND_COLOR", color);
+        socket.emit("CLIENT_CHANGE_BACKGROUND_COLOR", {
+            color,
+            idForm: props.idForm,
+        });
     };
 
     var body =

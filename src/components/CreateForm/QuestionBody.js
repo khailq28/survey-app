@@ -22,27 +22,38 @@ import {
     changeTitleQuestion,
     setOptions,
     setQuestionImage,
+    setStatusDialogUploadOp,
+    setOptionImage,
 } from "../../actions";
 
 QuestionBody.propTypes = {
+    survey: PropTypes.object,
+    idForm: PropTypes.string,
     question: PropTypes.object,
     changeTypeQuestion: PropTypes.func,
     changeTitleQuestion: PropTypes.func,
     setOptions: PropTypes.func,
     setQuestionImage: PropTypes.func,
+    setStatusDialogUploadOp: PropTypes.func,
+    setOptionImage: PropTypes.func,
 };
 
 QuestionBody.defaultProps = {
+    survey: null,
+    idForm: null,
     question: null,
     changeTypeQuestion: null,
     changeTitleQuestion: null,
     setOptions: null,
     setQuestionImage: null,
+    setStatusDialogUploadOp: null,
+    setOptionImage: null,
 };
 
 const mapStateToProps = (state) => {
     return {
-        questions: state.survey,
+        survey: state.survey,
+        idForm: state.survey._id,
     };
 };
 
@@ -63,72 +74,101 @@ const mapDispatchToProps = (dispatch, props) => {
         setQuestionImage: (sImage, index) => {
             dispatch(setQuestionImage(sImage, index));
         },
+
+        setStatusDialogUploadOp: (indexQues, indexOption) => {
+            dispatch(setStatusDialogUploadOp(indexQues, indexOption));
+        },
+
+        setOptionImage: (image, indexQues, indexOption) => {
+            dispatch(setOptionImage(image, indexQues, indexOption));
+        },
     };
 };
 
 function QuestionBody(props) {
-    let { question, index } = props;
-    // let question = questions[index];
+    var { question, index, idForm } = props;
+    // var question = questions[index];
 
-    let [options, setOptions] = useState(question.options);
-    let [questionText, setQuestionText] = useState(question.questionText);
-    let [questionType, setQuestionType] = useState(question.questionType);
+    var [options, setOptions] = useState(question.options);
+    var [questionText, setQuestionText] = useState(question.questionText);
+    var [questionType, setQuestionType] = useState(question.questionType);
     var [shareImage, setShareImage] = useState(question.image);
 
     const typingTimeOutRef = useRef(null);
 
     useEffect(() => {
         socket.on("SERVER_SEND_MSG_QUESTION_IMAGE", (oImage) => {
-            props.setQuestionImage(oImage.image, oImage.index);
+            if (idForm === oImage.idForm && index === oImage.index) {
+                setShareImage(oImage.image);
+                props.setQuestionImage(oImage.image, oImage.index);
+            }
         });
-    }, []);
-
-    useEffect(() => {
-        setQuestionText(question.questionText);
-        setQuestionType(question.questionType);
-        setOptions(question.options);
-        setShareImage(question.image);
-    }, [
-        question.questionText,
-        question.questionType,
-        question.options,
-        question.image,
-    ]);
+        socket.on("SERVER_SEND_MSG_OPTION_IMAGE", (oImage) => {
+            console.log(oImage);
+            var { image, indexQues, indexOption, idOption } = oImage;
+            console.log(idOption);
+            console.log(
+                props.survey.questions[indexQues].options[indexOption]._id,
+            );
+            console.log(idForm);
+            console.log(oImage.idForm);
+            if (
+                props.survey.questions[indexQues].options[indexOption]._id &&
+                idForm === oImage.idForm &&
+                idOption ===
+                    props.survey.questions[indexQues].options[indexOption]._id
+            ) {
+                console.log("da vao");
+                props.setOptionImage(image, indexQues, indexOption);
+            }
+        });
+    }, [idForm, props.survey]);
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_TYPE_QUESTION", (oData) => {
-            if (index === oData.index && questionType !== oData.type) {
+            if (
+                index === oData.index &&
+                questionType !== oData.type &&
+                idForm === oData.idForm
+            ) {
+                setOptions(oData.options);
+                props.setOptions(oData.options, oData.index);
                 setQuestionType(oData.type);
+                props.changeTypeQuestion(oData.type, oData.index);
             }
-            props.changeTypeQuestion(oData.type, oData.index);
         });
-    }, [questionType]);
+    }, [questionType, idForm]);
 
-    let handleChangeSelect = (e) => {
-        let target = e.target;
-        let value = target.type === "checked" ? target.checked : target.value;
+    var handleChangeSelect = (e) => {
+        var target = e.target;
+        var value = target.type === "checked" ? target.checked : target.value;
+        setQuestionType(value);
         props.changeTypeQuestion(value, index);
         setOptions([{ optionText: "", image: "", other: false }]);
         socket.emit("CLIENT_CHANGE_QUESTION_TYPE", {
             id: question._id,
             value,
             index,
+            idForm,
         });
     };
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_TITLE_QUESTION", (oData) => {
-            if (index === oData.index && questionText !== oData.title) {
+            if (
+                index === oData.index &&
+                questionText !== oData.title &&
+                idForm === oData.idForm
+            ) {
                 setQuestionText(oData.title);
+                props.changeTitleQuestion(oData.title, oData.index);
             }
-
-            props.changeTitleQuestion(oData.title, oData.index);
         });
-    }, [questionText]);
+    }, [questionText, idForm]);
 
-    let handleQuestionValue = (e) => {
-        let target = e.target;
-        let value = target.type === "checked" ? target.checked : target.value;
+    var handleQuestionValue = (e) => {
+        var target = e.target;
+        var value = target.type === "checked" ? target.checked : target.value;
         setQuestionText(value);
         props.changeTitleQuestion(value, index);
 
@@ -141,14 +181,15 @@ function QuestionBody(props) {
                 id: question._id,
                 value,
                 index,
+                idForm,
             });
         }, 300);
     };
 
-    let handleOptionValue = (e, j) => {
-        let target = e.target;
-        let value = target.type === "checked" ? target.checked : target.value;
-        let optionTemp = [...options];
+    var handleOptionValue = (e, j) => {
+        var target = e.target;
+        var value = target.type === "checked" ? target.checked : target.value;
+        var optionTemp = [...options];
         optionTemp[j].optionText = value;
 
         setOptions(optionTemp);
@@ -163,20 +204,23 @@ function QuestionBody(props) {
                 id: question._id,
                 options: optionTemp,
                 index,
+                idForm,
             });
         }, 300);
     };
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_OPTIONS", (oData) => {
-            setOptions(oData.options);
-            props.setOptions(oData.options, oData.index);
+            if (idForm === oData.idForm) {
+                setOptions(oData.options);
+                props.setOptions(oData.options, oData.index);
+            }
         });
-    }, [options]);
+    }, [options, idForm]);
 
-    let handleAddOption = () => {
-        let optionTemp = [...options];
-        let length = optionTemp.length;
+    var handleAddOption = () => {
+        var optionTemp = [...options];
+        var length = optionTemp.length;
         if (optionTemp[length - 1].other) {
             optionTemp.splice(length - 1, 0, {
                 optionText: "",
@@ -202,11 +246,12 @@ function QuestionBody(props) {
             id: question._id,
             options: optionTemp,
             index,
+            idForm,
         });
     };
 
-    let handleAddOther = () => {
-        let optionTemp = [...options];
+    var handleAddOther = () => {
+        var optionTemp = [...options];
         optionTemp.push({ optionText: "", other: true });
         setOptions(optionTemp);
         props.setOptions(optionTemp, index);
@@ -214,11 +259,12 @@ function QuestionBody(props) {
             id: question._id,
             options: optionTemp,
             index,
+            idForm,
         });
     };
 
-    let handleRemoveOption = (j) => {
-        let optionTemp = [...options];
+    var handleRemoveOption = (j) => {
+        var optionTemp = [...options];
         if (optionTemp.length > 1) {
             optionTemp.splice(j, 1);
             optionTemp.forEach((option, i) => {
@@ -232,19 +278,20 @@ function QuestionBody(props) {
                 id: question._id,
                 options: optionTemp,
                 index,
+                idForm,
             });
         }
     };
 
     const handleBlur = (e, option, j) => {
-        let target = e.target;
-        let value = target.type === "checked" ? target.checked : target.value;
+        var target = e.target;
+        var value = target.type === "checked" ? target.checked : target.value;
         // truong hop chuoi rong
         if (!value) {
             value = "Tùy chọn " + (j + 1);
         }
         //  gia tri giong nhau
-        let optionTemp = [...options];
+        var optionTemp = [...options];
         optionTemp.forEach((option, i) => {
             if (value === option.optionText && i !== j) {
                 value = "Tùy chọn " + (j + 1);
@@ -282,11 +329,12 @@ function QuestionBody(props) {
             id: question._id,
             options: itemF,
             index,
+            idForm,
         });
     };
 
     // upload file
-    const handleChangeShareImg = (e) => {
+    const handleUploadQuesImg = (e) => {
         const image = e.target.files[0];
         if (image === "" || image === undefined) {
             alert("file phải là ảnh");
@@ -296,7 +344,7 @@ function QuestionBody(props) {
         const formData = new FormData();
 
         formData.append("photo", image);
-        formData.append("idForm", props.questions._id);
+        formData.append("idForm", props.survey._id);
         formData.append("idQues", question._id);
         formData.append("index", index);
 
@@ -307,26 +355,46 @@ function QuestionBody(props) {
             .then((response) => response.json())
             .then((result) => {
                 socket.emit("CLIENT_SET_QUESTION_IMAGE", {
+                    idForm: props.survey._id,
                     image: result.image,
                     index,
+                    idForm,
                 });
             })
             .catch();
     };
 
+    const handleClickUploadOption = (i, j) => {
+        props.setStatusDialogUploadOp(i, j);
+    };
+
     const handleDeleteQuesImg = () => {
         socket.emit("CLIENT_DELETE_QUESTION_IMAGE", {
-            sIdForm: props.questions._id,
             sIdQuestion: question._id,
             path: question.image,
             index,
+            idForm,
         });
-    }
+    };
 
-    let questionCheckOrRadio = question.options.map((option, j) => {
-        if (option.other) {
-            return (
-                <div style={{ position: "relative", marginLeft: "38px" }}>
+    const handleDeleteOpImg = (j) => {
+        socket.emit("CLIENT_DELETE_OPTION_IMAGE", {
+            idForm,
+            sIdQuestion: question._id,
+            sIdOption: question.options[j]._id,
+            path: question.options[j].image,
+            indexQues: index,
+            indexOption: j,
+        });
+    };
+
+    var questionCheckOrRadio = (i, aOptions) => {
+        var result = aOptions.map((op, j) => {
+            return op.other ? (
+                <div
+                    key={j}
+                    style={{ position: "relative", marginLeft: "38px" }}
+                >
                     <input className="text" type={questionType} disabled />
                     <OptionInput
                         type="text"
@@ -343,9 +411,7 @@ function QuestionBody(props) {
                         <CloseIcon className="icon-option" />
                     </CustomIconButton1>
                 </div>
-            );
-        } else {
-            return (
+            ) : (
                 <Draggable key={j} draggableId={j + "id"} index={j}>
                     {(provided, snapshot) => (
                         <div
@@ -363,53 +429,79 @@ function QuestionBody(props) {
                                     <CustomDivDrag>
                                         <CustomDragIndicatorIcon fontSize="small" />
                                     </CustomDivDrag>
-                                    <Body>
-                                        <div>
-                                            <input
-                                                className="text"
-                                                type={question.questionType}
-                                                disabled
-                                            />
-                                            <OptionInput
-                                                type="text"
-                                                placeholder="Lựa chọn"
-                                                value={option.optionText}
-                                                onFocus={(e) =>
-                                                    e.target.select()
-                                                }
-                                                onChange={(e) =>
-                                                    handleOptionValue(e, j)
-                                                }
-                                                onBlur={(e) =>
-                                                    handleBlur(e, option, j)
-                                                }
-                                            ></OptionInput>
+                                    <div>
+                                        <Body>
+                                            <div>
+                                                <input
+                                                    className="text"
+                                                    type={question.questionType}
+                                                    disabled
+                                                />
+                                                <OptionInput
+                                                    type="text"
+                                                    placeholder="Lựa chọn"
+                                                    value={op.optionText}
+                                                    onFocus={(e) =>
+                                                        e.target.select()
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleOptionValue(e, j)
+                                                    }
+                                                    onBlur={(e) =>
+                                                        handleBlur(e, op, j)
+                                                    }
+                                                ></OptionInput>
 
-                                            <CustomIconButton1 aria-label="image">
-                                                <CropOriginalIcon className="icon-option" />
-                                            </CustomIconButton1>
-
-                                            <CustomIconButton1
-                                                aria-label="delete"
-                                                onClick={() => {
-                                                    handleRemoveOption(j);
-                                                }}
+                                                <CustomIconButton1
+                                                    onClick={() =>
+                                                        handleClickUploadOption(
+                                                            i,
+                                                            j,
+                                                        )
+                                                    }
+                                                >
+                                                    <CustomCropOriginalIcon />
+                                                </CustomIconButton1>
+                                                <CustomIconButton1
+                                                    aria-label="delete"
+                                                    onClick={() => {
+                                                        handleRemoveOption(j);
+                                                    }}
+                                                >
+                                                    <CloseIcon className="icon-option" />
+                                                </CustomIconButton1>
+                                            </div>
+                                        </Body>
+                                        {op.image && (
+                                            <OptionImage
+                                                onClick={() =>
+                                                    handleDeleteOpImg(j)
+                                                }
                                             >
-                                                <CloseIcon className="icon-option" />
-                                            </CustomIconButton1>
-                                        </div>
-                                    </Body>
+                                                <img
+                                                    src={
+                                                        ENDPOINT +
+                                                        "/" +
+                                                        op.image.slice(7)
+                                                    }
+                                                    alt=""
+                                                />
+                                                <div>
+                                                    <CloseIcon />
+                                                </div>
+                                            </OptionImage>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     )}
                 </Draggable>
             );
-        }
-    });
+        });
+        return result;
+    };
 
-    var idQuesImg = "imgQues" + index;
-    var linkQuesImg = ENDPOINT + "/" + shareImage.slice(7);
     return (
         <div>
             <Box>
@@ -425,11 +517,11 @@ function QuestionBody(props) {
                             <input
                                 type="file"
                                 accept="image/png, image/jpeg"
-                                id={idQuesImg}
+                                id={"imgQues" + index}
                                 style={{ display: "none" }}
-                                onChange={handleChangeShareImg}
+                                onChange={handleUploadQuesImg}
                             />
-                            <label htmlFor={idQuesImg}>
+                            <label htmlFor={"imgQues" + index}>
                                 <CustomCropOriginalIcon />
                             </label>
                         </CustomIconButton>
@@ -465,8 +557,10 @@ function QuestionBody(props) {
 
             {shareImage && (
                 <QuestionImage onClick={handleDeleteQuesImg}>
-                    <img src={linkQuesImg} />
-                    <div><CloseIcon /></div>
+                    <img src={ENDPOINT + "/" + shareImage.slice(7)} alt="" />
+                    <div>
+                        <CloseIcon />
+                    </div>
                 </QuestionImage>
             )}
 
@@ -480,7 +574,10 @@ function QuestionBody(props) {
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                 >
-                                    {questionCheckOrRadio}
+                                    {questionCheckOrRadio(
+                                        index,
+                                        question.options,
+                                    )}
                                     {provided.placeholder}
                                 </div>
                             )}
@@ -547,7 +644,7 @@ const OptionInput = styled.input`
     height: 40px;
     width: 550px;
     font-family: Roboto, Arial, sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.2px;
     color: #202124;
@@ -712,6 +809,31 @@ const QuestionImage = styled.div`
 
     & > img {
         width: 80%;
+        box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 40%);
+    }
+
+    & > div {
+        border: 1.5px solid rgb(181 154 63 / 95%);
+        border-radius: 50%;
+        background-color: #68645f69;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-left: 5px;
+    }
+`;
+
+const OptionImage = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 20px;
+
+    & > img {
+        width: 200px;
+        box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 40%);
     }
 
     & > div {

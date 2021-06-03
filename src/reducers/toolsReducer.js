@@ -4,6 +4,12 @@ var INITIAL_STATE = {
         show: false,
         id: "", //id can xoa
     },
+    dialogUpload: {
+        show: false,
+        idSurvey: "",
+        indexQues: -1,
+        indexOption: -1,
+    },
     progress: {
         show: false,
     },
@@ -23,6 +29,13 @@ const toolsReducer = (state = INITIAL_STATE, action) => {
         case actionType.SET_STATUS_DIALOG:
             state.dialog.show = !state.dialog.show;
             state.dialog.id = action.id;
+            return { ...state };
+
+        case actionType.SET_STATUS_DIALOG_UPLOAD_OPTION_IMAGE:
+            state.dialogUpload.show = !state.dialogUpload.show;
+            state.dialogUpload.idSurvey = action.idSurvey;
+            state.dialogUpload.indexQues = action.indexQues;
+            state.dialogUpload.indexOption = action.indexOption;
             return { ...state };
 
         case actionType.CHANGE_STATUS_PROPGRESS:

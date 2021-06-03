@@ -11,6 +11,7 @@ import { changeReruied } from "../../actions";
 import socket from "../../socket";
 
 QuestionFooter.propTypes = {
+    idForm: PropTypes.string,
     question: PropTypes.object,
     changeReruied: PropTypes.func,
     handleCopyQuestion: PropTypes.func,
@@ -18,6 +19,7 @@ QuestionFooter.propTypes = {
 };
 
 QuestionFooter.defaultProps = {
+    idForm: null,
     question: null,
     changeReruied: null,
     handleCopyQuestion: null,
@@ -26,7 +28,7 @@ QuestionFooter.defaultProps = {
 
 const mapStateToProps = (state) => {
     return {
-        // questions: state.survey.questions,
+        idForm: state.survey._id,
     };
 };
 
@@ -40,21 +42,19 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function QuestionFooter(props) {
-    let { question, index } = props;
+    let { question, index, idForm } = props;
     // let question = questions[index];
 
     let [required, setRequired] = useState(question.required);
 
     useEffect(() => {
-        setRequired(question.required);
-    }, [question.required]);
-
-    useEffect(() => {
         socket.on("SERVER_SEND_NEW_REQUIRED", (oData) => {
-            props.changeReruied(oData.index);
-            setRequired(oData.bRequire);
+            if (idForm === oData.idForm) {
+                props.changeReruied(oData.index);
+                setRequired(oData.bRequire);
+            }
         });
-    }, [required]);
+    }, [required, idForm]);
 
     let handleSwitch = () => {
         let updateRequired = !required;
@@ -65,6 +65,7 @@ function QuestionFooter(props) {
             id: question._id,
             value: updateRequired,
             index,
+            idForm,
         });
     };
 

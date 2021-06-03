@@ -77,6 +77,14 @@ export function setStatusDialog(id) {
     };
 }
 
+export function setStatusDialogUploadOp(indexQues, indexOption) {
+    return {
+        type: actionType.SET_STATUS_DIALOG_UPLOAD_OPTION_IMAGE,
+        indexQues,
+        indexOption,
+    };
+}
+
 export function sortListSurveys() {
     return {
         type: actionType.SORT,
@@ -168,6 +176,15 @@ export function setQuestionImage(image, index) {
         type: actionType.SET_QUESTION_IMAGE,
         image,
         index,
+    };
+}
+
+export function setOptionImage(image, indexQues, indexOption) {
+    return {
+        type: actionType.SET_OPTION_IMAGE,
+        image,
+        indexQues,
+        indexOption,
     };
 }
 

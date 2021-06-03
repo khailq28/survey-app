@@ -1,6 +1,7 @@
 import * as actionType from "../actions/actionType";
 
 var INITIAL_STATE = {
+    _id: "",
     author: "",
     title: "Mẫu Không tiêu đề",
     description: "",
@@ -27,9 +28,9 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
 
         case actionType.CHANGE_TYPE_QUESTION:
             state.questions[action.index].questionType = action.value;
-            state.questions[action.index].options = [
-                { optionText: "Tùy chọn 1", image: "", other: false },
-            ];
+            // state.questions[action.index].options = [
+            //     { optionText: "Tùy chọn 1", image: "", other: false },
+            // ];
             return { ...state };
 
         case actionType.CHANGE_TITLE_QUESTION:
@@ -65,8 +66,13 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
 
         case actionType.SET_QUESTION_IMAGE:
-            console.log(action.image);
             state.questions[action.index].image = action.image;
+            return { ...state };
+
+        case actionType.SET_OPTION_IMAGE:
+            state.questions[action.indexQues].options[
+                action.indexOption
+            ].image = action.image;
             return { ...state };
 
         case actionType.CLEAN_SURVER_REDUCER:

@@ -27,6 +27,7 @@ FormBody.propTypes = {
     setSurvey: PropTypes.func,
     changeStatusProgess: PropTypes.func,
     user: PropTypes.object,
+    idForm: PropTypes.string,
 };
 
 FormBody.defaultProps = {
@@ -36,12 +37,14 @@ FormBody.defaultProps = {
     setSurvey: null,
     changeStatusProgess: null,
     user: null,
+    idForm: null,
 };
 
 const mapStateToProps = (state) => {
     return {
         questions: state.survey.questions,
         user: state.userState.user,
+        idForm: state.survey._id,
     };
 };
 
@@ -66,19 +69,23 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function FormBody(props) {
+    var { idForm } = props;
     // set state
     let { id } = useParams();
     var history = useHistory();
     const [questions, setQuestions] = useState(props.questions);
 
     useEffect(() => {
-        socket.on("SERVER_SEND_NEW_QUESTIONS", (aQuestions) => {
-            if (questions !== aQuestions) {
-                setQuestions(aQuestions);
-                props.setQuestions(aQuestions);
+        socket.on("SERVER_SEND_NEW_QUESTIONS", (oQuestions) => {
+            if (
+                questions !== oQuestions.questions &&
+                idForm === oQuestions.idForm
+            ) {
+                setQuestions(oQuestions.questions);
+                props.setQuestions(oQuestions.questions);
             }
         });
-    }, [questions]);
+    }, [questions, idForm]);
 
     useEffect(() => {
         props.changeStatusProgess(true);
@@ -104,10 +111,12 @@ function FormBody(props) {
 
     useEffect(() => {
         socket.on("SERVER_CHANGED_STATUS_OPEN_QUESTION", (oSurvey) => {
-            props.setSurvey(oSurvey);
-            setQuestions(oSurvey.questions);
+            if (idForm === oSurvey.idForm) {
+                props.setSurvey(oSurvey.survey);
+                setQuestions(oSurvey.survey.questions);
+            }
         });
-    }, [changeAccordion]);
+    }, [changeAccordion, idForm]);
 
     const handleChangeAccordion = (index) => {
         var temp = [...questions];
@@ -118,7 +127,10 @@ function FormBody(props) {
         temp[index].open = true;
         setQuestions(temp);
         props.changeStatusOpenQuestion(index);
-        socket.emit("CLIENT_CHANGE_OPEN_QUESTION", questions[index]._id);
+        socket.emit("CLIENT_CHANGE_OPEN_QUESTION", {
+            idQuestion: questions[index]._id,
+            idForm,
+        });
 
         setChangeAccordion(!changeAccordion);
     };
@@ -145,7 +157,10 @@ function FormBody(props) {
         });
         setQuestions(questionsTemp);
         props.setQuestions(questionsTemp);
-        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", {
+            questions: questionsTemp,
+            idForm,
+        });
         if (props.user) {
             socket.emit("CLIENT_GET_DATA_SURVEY", {
                 id,
@@ -170,7 +185,10 @@ function FormBody(props) {
 
         setQuestions(questionsTemp);
         props.setQuestions(questionsTemp);
-        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", {
+            questions: questionsTemp,
+            idForm,
+        });
     };
 
     const handleDeleteQuestion = (index) => {
@@ -178,7 +196,10 @@ function FormBody(props) {
         questionsTemp.splice(index, 1);
         setQuestions(questionsTemp);
         props.setQuestions(questionsTemp);
-        socket.emit("CLIENT_SET_QUESTIONS", questionsTemp);
+        socket.emit("CLIENT_SET_QUESTIONS", {
+            questions: questionsTemp,
+            idForm,
+        });
     };
 
     const onDragEnd = (result) => {
@@ -193,7 +214,10 @@ function FormBody(props) {
         );
         setQuestions(itemF);
         props.setQuestions(itemF);
-        socket.emit("CLIENT_SET_QUESTIONS", itemF);
+        socket.emit("CLIENT_SET_QUESTIONS", {
+            questions: itemF,
+            idForm,
+        });
     };
 
     const reorder = (list, startIndex, endIndex) => {
@@ -388,15 +412,16 @@ const CustomAddCircleOutlineIcon = styled(AddCircleOutlineIcon)`
     right: 325px !important;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
     border-radius: 8px;
-    background-color: #cee3f6;
+    background-color: #d3cef6;
 
     &:hover {
         color: var(--basic-color);
+        font-size: 50px !important;
     }
 
     @media (max-width: 768px) {
-        top: 60px !important;
-        right: 10px !important;
+        /* bottom: 1% !important; */
+        right: 10% !important;
         font-size: 35px !important;
     }
 `;

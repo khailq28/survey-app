@@ -13,6 +13,7 @@ import socket from "../../socket";
 
 FormHeader.propTypes = {
     user: PropTypes.object,
+    survey: PropTypes.object,
     signOut: PropTypes.func,
     setStatusSlideBar: PropTypes.func,
     title: PropTypes.string,
@@ -20,6 +21,7 @@ FormHeader.propTypes = {
 };
 
 FormHeader.defaultProps = {
+    survey: null,
     user: null,
     signOut: null,
     setStatusSlideBar: null,
@@ -40,7 +42,10 @@ function FormHeader(props) {
         }
 
         typingTimeOutRef.current = setTimeout(() => {
-            socket.emit("CLIENT_CHANGE_TITLE_FORM", value);
+            socket.emit("CLIENT_CHANGE_TITLE_FORM", {
+                value,
+                idForm: props.survey._id,
+            });
         }, 300);
     };
 
@@ -400,6 +405,7 @@ const MenuButton = styled(IconButton)`
 
 const mapStateToProps = (state) => {
     return {
+        survey: state.survey,
         user: state.userState.user,
         title: state.survey.title,
     };

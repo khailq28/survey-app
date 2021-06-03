@@ -6,6 +6,7 @@ import { setTitleForm, setDescription } from "../../actions";
 import socket from "../../socket";
 
 FormTitle.propTypes = {
+    survey: PropTypes.object,
     title: PropTypes.string,
     setTitleForm: PropTypes.func,
     setDescription: PropTypes.func,
@@ -19,10 +20,12 @@ FormTitle.defaultProps = {
     setDescription: null,
     description: "",
     interfaceColor: null,
+    survey: null,
 };
 
 const mapStateToProps = (state) => {
     return {
+        survey: state.survey,
         title: state.survey.title,
         description: state.survey.description,
         interfaceColor: state.survey.interfaceColor,
@@ -45,17 +48,24 @@ function FormTitle(props) {
     const typingTimeOutRef = useRef(null);
 
     useEffect(() => {
-        socket.on("SERVER_SEND_NEW_TITLE", (sTitle) => {
-            if (sTitle !== props.title) {
-                props.setTitleForm(sTitle);
+        socket.on("SERVER_SEND_NEW_TITLE", (oData) => {
+            if (
+                oData.value !== props.title &&
+                oData.idForm === props.survey._id
+            ) {
+                props.setTitleForm(oData.value);
             }
         });
     }, [props.title]);
 
     useEffect(() => {
-        socket.on("SERVER_SEND_NEW_DESCRIPTION", (sDescription) => {
-            if (sDescription !== props.description)
-                props.setDescription(sDescription);
+        socket.on("SERVER_SEND_NEW_DESCRIPTION", (oData) => {
+            if (
+                oData.value !== props.description &&
+                oData.idForm === props.survey._id
+            ) {
+                props.setDescription(oData.value);
+            }
         });
     }, [props.description]);
 
@@ -71,7 +81,10 @@ function FormTitle(props) {
         }
 
         typingTimeOutRef.current = setTimeout(() => {
-            socket.emit("CLIENT_CHANGE_TITLE_FORM", value);
+            socket.emit("CLIENT_CHANGE_TITLE_FORM", {
+                value,
+                idForm: props.survey._id,
+            });
         }, 300);
     };
 
@@ -86,7 +99,10 @@ function FormTitle(props) {
         }
 
         typingTimeOutRef.current = setTimeout(() => {
-            socket.emit("CLIENT_CHANGE_DESCRIPTION_FORM", value);
+            socket.emit("CLIENT_CHANGE_DESCRIPTION_FORM", {
+                value,
+                idForm: props.survey._id,
+            });
         }, 300);
     };
 
