@@ -1,8 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { setTitleForm, setDescription } from "../../actions";
+import {
+    setTitleForm,
+    setDescription,
+    changeStatusProgess,
+} from "../../actions";
 import socket from "../../socket";
 
 FormTitle.propTypes = {
@@ -10,6 +14,7 @@ FormTitle.propTypes = {
     title: PropTypes.string,
     setTitleForm: PropTypes.func,
     setDescription: PropTypes.func,
+    changeStatusProgess: PropTypes.func,
     description: PropTypes.string,
     interfaceColor: PropTypes.string,
 };
@@ -18,6 +23,7 @@ FormTitle.defaultProps = {
     title: "Mẫu không tiêu đề",
     setTitleForm: null,
     setDescription: null,
+    changeStatusProgess: null,
     description: "",
     interfaceColor: null,
     survey: null,
@@ -41,12 +47,17 @@ const mapDispatchToProps = (dispatch, props) => {
         setDescription: (description) => {
             dispatch(setDescription(description));
         },
+
+        changeStatusProgess: (bStatus) => {
+            dispatch(changeStatusProgess(bStatus));
+        },
     };
 };
 
 function FormTitle(props) {
     const typingTimeOutRef = useRef(null);
-
+    var [title, setTitle] = useState(props.title);
+    var [description, setDescription] = useState(props.description);
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_TITLE", (oData) => {
             if (
@@ -55,7 +66,9 @@ function FormTitle(props) {
             ) {
                 props.setTitleForm(oData.value);
             }
+            props.changeStatusProgess(false);
         });
+        setTitle(props.title);
     }, [props.title]);
 
     useEffect(() => {
@@ -66,69 +79,65 @@ function FormTitle(props) {
             ) {
                 props.setDescription(oData.value);
             }
+            props.changeStatusProgess(false);
         });
+        setDescription(props.description);
     }, [props.description]);
 
     // handle change Title
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
-        value = value === "" ? "Mẫu không tiêu đề" : value;
-        props.setTitleForm(value);
-
+        setTitle(value);
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }
 
         typingTimeOutRef.current = setTimeout(() => {
+            props.setTitleForm(value);
+            props.changeStatusProgess(true);
             socket.emit("CLIENT_CHANGE_TITLE_FORM", {
                 value,
                 idForm: props.survey._id,
             });
-        }, 300);
+        }, 500);
     };
 
     // handle change description
     var handleChangeDesc = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
-        props.setDescription(value);
-
+        setDescription(value);
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }
 
         typingTimeOutRef.current = setTimeout(() => {
+            props.setDescription(value);
+            props.changeStatusProgess(true);
             socket.emit("CLIENT_CHANGE_DESCRIPTION_FORM", {
                 value,
                 idForm: props.survey._id,
             });
-        }, 300);
+        }, 1000);
     };
 
     return (
         <Title interfaceColor={props.interfaceColor}>
             <QuestionFormName
-                type="'text"
-                value={props.title}
+                type="text"
+                value={title}
                 onFocus={(e) => e.target.select()}
                 onChange={handleChangeTitle}
-                // placeholder={documentName}
-                // value={documentName}
-                // onChange={(e) => {
-                //     setDocName(e.target.value);
-                // }}
+                // onBlur={handleBlurTitle}
+                placeholder="Mẫu không tiêu đề"
             ></QuestionFormName>
             <QuestionFormDesc
                 type="text"
                 placeholder="Mô tả biểu mẫu"
-                value={props.description}
+                value={description}
                 onChange={handleChangeDesc}
-                // placeholder={documentDescription}
-                // value={documentDescription}
-                // onChange={(e) => {
-                //     setDocDesc(e.target.value);
-                // }}
+                // onBlur={handleBlurDesc}
             ></QuestionFormDesc>
         </Title>
     );

@@ -11,6 +11,7 @@ import QuestionFooter from "./QuestionFooter";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
+import { ENDPOINT } from "../../constant";
 import {
     setQuestions,
     changeStatusOpenQuestion,
@@ -85,7 +86,7 @@ function FormBody(props) {
                 props.setQuestions(oQuestions.questions);
             }
         });
-    }, [questions, idForm]);
+    }, [idForm]);
 
     useEffect(() => {
         props.changeStatusProgess(true);
@@ -262,6 +263,28 @@ function FormBody(props) {
                                                         {i + 1}.{" "}
                                                         {question.questionText}
                                                     </CustomTypography>
+                                                    <div
+                                                        style={{
+                                                            width: "100%",
+                                                            display: "flex",
+                                                            alignItems:
+                                                                "center",
+                                                            justifyContent:
+                                                                "center",
+                                                            marginBottom: "4px",
+                                                        }}
+                                                    >
+                                                        <QuestionImg
+                                                            src={
+                                                                ENDPOINT +
+                                                                "/" +
+                                                                question.image.slice(
+                                                                    7,
+                                                                )
+                                                            }
+                                                            alt=""
+                                                        />
+                                                    </div>
 
                                                     {question.questionType ===
                                                         "radio" ||
@@ -269,69 +292,87 @@ function FormBody(props) {
                                                         "checkbox" ? (
                                                         question.options.map(
                                                             (op, j) => (
-                                                                <ListOption
-                                                                    key={j}
-                                                                >
+                                                                <div key={j}>
+                                                                    <ListOption>
+                                                                        {question
+                                                                            .options[
+                                                                            j
+                                                                        ]
+                                                                            .other ? (
+                                                                            <CustomFormControlLabel
+                                                                                disabled
+                                                                                control={
+                                                                                    <input
+                                                                                        type={
+                                                                                            question.questionType
+                                                                                        }
+                                                                                        color="primary"
+                                                                                        style={{
+                                                                                            margin: "13px",
+                                                                                        }}
+                                                                                        required={
+                                                                                            question.type
+                                                                                        }
+                                                                                    />
+                                                                                }
+                                                                                label={
+                                                                                    <CustomTypographyOption>
+                                                                                        <span id="other">
+                                                                                            Mục
+                                                                                            khác
+                                                                                        </span>
+                                                                                    </CustomTypographyOption>
+                                                                                }
+                                                                            />
+                                                                        ) : (
+                                                                            <CustomFormControlLabel
+                                                                                disabled
+                                                                                control={
+                                                                                    <input
+                                                                                        type={
+                                                                                            question.questionType
+                                                                                        }
+                                                                                        color="primary"
+                                                                                        style={{
+                                                                                            margin: "13px",
+                                                                                        }}
+                                                                                        required={
+                                                                                            question.type
+                                                                                        }
+                                                                                    />
+                                                                                }
+                                                                                label={
+                                                                                    <CustomTypographyOption>
+                                                                                        {
+                                                                                            question
+                                                                                                .options[
+                                                                                                j
+                                                                                            ]
+                                                                                                .optionText
+                                                                                        }
+                                                                                    </CustomTypographyOption>
+                                                                                }
+                                                                            />
+                                                                        )}
+                                                                    </ListOption>
                                                                     {question
                                                                         .options[
                                                                         j
-                                                                    ].other ? (
-                                                                        <CustomFormControlLabel
-                                                                            disabled
-                                                                            control={
-                                                                                <input
-                                                                                    type={
-                                                                                        question.questionType
-                                                                                    }
-                                                                                    color="primary"
-                                                                                    style={{
-                                                                                        margin: "13px",
-                                                                                    }}
-                                                                                    required={
-                                                                                        question.type
-                                                                                    }
-                                                                                />
+                                                                    ].image && (
+                                                                        <OptionImg
+                                                                            src={
+                                                                                ENDPOINT +
+                                                                                "/" +
+                                                                                question.options[
+                                                                                    j
+                                                                                ].image.slice(
+                                                                                    7,
+                                                                                )
                                                                             }
-                                                                            label={
-                                                                                <CustomTypographyOption>
-                                                                                    <span id="other">
-                                                                                        Mục
-                                                                                        khác
-                                                                                    </span>
-                                                                                </CustomTypographyOption>
-                                                                            }
-                                                                        />
-                                                                    ) : (
-                                                                        <CustomFormControlLabel
-                                                                            disabled
-                                                                            control={
-                                                                                <input
-                                                                                    type={
-                                                                                        question.questionType
-                                                                                    }
-                                                                                    color="primary"
-                                                                                    style={{
-                                                                                        margin: "13px",
-                                                                                    }}
-                                                                                    required={
-                                                                                        question.type
-                                                                                    }
-                                                                                />
-                                                                            }
-                                                                            label={
-                                                                                <CustomTypographyOption>
-                                                                                    {
-                                                                                        question
-                                                                                            .options[
-                                                                                            j
-                                                                                        ]
-                                                                                            .optionText
-                                                                                    }
-                                                                                </CustomTypographyOption>
-                                                                            }
+                                                                            alt=""
                                                                         />
                                                                     )}
-                                                                </ListOption>
+                                                                </div>
                                                             ),
                                                         )
                                                     ) : question.questionType ===
@@ -530,6 +571,17 @@ const CustomDivDrag = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const OptionImg = styled.img`
+    width: 250px;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 40%);
+    margin-left: 30px;
+`;
+
+const QuestionImg = styled.img`
+    width: 80%;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 40%);
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormBody);

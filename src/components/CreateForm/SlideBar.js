@@ -114,7 +114,6 @@ function SlideBar(props) {
                 oColor.idForm === props.idForm &&
                 props.idForm !== ""
             ) {
-                console.log("hihi");
                 props.setInterfaceColor(oColor.color);
             }
         });

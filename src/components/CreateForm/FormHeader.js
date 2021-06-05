@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
@@ -7,7 +7,12 @@ import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
 import { IconButton } from "@material-ui/core";
 import SlideBar from "./SlideBar";
 import { connect } from "react-redux";
-import { setStatusSlideBar, signOutAPI, setTitleForm } from "../../actions";
+import {
+    setStatusSlideBar,
+    signOutAPI,
+    setTitleForm,
+    changeStatusProgess,
+} from "../../actions";
 import PropTypes from "prop-types";
 import socket from "../../socket";
 
@@ -18,6 +23,7 @@ FormHeader.propTypes = {
     setStatusSlideBar: PropTypes.func,
     title: PropTypes.string,
     setTitleForm: PropTypes.func,
+    changeStatusProgess: PropTypes.func,
 };
 
 FormHeader.defaultProps = {
@@ -27,26 +33,33 @@ FormHeader.defaultProps = {
     setStatusSlideBar: null,
     title: "Mẫu không tiêu đề",
     setTitleForm: null,
+    changeStatusProgess: null,
 };
 
 function FormHeader(props) {
     const typingTimeOutRef = useRef(null);
+    var [title, setTitle] = useState(props.title);
+
+    useEffect(() => {
+        setTitle(props.title);
+    }, [props.title]);
+
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
-        value = value === "" ? "Mẫu không tiêu đề" : value;
-        props.setTitleForm(value);
-
+        setTitle(value);
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }
 
         typingTimeOutRef.current = setTimeout(() => {
+            props.setTitleForm(value);
+            props.changeStatusProgess(true);
             socket.emit("CLIENT_CHANGE_TITLE_FORM", {
                 value,
                 idForm: props.survey._id,
             });
-        }, 300);
+        }, 500);
     };
 
     return (
@@ -60,9 +73,10 @@ function FormHeader(props) {
 
                 <NameInput>
                     <input
-                        value={props.title}
+                        value={title}
                         onFocus={(e) => e.target.select()}
                         onChange={handleChangeTitle}
+                        placeholder="Mẫu không tiêu đề"
                     />
                 </NameInput>
 
@@ -423,6 +437,10 @@ const mapDispatchToProps = (dispatch, props) => {
 
         setTitleForm: (title) => {
             dispatch(setTitleForm(title));
+        },
+
+        changeStatusProgess: (bStatus) => {
+            dispatch(changeStatusProgess(bStatus));
         },
     };
 };

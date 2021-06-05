@@ -94,6 +94,13 @@ function QuestionBody(props) {
     var [questionType, setQuestionType] = useState(question.questionType);
     var [shareImage, setShareImage] = useState(question.image);
 
+    useEffect(() => {
+        setOptions(question.options);
+        setQuestionText(question.questionText);
+        setQuestionType(question.questionType);
+        setShareImage(question.image);
+    }, [question]);
+
     const typingTimeOutRef = useRef(null);
 
     useEffect(() => {
@@ -101,25 +108,6 @@ function QuestionBody(props) {
             if (idForm === oImage.idForm && index === oImage.index) {
                 setShareImage(oImage.image);
                 props.setQuestionImage(oImage.image, oImage.index);
-            }
-        });
-        socket.on("SERVER_SEND_MSG_OPTION_IMAGE", (oImage) => {
-            console.log(oImage);
-            var { image, indexQues, indexOption, idOption } = oImage;
-            console.log(idOption);
-            console.log(
-                props.survey.questions[indexQues].options[indexOption]._id,
-            );
-            console.log(idForm);
-            console.log(oImage.idForm);
-            if (
-                props.survey.questions[indexQues].options[indexOption]._id &&
-                idForm === oImage.idForm &&
-                idOption ===
-                    props.survey.questions[indexQues].options[indexOption]._id
-            ) {
-                console.log("da vao");
-                props.setOptionImage(image, indexQues, indexOption);
             }
         });
     }, [idForm, props.survey]);
@@ -137,7 +125,7 @@ function QuestionBody(props) {
                 props.changeTypeQuestion(oData.type, oData.index);
             }
         });
-    }, [questionType, idForm]);
+    }, [question.questionType, idForm]);
 
     var handleChangeSelect = (e) => {
         var target = e.target;
@@ -160,30 +148,31 @@ function QuestionBody(props) {
                 questionText !== oData.title &&
                 idForm === oData.idForm
             ) {
+                // console.log("sss");
                 setQuestionText(oData.title);
                 props.changeTitleQuestion(oData.title, oData.index);
             }
         });
-    }, [questionText, idForm]);
+    }, [question.questionText, idForm]);
 
     var handleQuestionValue = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
         setQuestionText(value);
-        props.changeTitleQuestion(value, index);
 
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }
 
         typingTimeOutRef.current = setTimeout(() => {
+            props.changeTitleQuestion(value, index);
             socket.emit("CLIENT_CHANGE_TITLE_QUESTION", {
                 id: question._id,
                 value,
                 index,
                 idForm,
             });
-        }, 300);
+        }, 1000);
     };
 
     var handleOptionValue = (e, j) => {
@@ -193,13 +182,13 @@ function QuestionBody(props) {
         optionTemp[j].optionText = value;
 
         setOptions(optionTemp);
-        props.setOptions(optionTemp, index);
 
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }
 
         typingTimeOutRef.current = setTimeout(() => {
+            props.setOptions(optionTemp, index);
             socket.emit("CLIENT_SET_OPTIONS", {
                 id: question._id,
                 options: optionTemp,
@@ -216,7 +205,7 @@ function QuestionBody(props) {
                 props.setOptions(oData.options, oData.index);
             }
         });
-    }, [options, idForm]);
+    }, [question.options, idForm]);
 
     var handleAddOption = () => {
         var optionTemp = [...options];
@@ -297,8 +286,25 @@ function QuestionBody(props) {
                 value = "Tùy chọn " + (j + 1);
             }
         });
-        optionTemp[j].optionText = value;
+        optionTemp.forEach((option, i) => {
+            if (option.optionText === "" && !option.other) {
+                optionTemp.forEach((option2, j) => {
+                    if (option2.optionText === "Tùy chọn " + (i + 1)) {
+                        option2.optionText = "Tùy chọn " + (j + 1);
+                    }
+                });
+                option.optionText = "Tùy chọn " + (i + 1);
+            }
+        });
+        // console.log(optionTemp);
+        // // optionTemp[j].optionText = value;
         setOptions(optionTemp);
+        socket.emit("CLIENT_SET_OPTIONS", {
+            id: question._id,
+            options: optionTemp,
+            index,
+            idForm,
+        });
         props.setOptions(optionTemp, index);
     };
 
@@ -511,6 +517,7 @@ function QuestionBody(props) {
                             type="text"
                             placeholder="Câu hỏi"
                             value={questionText}
+                            onFocus={(e) => e.target.select()}
                             onChange={handleQuestionValue}
                         ></QuestionInput>
                         <CustomIconButton>
@@ -583,7 +590,7 @@ function QuestionBody(props) {
                             )}
                         </Droppable>
                     </DragDropContext>
-                    <Body style={{ marginLeft: "37px" }}>
+                    <Body style={{ marginLeft: "39px" }}>
                         <input
                             className="text"
                             type={question.questionType}

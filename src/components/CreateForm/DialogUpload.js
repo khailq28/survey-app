@@ -67,11 +67,10 @@ function DialogUpload(props) {
                 props.setStatusDialogUploadOp(-1, -1);
                 socket.emit("CLIENT_SET_OPTION_IMAGE", {
                     image: result.image,
-                    indexQues,
-                    indexOption,
+                    id: indexQues,
+                    indexOption: indexOption,
+                    index: indexQues,
                     idForm: props.idForm,
-                    idOption:
-                        survey.questions[indexQues].options[indexOption]._id,
                 });
             })
             .catch();
