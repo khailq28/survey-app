@@ -364,7 +364,6 @@ function QuestionBody(props) {
                     idForm: props.survey._id,
                     image: result.image,
                     index,
-                    idForm,
                 });
             })
             .catch();

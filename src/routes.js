@@ -4,6 +4,7 @@ import Home from "./components/Home/Home";
 import CreateForm from "./components/CreateForm/CreateForm";
 
 import React from "react";
+import SubmitForm from "./components/SubmitForm/SubmitForm";
 
 const routes = [
     {
@@ -25,6 +26,13 @@ const routes = [
         exact: false,
         main: ({ match, location }) => (
             <CreateForm match={match} location={location} />
+        ),
+    },
+    {
+        path: "/form/:id",
+        exact: false,
+        main: ({ match, location }) => (
+            <SubmitForm match={match} location={location} />
         ),
     },
     {

@@ -152,7 +152,7 @@ const Title = styled.div`
     text-transform: capitalize;
     width: 750px;
     box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
-    height: 100%;
+    /* height: 100%; */
 
     @media (max-width: 768px) {
         width: 96%;
@@ -166,7 +166,6 @@ const QuestionFormName = styled.input`
     box-sizing: border-box;
     font-size: 32px;
     font-weight: 400;
-    line-height: 40px;
     line-height: 135%;
     width: 100%;
     border: none;
@@ -194,7 +193,6 @@ const QuestionFormDesc = styled.input`
     border: none;
     outline: none;
     border-bottom: 1px solid #f4f4f9;
-    color: black;
     border-radius: 0px 0px 4px 4px;
     border-bottom: 0px solid var(--basic-color);
     transition: border-bottom 0.2s ease-in-out;

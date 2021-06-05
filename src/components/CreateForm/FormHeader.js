@@ -83,7 +83,11 @@ function FormHeader(props) {
                 <Right>
                     <NavListWrap>
                         <NavList>
-                            <MenuButton>
+                            <MenuButton
+                                onClick={() => {
+                                    window.open("/form/" + props.survey._id);
+                                }}
+                            >
                                 <VisibilityOutlinedIcon className="menuIcon" />
                             </MenuButton>
                         </NavList>
