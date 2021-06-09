@@ -98,7 +98,6 @@ function SlideBar(props) {
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_BACKGROUND_COLOR", (oColor) => {
             if (
-                props.backgroundColor !== oColor.color &&
                 oColor.idForm === props.idForm &&
                 props.idForm !== ""
             ) {
@@ -110,7 +109,6 @@ function SlideBar(props) {
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_INTERFACE_COLOR", (oColor) => {
             if (
-                props.interfaceColor !== oColor.color &&
                 oColor.idForm === props.idForm &&
                 props.idForm !== ""
             ) {

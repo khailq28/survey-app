@@ -78,10 +78,7 @@ function FormBody(props) {
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_QUESTIONS", (oQuestions) => {
-            if (
-                questions !== oQuestions.questions &&
-                idForm === oQuestions.idForm
-            ) {
+            if (idForm === oQuestions.idForm) {
                 setQuestions(oQuestions.questions);
                 props.setQuestions(oQuestions.questions);
             }

@@ -103,7 +103,7 @@ function HomeBody(props) {
         socket.on("SERVER_SEND_MESSAGE_CREATE_SURVEY_SUCCESS", (id) => {
             history.push("/form/edit/" + id);
         });
-    }, []);
+    }, [props.user]);
 
     const CreateForm = () => {
         props.changeStatusProgess(true);

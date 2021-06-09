@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HomeBody from "./HomeBody";
 import Header from "./Header";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Redirect } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import { IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { setStatusDialog, changeStatusProgess } from "../../actions";
@@ -51,22 +51,24 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function Home(props) {
+    var history = useHistory();
+    var [countRender, setCountRender] = useState(1);
     const handleRemoveSurvey = () => {
         props.changeStatusProgess(true);
         socket.emit("CLIENT_REMOVE_SURVEY", props.idSurveyToRemove);
         props.setStatusDialog("");
     };
 
+    useEffect(() => {
+        console.log(countRender);
+        if (!props.user && countRender !== 1) {
+            history.replace("/");
+        }
+        setCountRender(countRender++);
+    });
+
     return (
         <>
-            {!props.user && (
-                <Redirect
-                    to={{
-                        pathname: "/",
-                        state: props.match.url,
-                    }}
-                />
-            )}
             <Background show={props.dialogShow}>
                 <Dialog>
                     <DialogHeader>

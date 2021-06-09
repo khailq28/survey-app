@@ -2,11 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {
-    setTitleForm,
-    setDescription,
-    changeStatusProgess,
-} from "../../actions";
+import { setTitleForm, setDescription } from "../../actions";
 import socket from "../../socket";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -15,7 +11,6 @@ FormTitle.propTypes = {
     title: PropTypes.string,
     setTitleForm: PropTypes.func,
     setDescription: PropTypes.func,
-    changeStatusProgess: PropTypes.func,
     description: PropTypes.string,
     interfaceColor: PropTypes.string,
 };
@@ -24,7 +19,6 @@ FormTitle.defaultProps = {
     title: "Mẫu không tiêu đề",
     setTitleForm: null,
     setDescription: null,
-    changeStatusProgess: null,
     description: "",
     interfaceColor: null,
     survey: null,
@@ -48,10 +42,6 @@ const mapDispatchToProps = (dispatch, props) => {
         setDescription: (description) => {
             dispatch(setDescription(description));
         },
-
-        changeStatusProgess: (bStatus) => {
-            dispatch(changeStatusProgess(bStatus));
-        },
     };
 };
 
@@ -61,26 +51,18 @@ function FormTitle(props) {
     var [description, setDescription] = useState(props.description);
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_TITLE", (oData) => {
-            if (
-                oData.value !== props.title &&
-                oData.idForm === props.survey._id
-            ) {
+            if (oData.idForm === props.survey._id) {
                 props.setTitleForm(oData.value);
             }
-            props.changeStatusProgess(false);
         });
         setTitle(props.title);
     }, [props.title]);
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_DESCRIPTION", (oData) => {
-            if (
-                oData.value !== props.description &&
-                oData.idForm === props.survey._id
-            ) {
+            if (oData.idForm === props.survey._id) {
                 props.setDescription(oData.value);
             }
-            props.changeStatusProgess(false);
         });
         setDescription(props.description);
     }, [props.description]);
@@ -98,7 +80,6 @@ function FormTitle(props) {
 
         typingTimeOutRef.current = setTimeout(() => {
             props.setTitleForm(value);
-            props.changeStatusProgess(true);
             socket.emit("CLIENT_CHANGE_TITLE_FORM", {
                 value,
                 idForm: props.survey._id,
@@ -117,7 +98,6 @@ function FormTitle(props) {
 
         typingTimeOutRef.current = setTimeout(() => {
             props.setDescription(value);
-            props.changeStatusProgess(true);
             socket.emit("CLIENT_CHANGE_DESCRIPTION_FORM", {
                 value,
                 idForm: props.survey._id,
