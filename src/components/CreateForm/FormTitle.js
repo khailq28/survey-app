@@ -8,6 +8,7 @@ import {
     changeStatusProgess,
 } from "../../actions";
 import socket from "../../socket";
+import TextareaAutosize from "react-textarea-autosize";
 
 FormTitle.propTypes = {
     survey: PropTypes.object,
@@ -88,7 +89,9 @@ function FormTitle(props) {
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
+        value = value === "" ? "Mẫu không tiêu đề" : value;
         setTitle(value);
+
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }
@@ -129,7 +132,6 @@ function FormTitle(props) {
                 value={title}
                 onFocus={(e) => e.target.select()}
                 onChange={handleChangeTitle}
-                // onBlur={handleBlurTitle}
                 placeholder="Mẫu không tiêu đề"
             ></QuestionFormName>
             <QuestionFormDesc
@@ -181,13 +183,15 @@ const QuestionFormName = styled.input`
     }
 `;
 
-const QuestionFormDesc = styled.input`
+const QuestionFormDesc = styled(TextareaAutosize)`
     box-sizing: border-box;
     margin-top: 10px;
     font-family: "Google Sans", Roboto, Arial, sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 40px;
+    resize: none;
+    white-space: pre-wrap;
 
     width: 100%;
     border: none;

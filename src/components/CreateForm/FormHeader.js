@@ -47,7 +47,9 @@ function FormHeader(props) {
     var handleChangeTitle = (e) => {
         var target = e.target;
         var value = target.type === "checked" ? target.checked : target.value;
+        value = value === "" ? "Mẫu không tiêu đề" : value;
         setTitle(value);
+
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }

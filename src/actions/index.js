@@ -208,3 +208,20 @@ export function setBackgroundColor(backgroundColor) {
         backgroundColor,
     };
 }
+
+export function createSubmitData(author, aId) {
+    return {
+        type: actionType.CREATE_SUBMIT_FORM,
+        author,
+        aId,
+    };
+}
+
+export function pushValueToSubmit(typeQues, value, index) {
+    return {
+        type: actionType.PUSH_VALUE_TO_SUBMIT_REDUCER,
+        typeQues,
+        value,
+        index,
+    };
+}

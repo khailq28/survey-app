@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import socket from "../../socket";
 
 SubmitTitle.propTypes = {
     title: PropTypes.string,
@@ -43,7 +42,6 @@ const Container = styled.div`
     background-color: white;
     border-radius: 6px;
     padding: 25px 20px;
-    text-transform: capitalize;
     width: 750px;
     box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
     height: 100%;
@@ -63,6 +61,8 @@ const Title = styled.div`
     width: 100%;
     border: none;
     outline: none;
+    word-wrap: break-word;
+    text-transform: capitalize;
 `;
 
 const Description = styled.div`
@@ -70,7 +70,8 @@ const Description = styled.div`
     font-family: "Google Sans", Roboto, Arial, sans-serif;
     font-size: 14px;
     font-weight: 400;
-    line-height: 40px;
+    line-height: 35px;
+    white-space: pre-wrap;
     width: 100%;
     outline: none;
     color: var(--icon-color);

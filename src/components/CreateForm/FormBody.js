@@ -274,16 +274,18 @@ function FormBody(props) {
                                                             marginBottom: "4px",
                                                         }}
                                                     >
-                                                        <QuestionImg
-                                                            src={
-                                                                ENDPOINT +
-                                                                "/" +
-                                                                question.image.slice(
-                                                                    7,
-                                                                )
-                                                            }
-                                                            alt=""
-                                                        />
+                                                        {question.image && (
+                                                            <QuestionImg
+                                                                src={
+                                                                    ENDPOINT +
+                                                                    "/" +
+                                                                    question.image.slice(
+                                                                        7,
+                                                                    )
+                                                                }
+                                                                alt=""
+                                                            />
+                                                        )}
                                                     </div>
 
                                                     {question.questionType ===

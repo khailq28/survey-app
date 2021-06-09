@@ -60,7 +60,7 @@ var INITIAL_STATE = [
             { color: "#FFE6DE" },
             { color: "#FFD5C8" },
             { color: "#FFFFFF" },
-            { color: "#FFFFFF" },
+            { color: "#F6F6F6" },
         ],
     },
     {

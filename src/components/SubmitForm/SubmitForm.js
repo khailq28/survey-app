@@ -3,9 +3,14 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Redirect, useParams } from "react-router";
 import { connect } from "react-redux";
-import { changeStatusProgess, setSurvey } from "../../actions";
+import {
+    changeStatusProgess,
+    setSurvey,
+    createSubmitData,
+} from "../../actions";
 import socket from "../../socket";
 import SubmitTitle from "./SubmitTitle";
+import SubmitBody from "./SubmitBody";
 
 SubmitForm.propTypes = {
     user: PropTypes.object,
@@ -37,6 +42,10 @@ const mapDispatchToProps = (dispatch, props) => {
         setSurvey: (oSurvey) => {
             dispatch(setSurvey(oSurvey));
         },
+
+        createSubmitData: (author, aId) => {
+            dispatch(createSubmitData(author, aId));
+        },
     };
 };
 
@@ -55,6 +64,13 @@ function SubmitForm(props) {
         socket.on("SERVER_SEND_SURVEY_TO_CREATE_FORM_PAGE", (oSurvey) => {
             props.setSurvey(oSurvey);
             props.changeStatusProgess(false);
+            var arr = [];
+            oSurvey.questions.forEach((question) => {
+                arr.push(question._id);
+            });
+            if (props.user) {
+                props.createSubmitData(props.user.email, arr);
+            }
         });
     }, []);
 
@@ -70,7 +86,7 @@ function SubmitForm(props) {
                     />
                 )}
                 <SubmitTitle />
-                <div>hahah</div>
+                <SubmitBody />
             </Content>
         </Container>
     );

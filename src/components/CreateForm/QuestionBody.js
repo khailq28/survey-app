@@ -132,7 +132,11 @@ function QuestionBody(props) {
         var value = target.type === "checked" ? target.checked : target.value;
         setQuestionType(value);
         props.changeTypeQuestion(value, index);
-        setOptions([{ optionText: "", image: "", other: false }]);
+        setOptions([{ optionText: "Tùy chọn 1", image: "", other: false }]);
+        props.setOptions(
+            [{ optionText: "Tùy chọn 1", image: "", other: false }],
+            index,
+        );
         socket.emit("CLIENT_CHANGE_QUESTION_TYPE", {
             id: question._id,
             value,
@@ -838,7 +842,7 @@ const OptionImage = styled.div`
     margin-left: 20px;
 
     & > img {
-        width: 200px;
+        width: 270px;
         box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 40%);
     }
 
