@@ -103,7 +103,7 @@ function FormBody(props) {
         socket.on("SERVER_SEND_MESSAGE_NO_ACCESS", () => {
             history.replace("/notfound");
         });
-    }, []);
+    }, [props.user]);
 
     var [changeAccordion, setChangeAccordion] = useState(false);
 

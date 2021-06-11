@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Redirect, useParams } from "react-router";
+import { Redirect, useHistory, useParams } from "react-router";
 import { connect } from "react-redux";
 import {
     changeStatusProgess,
@@ -14,6 +14,7 @@ import SubmitBody from "./SubmitBody";
 
 SubmitForm.propTypes = {
     user: PropTypes.object,
+    checkLogin: PropTypes.string,
     backgroundColor: PropTypes.string,
     setSurvey: PropTypes.func,
     changeStatusProgess: PropTypes.func,
@@ -21,6 +22,7 @@ SubmitForm.propTypes = {
 
 SubmitForm.defaultProps = {
     user: null,
+    checkLogin: "",
     backgroundColor: "",
     setSurvey: null,
     changeStatusProgess: null,
@@ -29,6 +31,7 @@ SubmitForm.defaultProps = {
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
+        checkLogin: state.userState.checkLogin,
         backgroundColor: state.survey.backgroundColor,
     };
 };
@@ -51,6 +54,13 @@ const mapDispatchToProps = (dispatch, props) => {
 
 function SubmitForm(props) {
     var { id } = useParams();
+    var history = useHistory();
+
+    useEffect(() => {
+        if (props.checkLogin === "false") {
+            history.replace("/");
+        }
+    });
 
     useEffect(() => {
         props.changeStatusProgess(true);
@@ -72,19 +82,19 @@ function SubmitForm(props) {
                 props.createSubmitData(props.user.email, arr);
             }
         });
-    }, []);
+    }, [props.user]);
 
     return (
         <Container backgroundColor={props.backgroundColor}>
             <Content>
-                {!props.user && (
+                {/* {!props.user && (
                     <Redirect
                         to={{
                             pathname: "/",
                             state: props.match.url,
                         }}
                     />
-                )}
+                )} */}
                 <SubmitTitle />
                 <SubmitBody />
             </Content>

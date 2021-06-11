@@ -13,6 +13,7 @@ import socket from "../../socket";
 
 Home.propTypes = {
     user: PropTypes.object,
+    checkLogin: PropTypes.string,
     dialogShow: PropTypes.bool,
     idSurveyToRemove: PropTypes.string,
     progress: PropTypes.bool,
@@ -22,6 +23,7 @@ Home.propTypes = {
 
 Home.defaultProps = {
     user: null,
+    checkLogin: "",
     dialogShow: false,
     idSurveyToRemove: null,
     progress: false,
@@ -32,6 +34,7 @@ Home.defaultProps = {
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
+        checkLogin: state.userState.checkLogin,
         dialogShow: state.tools.dialog.show,
         idSurveyToRemove: state.tools.dialog.id,
         progress: state.tools.progress.show,
@@ -52,7 +55,6 @@ const mapDispatchToProps = (dispatch, props) => {
 
 function Home(props) {
     var history = useHistory();
-    var [countRender, setCountRender] = useState(1);
     const handleRemoveSurvey = () => {
         props.changeStatusProgess(true);
         socket.emit("CLIENT_REMOVE_SURVEY", props.idSurveyToRemove);
@@ -60,15 +62,23 @@ function Home(props) {
     };
 
     useEffect(() => {
-        console.log(countRender);
-        if (!props.user && countRender !== 1) {
+        if (props.checkLogin === "false") {
             history.replace("/");
         }
-        setCountRender(countRender++);
     });
+
+    console.log("home");
 
     return (
         <>
+            {/* {!props.user && (
+                <Redirect
+                    to={{
+                        pathname: "/",
+                        state: props.match.url,
+                    }}
+                />
+            )} */}
             <Background show={props.dialogShow}>
                 <Dialog>
                     <DialogHeader>

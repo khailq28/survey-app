@@ -7,6 +7,11 @@ export const setUser = (payload) => ({
     user: payload,
 });
 
+export const setStatusLogin = (status) => ({
+    type: actionType.SET_STATUS_LOGIN,
+    status,
+});
+
 export function signInAPI() {
     return (dispatch) => {
         auth.signInWithPopup(provider)
@@ -36,8 +41,12 @@ export function cleanSurvey() {
 export function getUserAuth() {
     return (dispatch) => {
         auth.onAuthStateChanged(async (user) => {
+            console.log("getuser");
             if (user) {
                 dispatch(setUser(user));
+                dispatch(setStatusLogin("true"));
+            } else {
+                dispatch(setStatusLogin("false"));
             }
         });
     };

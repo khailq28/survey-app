@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 // import { Prompt } from "react-router-dom";
 import FormHeader from "./FormHeader";
 import TabHeader from "./TabHeader";
-import { Redirect } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { changeStatusProgess } from "../../actions";
 import { connect } from "react-redux";
@@ -12,6 +12,7 @@ import DialogUpload from "./DialogUpload";
 
 CreateForm.propTypes = {
     user: PropTypes.object,
+    checkLogin: PropTypes.string,
     backgroundColor: PropTypes.string,
     changeStatusProgess: PropTypes.func,
     progress: PropTypes.bool,
@@ -19,6 +20,7 @@ CreateForm.propTypes = {
 
 CreateForm.defaultProps = {
     user: null,
+    checkLogin: "",
     backgroundColor: null,
     changeStatusProgess: null,
     progress: null,
@@ -27,6 +29,7 @@ CreateForm.defaultProps = {
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
+        checkLogin: state.userState.checkLogin,
         backgroundColor: state.survey.backgroundColor,
         progress: state.tools.progress.show,
     };
@@ -41,16 +44,23 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function CreateForm(props) {
+    var history = useHistory();
+    
+    useEffect(() => {
+        if (props.checkLogin === "false") {
+            history.replace("/");
+        }
+    });
     return (
         <Container backgroundColor={props.backgroundColor}>
-            {!props.user && (
+            {/* {!props.user && (
                 <Redirect
                     to={{
                         pathname: "/",
                         state: props.match.url,
                     }}
                 />
-            )}
+            )} */}
 
             <TabHeader />
             <FormHeader />
