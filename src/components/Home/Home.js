@@ -4,12 +4,13 @@ import HomeBody from "./HomeBody";
 import Header from "./Header";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Redirect, useHistory } from "react-router";
+import { useHistory } from "react-router";
 import { IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { setStatusDialog, changeStatusProgess } from "../../actions";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import socket from "../../socket";
+import HeaderSkeleton from "./HeaderSkeleton";
 
 Home.propTypes = {
     user: PropTypes.object,
@@ -55,6 +56,8 @@ const mapDispatchToProps = (dispatch, props) => {
 
 function Home(props) {
     var history = useHistory();
+    var [loading, setLoading] = useState(false);
+
     const handleRemoveSurvey = () => {
         props.changeStatusProgess(true);
         socket.emit("CLIENT_REMOVE_SURVEY", props.idSurveyToRemove);
@@ -67,18 +70,12 @@ function Home(props) {
         }
     });
 
-    console.log("home");
+    const handleLoading = () => {
+        setLoading(true);
+    };
 
     return (
         <>
-            {/* {!props.user && (
-                <Redirect
-                    to={{
-                        pathname: "/",
-                        state: props.match.url,
-                    }}
-                />
-            )} */}
             <Background show={props.dialogShow}>
                 <Dialog>
                     <DialogHeader>
@@ -104,8 +101,14 @@ function Home(props) {
                     <CustomCircularProgress />
                 </Container>
             </Background>
-            <Header />
-            <HomeBody />
+            {loading ? (
+                <>
+                    <Header />
+                </>
+            ) : (
+                <HeaderSkeleton />
+            )}
+            <HomeBody loading={loading} handleLoading={handleLoading} />
         </>
     );
 }

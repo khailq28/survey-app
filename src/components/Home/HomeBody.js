@@ -17,6 +17,7 @@ import {
 } from "../../actions";
 import PropTypes from "prop-types";
 import socket from "../../socket";
+import BodySkeleton from "./BodySkeleton";
 
 HomeBody.propTypes = {
     setStatusDialog: PropTypes.func,
@@ -24,6 +25,7 @@ HomeBody.propTypes = {
     setViewMode: PropTypes.func,
     setSurveysHome: PropTypes.func,
     changeStatusProgess: PropTypes.func,
+    handleLoading: PropTypes.func,
     user: PropTypes.object,
     listSurvey: PropTypes.array,
     sort: PropTypes.object,
@@ -37,6 +39,7 @@ HomeBody.defaultProps = {
     setSurveysHome: null,
     setViewMode: null,
     changeStatusProgess: null,
+    handleLoading: null,
     user: null,
     listSurvey: [],
     sort: null,
@@ -81,11 +84,11 @@ const mapDispatchToProps = (dispatch, props) => {
 function HomeBody(props) {
     const history = useHistory();
 
-    var { listSurvey, sort, keyword, viewMode } = props;
+    var { listSurvey, sort, keyword, viewMode, loading } = props;
 
     useEffect(() => {
         if (props.user) {
-            props.changeStatusProgess(true);
+            // props.changeStatusProgess(true);
             socket.emit("CLIENT_GET_SURVEY_BY_AUTHOR", props.user.email);
         }
 
@@ -93,11 +96,13 @@ function HomeBody(props) {
         socket.on("SERVER_SEND_SURVEYS", (aData) => {
             props.setSurveysHome(aData);
             props.changeStatusProgess(false);
+            props.handleLoading();
         });
 
         socket.on("SERVER_SEND_SURVEYS_ALL", (aData) => {
             props.setSurveysHome(aData);
             props.changeStatusProgess(false);
+            props.handleLoading();
         });
 
         socket.on("SERVER_SEND_MESSAGE_CREATE_SURVEY_SUCCESS", (id) => {
@@ -132,57 +137,63 @@ function HomeBody(props) {
     });
 
     return (
-        <Container>
-            <CreateNewSurvey onClick={CreateForm}>
-                <AddIcon />
-                <p>Bắt đầu biểu mẫu mới</p>
-            </CreateNewSurvey>
+        <>
+            {loading ? (
+                <Container>
+                    <CreateNewSurvey onClick={CreateForm}>
+                        <AddIcon />
+                        <p>Bắt đầu biểu mẫu mới</p>
+                    </CreateNewSurvey>
 
-            <Body>
-                <Top>
-                    <Left>Biểu mẫu gần đây</Left>
+                    <Body>
+                        <Top>
+                            <Left>Biểu mẫu gần đây</Left>
 
-                    <Right>
-                        <IconButton onClick={props.setViewMode}>
-                            {viewMode === "grid" ? (
-                                <StorageButton />
-                            ) : (
-                                <ViewComfyButton />
-                            )}
-                        </IconButton>
-                        <IconButton onClick={props.sortListSurveys}>
-                            <SortByButton />
-                        </IconButton>
-                    </Right>
-                </Top>
+                            <Right>
+                                <IconButton onClick={props.setViewMode}>
+                                    {viewMode === "grid" ? (
+                                        <StorageButton />
+                                    ) : (
+                                        <ViewComfyButton />
+                                    )}
+                                </IconButton>
+                                <IconButton onClick={props.sortListSurveys}>
+                                    <SortByButton />
+                                </IconButton>
+                            </Right>
+                        </Top>
 
-                {listSurvey.length === 0 ? (
-                    <ArrayEmpty>Không có nội dung hiển thị</ArrayEmpty>
-                ) : viewMode === "grid" ? (
-                    <Content>
-                        {listSurvey.map((survey, index) => (
-                            <FormRecent
-                                survey={survey}
-                                key={index}
-                                viewMode={viewMode}
-                                handleRemoveSurvey={handleRemoveSurvey}
-                            />
-                        ))}
-                    </Content>
-                ) : (
-                    <ContentList>
-                        {listSurvey.map((survey, index) => (
-                            <FormRecent
-                                survey={survey}
-                                key={index}
-                                viewMode={viewMode}
-                                handleRemoveSurvey={handleRemoveSurvey}
-                            />
-                        ))}
-                    </ContentList>
-                )}
-            </Body>
-        </Container>
+                        {listSurvey.length === 0 ? (
+                            <ArrayEmpty>Không có nội dung hiển thị</ArrayEmpty>
+                        ) : viewMode === "grid" ? (
+                            <Content>
+                                {listSurvey.map((survey, index) => (
+                                    <FormRecent
+                                        survey={survey}
+                                        key={index}
+                                        viewMode={viewMode}
+                                        handleRemoveSurvey={handleRemoveSurvey}
+                                    />
+                                ))}
+                            </Content>
+                        ) : (
+                            <ContentList>
+                                {listSurvey.map((survey, index) => (
+                                    <FormRecent
+                                        survey={survey}
+                                        key={index}
+                                        viewMode={viewMode}
+                                        handleRemoveSurvey={handleRemoveSurvey}
+                                    />
+                                ))}
+                            </ContentList>
+                        )}
+                    </Body>
+                </Container>
+            ) : (
+                <BodySkeleton />
+            )}
+        </>
     );
 }
 

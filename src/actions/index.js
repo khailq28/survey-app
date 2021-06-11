@@ -41,7 +41,6 @@ export function cleanSurvey() {
 export function getUserAuth() {
     return (dispatch) => {
         auth.onAuthStateChanged(async (user) => {
-            console.log("getuser");
             if (user) {
                 dispatch(setUser(user));
                 dispatch(setStatusLogin("true"));

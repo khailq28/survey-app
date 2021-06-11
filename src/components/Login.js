@@ -1,32 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { signInAPI } from "../actions";
-import { Redirect } from "react-router";
+import { useHistory } from "react-router";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 function Login(props) {
+    var [loading, setLoading] = useState(false);
+    var history = useHistory();
+
+    useEffect(() => {
+        if (props.checkLogin === "true") {
+            history.replace("/home");
+        }
+        if (props.checkLogin === "false") {
+            setLoading(true);
+        }
+    });
+
     return (
         <Container>
-            {props.user && (
-                <Redirect
-                    to={{
-                        pathname:
-                            props.location.state === undefined
-                                ? "/home"
-                                : props.location.state,
-                    }}
-                />
-            )}
             <CTA>
                 <Content>
-                    <Title>survey forms</Title>
-                    <Google onClick={() => props.signIn()}>
-                        <img src="/images/login/google.svg" alt="" />
-                        &nbsp;<p>Đăng nhập bằng Google</p>
-                    </Google>
+                    {loading ? (
+                        <>
+                            <Title>survey forms</Title>
+                            <Google onClick={() => props.signIn()}>
+                                <img src="/images/login/google.svg" alt="" />
+                                &nbsp;<p>Đăng nhập bằng Google</p>
+                            </Google>
+                        </>
+                    ) : (
+                        <>
+                            <Skeleton
+                                animation="wave"
+                                variant="text"
+                                width="400px"
+                                height="80px"
+                            />
+                            <Skeleton
+                                animation="wave"
+                                variant="text"
+                                width="600px"
+                                height="90px"
+                            />
+                        </>
+                    )}
                 </Content>
             </CTA>
-            <BgImage />
+            {loading ? <BgImage /> : ""}
         </Container>
     );
 }
@@ -129,6 +151,7 @@ const Google = styled.button`
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
+        checkLogin: state.userState.checkLogin,
     };
 };
 
