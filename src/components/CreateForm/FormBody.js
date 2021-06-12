@@ -20,6 +20,7 @@ import {
 } from "../../actions";
 import { useHistory, useParams } from "react-router";
 import socket from "../../socket";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 FormBody.propTypes = {
     questions: PropTypes.array,
@@ -29,6 +30,8 @@ FormBody.propTypes = {
     changeStatusProgess: PropTypes.func,
     user: PropTypes.object,
     idForm: PropTypes.string,
+    handleLoading: PropTypes.func,
+    loading: PropTypes.bool,
 };
 
 FormBody.defaultProps = {
@@ -39,6 +42,8 @@ FormBody.defaultProps = {
     changeStatusProgess: null,
     user: null,
     idForm: null,
+    handleLoading: null,
+    loading: false,
 };
 
 const mapStateToProps = (state) => {
@@ -70,7 +75,7 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function FormBody(props) {
-    var { idForm } = props;
+    var { idForm, loading } = props;
     // set state
     let { id } = useParams();
     var history = useHistory();
@@ -98,6 +103,7 @@ function FormBody(props) {
             props.setSurvey(oSurvey);
             setQuestions(oSurvey.questions);
             props.changeStatusProgess(false);
+            props.handleLoading();
         });
 
         socket.on("SERVER_SEND_MESSAGE_NO_ACCESS", () => {
@@ -422,22 +428,40 @@ function FormBody(props) {
 
     return (
         <div>
-            <CustomAddCircleOutlineIcon onClick={handleAddQuestion} />
+            {loading ? (
+                <>
+                    <CustomAddCircleOutlineIcon onClick={handleAddQuestion} />
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="droppable">
+                            {(provided, snapshot) => (
+                                <div
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                >
+                                    {questionUI}
 
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="droppable">
-                    {(provided, snapshot) => (
-                        <div
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                        >
-                            {questionUI}
-
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                </>
+            ) : (
+                <>
+                    <SkeletonContent
+                        animation="wave"
+                        variant="rect"
+                        width="750px"
+                        height="150px"
+                    />
+                    <SkeletonContent
+                        animation="wave"
+                        variant="rect"
+                        width="750px"
+                        height="150px"
+                    />
+                </>
+            )}
         </div>
     );
 }
@@ -581,6 +605,12 @@ const OptionImg = styled.img`
 const QuestionImg = styled.img`
     width: 80%;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 40%);
+`;
+
+const SkeletonContent = styled(Skeleton)`
+    border-radius: 6px;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    margin-top: 20px;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormBody);

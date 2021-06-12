@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import { Prompt } from "react-router-dom";
+import { Prompt } from "react-router-dom";
 import FormHeader from "./FormHeader";
 import TabHeader from "./TabHeader";
 import { Redirect, useHistory } from "react-router";
@@ -45,25 +45,22 @@ const mapDispatchToProps = (dispatch, props) => {
 
 function CreateForm(props) {
     var history = useHistory();
-    
+    var [loading, setLoading] = useState(false);
+
     useEffect(() => {
         if (props.checkLogin === "false") {
             history.replace("/");
         }
     });
+
+    const handleLoading = () => {
+        setLoading(true);
+    };
+
     return (
         <Container backgroundColor={props.backgroundColor}>
-            {/* {!props.user && (
-                <Redirect
-                    to={{
-                        pathname: "/",
-                        state: props.match.url,
-                    }}
-                />
-            )} */}
-
-            <TabHeader />
-            <FormHeader />
+            <TabHeader loading={loading} handleLoading={handleLoading} />
+            <FormHeader loading={loading} />
             <DialogUpload />
 
             <Background show={props.progress}>
@@ -71,7 +68,7 @@ function CreateForm(props) {
                     <CustomCircularProgress />
                 </ContainerProgress>
             </Background>
-            {/* <Prompt when={true} message={() => `Bạn chắc chắn muốn thoát?`} /> */}
+            <Prompt when={true} message={() => `Bạn chắc chắn muốn thoát?`} />
         </Container>
     );
 }

@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import { setStatusSlideBar, signOutAPI, setTitleForm } from "../../actions";
 import PropTypes from "prop-types";
 import socket from "../../socket";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 FormHeader.propTypes = {
     user: PropTypes.object,
@@ -18,6 +19,7 @@ FormHeader.propTypes = {
     setStatusSlideBar: PropTypes.func,
     title: PropTypes.string,
     setTitleForm: PropTypes.func,
+    loading: PropTypes.bool,
 };
 
 FormHeader.defaultProps = {
@@ -27,6 +29,7 @@ FormHeader.defaultProps = {
     setStatusSlideBar: null,
     title: "Mẫu không tiêu đề",
     setTitleForm: null,
+    loading: false,
 };
 
 function FormHeader(props) {
@@ -60,81 +63,153 @@ function FormHeader(props) {
         <Container>
             <Content>
                 <Logo>
-                    <a href="/home">
-                        <img src="/images/logo/logo.png" alt="" />
-                    </a>
+                    {props.loading ? (
+                        <a href="/home">
+                            <img src="/images/logo/logo.png" alt="" />
+                        </a>
+                    ) : (
+                        <Skeleton
+                            animation="wave"
+                            variant="text"
+                            width="35px"
+                            height="70px"
+                        />
+                    )}
                 </Logo>
 
                 <NameInput>
-                    <input
-                        value={title}
-                        onFocus={(e) => e.target.select()}
-                        onChange={handleChangeTitle}
-                        placeholder="Mẫu không tiêu đề"
-                    />
+                    {props.loading ? (
+                        <input
+                            value={title}
+                            onFocus={(e) => e.target.select()}
+                            onChange={handleChangeTitle}
+                            placeholder="Mẫu không tiêu đề"
+                        />
+                    ) : (
+                        <Skeleton
+                            animation="wave"
+                            variant="text"
+                            width="140px"
+                            height="40px"
+                        />
+                    )}
                 </NameInput>
 
                 <Right>
                     <NavListWrap>
-                        <NavList>
-                            <MenuButton
-                                onClick={() => {
-                                    window.open("/form/" + props.survey._id);
-                                }}
-                            >
-                                <VisibilityOutlinedIcon className="menuIcon" />
-                            </MenuButton>
-                        </NavList>
-                        <NavList>
-                            <MenuButton
-                                onClick={() =>
-                                    props.setStatusSlideBar({
-                                        status: true,
-                                        title: "layout",
-                                    })
-                                }
-                            >
-                                <ColorLensOutlinedIcon className="menuIcon" />
-                            </MenuButton>
-                        </NavList>
-                        <NavList>
-                            <MenuButton
-                                onClick={() =>
-                                    props.setStatusSlideBar({
-                                        status: true,
-                                        title: "send",
-                                    })
-                                }
-                            >
-                                <SendOutlinedIcon className="menuIcon" />
-                            </MenuButton>
-                        </NavList>
-                        <NavList>
-                            <MenuButton
-                                onClick={() =>
-                                    props.setStatusSlideBar({
-                                        status: true,
-                                        title: "setting",
-                                    })
-                                }
-                            >
-                                <SettingsOutlinedIcon className="menuIcon" />
-                            </MenuButton>
-                        </NavList>
+                        {props.loading ? (
+                            <>
+                                <NavList>
+                                    <MenuButton
+                                        onClick={() => {
+                                            window.open(
+                                                "/form/" + props.survey._id,
+                                            );
+                                        }}
+                                    >
+                                        <VisibilityOutlinedIcon className="menuIcon" />
+                                    </MenuButton>
+                                </NavList>
+                                <NavList>
+                                    <MenuButton
+                                        onClick={() =>
+                                            props.setStatusSlideBar({
+                                                status: true,
+                                                title: "layout",
+                                            })
+                                        }
+                                    >
+                                        <ColorLensOutlinedIcon className="menuIcon" />
+                                    </MenuButton>
+                                </NavList>
+                                <NavList>
+                                    <MenuButton
+                                        onClick={() =>
+                                            props.setStatusSlideBar({
+                                                status: true,
+                                                title: "send",
+                                            })
+                                        }
+                                    >
+                                        <SendOutlinedIcon className="menuIcon" />
+                                    </MenuButton>
+                                </NavList>
+                                <NavList>
+                                    <MenuButton
+                                        onClick={() =>
+                                            props.setStatusSlideBar({
+                                                status: true,
+                                                title: "setting",
+                                            })
+                                        }
+                                    >
+                                        <SettingsOutlinedIcon className="menuIcon" />
+                                    </MenuButton>
+                                </NavList>
+                            </>
+                        ) : (
+                            <>
+                                <Skeleton
+                                    animation="wave"
+                                    variant="rect"
+                                    width="30px"
+                                    height="30px"
+                                    style={{ marginRight: "5px" }}
+                                />
+                                <Skeleton
+                                    animation="wave"
+                                    variant="rect"
+                                    width="30px"
+                                    height="30px"
+                                    style={{ marginRight: "5px" }}
+                                />
+                                <Skeleton
+                                    animation="wave"
+                                    variant="rect"
+                                    width="30px"
+                                    height="30px"
+                                    style={{ marginRight: "5px" }}
+                                />
+                                <Skeleton
+                                    animation="wave"
+                                    variant="rect"
+                                    width="30px"
+                                    height="30px"
+                                    style={{ marginRight: "5px" }}
+                                />
+                            </>
+                        )}
                     </NavListWrap>
 
                     <SignOut>
-                        <User>
-                            {props.user && props.user.photoURL ? (
-                                <UserImg src={props.user.photoURL} alt="" />
-                            ) : (
-                                <UserImg src="/images/user.svg" alt="" />
-                            )}
-                        </User>
-
-                        <DropDown onClick={() => props.signOut()}>
-                            <span>Sign out</span>
-                        </DropDown>
+                        {props.loading ? (
+                            <>
+                                <User>
+                                    {props.user && props.user.photoURL ? (
+                                        <UserImg
+                                            src={props.user.photoURL}
+                                            alt=""
+                                        />
+                                    ) : (
+                                        <UserImg
+                                            src="/images/user.svg"
+                                            alt=""
+                                        />
+                                    )}
+                                </User>
+                                <DropDown onClick={() => props.signOut()}>
+                                    <span>Sign out</span>
+                                </DropDown>
+                            </>
+                        ) : (
+                            <Skeleton
+                                animation="wave"
+                                variant="circle"
+                                width="50px"
+                                height="50px"
+                                style={{ marginRight: "13px" }}
+                            />
+                        )}
                     </SignOut>
                 </Right>
 

@@ -5,6 +5,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import PropTypes from "prop-types";
 import QuestionForm from "./QuestionForm";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -26,6 +27,8 @@ TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.any.isRequired,
     value: PropTypes.any.isRequired,
+    handleLoading: PropTypes.func,
+    loading: PropTypes.bool,
 };
 
 function a11yProps(index) {
@@ -41,6 +44,7 @@ function TabHeader(props) {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
     return (
         <Container>
             <CustomPaper>
@@ -51,12 +55,34 @@ function TabHeader(props) {
                     textColor="primary"
                     centered
                 >
-                    <CustomTab label="Câu hỏi" {...a11yProps(0)} />
-                    <CustomTab label="Câu trả lời" {...a11yProps(1)} />
+                    {props.loading ? (
+                        <>
+                            <CustomTab label="Câu hỏi" {...a11yProps(0)} />
+                            <CustomTab label="Câu trả lời" {...a11yProps(1)} />
+                        </>
+                    ) : (
+                        <>
+                            <Skeleton
+                                animation="wave"
+                                variant="text"
+                                width="70px"
+                                height="30px"
+                            />
+                            <Skeleton
+                                animation="wave"
+                                variant="text"
+                                width="70px"
+                                height="30px"
+                            />
+                        </>
+                    )}
                 </CustomTabs>
             </CustomPaper>
             <TabPanel value={value} index={0}>
-                <QuestionForm />
+                <QuestionForm
+                    loading={props.loading}
+                    handleLoading={props.handleLoading}
+                />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 tab2

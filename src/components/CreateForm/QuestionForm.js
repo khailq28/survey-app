@@ -2,14 +2,33 @@ import React from "react";
 import styled from "styled-components";
 import FormBody from "./FormBody";
 import FormTitle from "./FormTitle";
+import PropTypes from "prop-types";
+import Skeleton from "@material-ui/lab/Skeleton";
+
+QuestionForm.propTypes = {
+    handleLoading: PropTypes.func,
+    loading: PropTypes.bool,
+};
 
 function QuestionForm(props) {
     return (
         <Container>
-            <FormTitle />
+            {props.loading ? (
+                <FormTitle />
+            ) : (
+                <SkeletonTitle
+                    animation="wave"
+                    variant="rect"
+                    width="750px"
+                    height="200px"
+                />
+            )}
 
             <Box>
-                <FormBody />
+                <FormBody
+                    loading={props.loading}
+                    handleLoading={props.handleLoading}
+                />
             </Box>
         </Container>
     );
@@ -38,6 +57,11 @@ const Box = styled.div`
         width: 93%;
         margin-left: 10px;
     }
+`;
+
+const SkeletonTitle = styled(Skeleton)`
+    border-radius: 6px;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
 `;
 
 export default QuestionForm;
