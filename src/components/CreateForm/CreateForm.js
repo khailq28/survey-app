@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import FormHeader from "./FormHeader";
 import TabHeader from "./TabHeader";
-import { Redirect, useHistory } from "react-router";
+import { useHistory } from "react-router";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { changeStatusProgess } from "../../actions";
 import { connect } from "react-redux";

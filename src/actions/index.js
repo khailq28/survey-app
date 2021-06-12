@@ -233,3 +233,11 @@ export function pushValueToSubmit(typeQues, value, index) {
         index,
     };
 }
+
+export function changeValueOtherCheckbox(value, index) {
+    return {
+        type: actionType.CHANGE_VALUE_OTHER_CHECKBOX,
+        value,
+        index,
+    };
+}

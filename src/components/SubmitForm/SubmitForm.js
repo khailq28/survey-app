@@ -67,13 +67,13 @@ function SubmitForm(props) {
     useEffect(() => {
         props.changeStatusProgess(true);
         if (props.user) {
-            socket.emit("CLIENT_GET_DATA_SURVEY", {
+            socket.emit("CLIENT_GET_DATA_SURVEY_SUBMIT", {
                 id,
                 author: props.user.email,
             });
         }
 
-        socket.on("SERVER_SEND_SURVEY_TO_CREATE_FORM_PAGE", (oSurvey) => {
+        socket.on("SERVER_SEND_SURVEY_SUBMIT", (oSurvey) => {
             props.setSurvey(oSurvey);
             props.changeStatusProgess(false);
             var arr = [];
@@ -84,6 +84,10 @@ function SubmitForm(props) {
                 props.createSubmitData(props.user.email, arr);
             }
             setLoading(true);
+        });
+
+        socket.on("SERVER_SEND_MSG_NOT_FOUND", () => {
+            history.replace("/notfound");
         });
     }, [props.user]);
 
@@ -124,7 +128,7 @@ function SubmitForm(props) {
                         <SkeletonContent
                             animation="wave"
                             variant="rect"
-                            width="150px"
+                            width="100px"
                             height="40px"
                         />
                     </>

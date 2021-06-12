@@ -6,8 +6,6 @@ import { getUserAuth } from "./actions";
 import routes from "./routes";
 
 function App(props) {
-    console.log("app");
-
     useEffect(() => {
         props.getUserAuth();
     });

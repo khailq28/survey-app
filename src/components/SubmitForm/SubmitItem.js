@@ -4,18 +4,20 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { ENDPOINT } from "../../constant";
 import TextareaAutosize from "react-textarea-autosize";
-import { pushValueToSubmit } from "../../actions";
+import { pushValueToSubmit, changeValueOtherCheckbox } from "../../actions";
 
 SubmitItem.propTypes = {
     question: PropTypes.object,
     index: PropTypes.number,
     pushValueToSubmit: PropTypes.func,
+    changeValueOtherCheckbox: PropTypes.func,
 };
 
 SubmitItem.defaultProps = {
     question: null,
     index: null,
     pushValueToSubmit: null,
+    changeValueOtherCheckbox: null,
 };
 
 const mapStateToProps = (state) => {
@@ -27,39 +29,82 @@ const mapDispatchToProps = (dispatch, props) => {
         pushValueToSubmit: (typeQues, value, index) => {
             dispatch(pushValueToSubmit(typeQues, value, index));
         },
+
+        changeValueOtherCheckbox: (value, index) => {
+            dispatch(changeValueOtherCheckbox(value, index));
+        },
     };
 };
 
 function SubmitItem(props) {
     var { question, index } = props;
     var [valueQues, setValueQues] = useState("");
+    var [valueOther, setValueOther] = useState("");
     const typingTimeOutRef = useRef(null);
 
-    const handleChange = (e) => {
+    const handleChange = (e, optionId) => {
         var target = e.target;
         var type = target.type;
-        var value;
+        var value, checked;
         if (type === "checkbox") {
-        } else {
-            value = target.value;
+            checked = target.checked;
         }
+        value = target.value !== "" ? target.value : valueOther;
 
         setValueQues(value);
+        if (type === "radio") {
+            setValueOther("");
+        }
+
+        if (typingTimeOutRef.current) {
+            clearTimeout(typingTimeOutRef.current);
+        }
+
+        if (type === "checkbox") {
+            props.pushValueToSubmit(type, { value, optionId, checked }, index);
+        } else {
+            typingTimeOutRef.current = setTimeout(() => {
+                props.pushValueToSubmit(type, value, index);
+            }, 500);
+        }
+    };
+
+    const handleFocusOther = (id, e) => {
+        document.getElementById(id).checked = true;
+        e.target.select();
+
+        if (document.getElementById(id).type === "checkbox") {
+            props.pushValueToSubmit(
+                document.getElementById(id).type,
+                { value: valueOther, optionId: id, checked: true },
+                index,
+            );
+        } else {
+            props.pushValueToSubmit(
+                document.getElementById(id).type,
+                "",
+                index,
+            );
+        }
+    };
+
+    const handleChangeOther = (e, optionId) => {
+        var target = e.target;
+        var value = target.value;
+
+        setValueOther(value);
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }
 
         typingTimeOutRef.current = setTimeout(() => {
-            props.pushValueToSubmit(type, value, index);
+            if (document.getElementById(optionId).type === "checkbox") {
+                props.changeValueOtherCheckbox({ value, optionId }, index);
+            } else {
+                props.pushValueToSubmit(null, value, index);
+            }
         }, 500);
     };
-
-    const handleFocusOther = (id, e) => {
-        document.getElementById(id).checked = true;
-        handleChange(e);
-    };
-
-    const handleChangeOther = (e) => {};
 
     return (
         <Container>
@@ -104,7 +149,9 @@ function SubmitItem(props) {
                                         name={question._id}
                                         id={option._id}
                                         value={option.optionText}
-                                        onChange={handleChange}
+                                        onChange={(e) =>
+                                            handleChange(e, option._id)
+                                        }
                                     />
                                     {option.other ? (
                                         <OtherInput
@@ -113,7 +160,10 @@ function SubmitItem(props) {
                                             onFocus={(e) =>
                                                 handleFocusOther(option._id, e)
                                             }
-                                            onChange={handleChangeOther}
+                                            value={valueOther}
+                                            onChange={(e) =>
+                                                handleChangeOther(e, option._id)
+                                            }
                                         />
                                     ) : (
                                         option.optionText
