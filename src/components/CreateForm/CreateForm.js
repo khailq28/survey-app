@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Prompt } from "react-router-dom";
 import FormHeader from "./FormHeader";
 import TabHeader from "./TabHeader";
 import { Redirect, useHistory } from "react-router";
@@ -68,7 +67,6 @@ function CreateForm(props) {
                     <CustomCircularProgress />
                 </ContainerProgress>
             </Background>
-            <Prompt when={true} message={() => `Bạn chắc chắn muốn thoát?`} />
         </Container>
     );
 }

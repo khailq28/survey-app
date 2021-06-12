@@ -17,9 +17,7 @@ const routes = [
     {
         path: "/home",
         exact: false,
-        main: ({ match, location }) => (
-            <Home match={match} location={location} />
-        ),
+        main: () => <Home />,
     },
     {
         path: "/form/edit/:id",

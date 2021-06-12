@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Redirect, useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { connect } from "react-redux";
 import {
     changeStatusProgess,
@@ -11,6 +11,7 @@ import {
 import socket from "../../socket";
 import SubmitTitle from "./SubmitTitle";
 import SubmitBody from "./SubmitBody";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 SubmitForm.propTypes = {
     user: PropTypes.object,
@@ -55,10 +56,11 @@ const mapDispatchToProps = (dispatch, props) => {
 function SubmitForm(props) {
     var { id } = useParams();
     var history = useHistory();
+    var [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (props.checkLogin === "false") {
-            history.replace("/");
+            history.push("/", { url: props.match.url });
         }
     });
 
@@ -81,22 +83,52 @@ function SubmitForm(props) {
             if (props.user) {
                 props.createSubmitData(props.user.email, arr);
             }
+            setLoading(true);
         });
     }, [props.user]);
 
     return (
         <Container backgroundColor={props.backgroundColor}>
             <Content>
-                {/* {!props.user && (
-                    <Redirect
-                        to={{
-                            pathname: "/",
-                            state: props.match.url,
-                        }}
-                    />
-                )} */}
-                <SubmitTitle />
-                <SubmitBody />
+                {loading ? (
+                    <>
+                        <SubmitTitle />
+                        <SubmitBody />
+                    </>
+                ) : (
+                    <>
+                        <SkeletonContent
+                            animation="wave"
+                            variant="rect"
+                            width="750px"
+                            height="150px"
+                        />
+                        <SkeletonContent
+                            animation="wave"
+                            variant="rect"
+                            width="750px"
+                            height="150px"
+                        />
+                        <SkeletonContent
+                            animation="wave"
+                            variant="rect"
+                            width="750px"
+                            height="150px"
+                        />
+                        <SkeletonContent
+                            animation="wave"
+                            variant="rect"
+                            width="750px"
+                            height="150px"
+                        />
+                        <SkeletonContent
+                            animation="wave"
+                            variant="rect"
+                            width="150px"
+                            height="40px"
+                        />
+                    </>
+                )}
             </Content>
         </Container>
     );
@@ -114,6 +146,12 @@ const Content = styled.div`
     display: grid;
     justify-content: center;
     padding-top: 10px;
+`;
+
+const SkeletonContent = styled(Skeleton)`
+    border-radius: 6px;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    margin-top: 10px;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubmitForm);

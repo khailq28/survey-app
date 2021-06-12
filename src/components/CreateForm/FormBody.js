@@ -232,199 +232,209 @@ function FormBody(props) {
     };
 
     // RENDER
-    var questionUI = questions.map((question, i) => {
-        return (
-            <Draggable key={i} draggableId={i + "id"} index={i}>
-                {(provided, snapshot) => (
-                    <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                    >
-                        <div>
-                            <div style={{ marginBottom: "0px" }}>
-                                <CustomDivDrag>
-                                    <CustomDragIndicatorIcon fontSize="small" />
-                                </CustomDivDrag>
-                                <Form show={question.open}>
-                                    <Accordion
-                                        expanded={question.open}
-                                        onChange={() =>
-                                            handleChangeAccordion(i)
-                                        }
-                                    >
-                                        <CustomAccordionSummary
-                                            aria-controls="panel1a-content"
-                                            elevation={1}
-                                            status={
-                                                question.open ? "true" : "false"
+    if (loading) {
+        var questionUI = questions.map((question, i) => {
+            return (
+                <Draggable key={i} draggableId={i + "id"} index={i}>
+                    {(provided, snapshot) => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                        >
+                            <div>
+                                <div style={{ marginBottom: "0px" }}>
+                                    <CustomDivDrag>
+                                        <CustomDragIndicatorIcon fontSize="small" />
+                                    </CustomDivDrag>
+                                    <Form show={question.open}>
+                                        <Accordion
+                                            expanded={question.open}
+                                            onChange={() =>
+                                                handleChangeAccordion(i)
                                             }
                                         >
-                                            {!question.open ? (
-                                                <SaveQuestion>
-                                                    <CustomTypography>
-                                                        {i + 1}.{" "}
-                                                        {question.questionText}
-                                                    </CustomTypography>
-                                                    <div
-                                                        style={{
-                                                            width: "100%",
-                                                            display: "flex",
-                                                            alignItems:
-                                                                "center",
-                                                            justifyContent:
-                                                                "center",
-                                                            marginBottom: "4px",
-                                                        }}
-                                                    >
-                                                        {question.image && (
-                                                            <QuestionImg
-                                                                src={
-                                                                    ENDPOINT +
-                                                                    "/" +
-                                                                    question.image.slice(
-                                                                        7,
-                                                                    )
-                                                                }
-                                                                alt=""
-                                                            />
-                                                        )}
-                                                    </div>
+                                            <CustomAccordionSummary
+                                                aria-controls="panel1a-content"
+                                                elevation={1}
+                                                status={
+                                                    question.open
+                                                        ? "true"
+                                                        : "false"
+                                                }
+                                            >
+                                                {!question.open ? (
+                                                    <SaveQuestion>
+                                                        <CustomTypography>
+                                                            {i + 1}.{" "}
+                                                            {
+                                                                question.questionText
+                                                            }
+                                                        </CustomTypography>
+                                                        <div
+                                                            style={{
+                                                                width: "100%",
+                                                                display: "flex",
+                                                                alignItems:
+                                                                    "center",
+                                                                justifyContent:
+                                                                    "center",
+                                                                marginBottom:
+                                                                    "4px",
+                                                            }}
+                                                        >
+                                                            {question.image && (
+                                                                <QuestionImg
+                                                                    src={
+                                                                        ENDPOINT +
+                                                                        "/" +
+                                                                        question.image.slice(
+                                                                            7,
+                                                                        )
+                                                                    }
+                                                                    alt=""
+                                                                />
+                                                            )}
+                                                        </div>
 
-                                                    {question.questionType ===
-                                                        "radio" ||
-                                                    question.questionType ===
-                                                        "checkbox" ? (
-                                                        question.options.map(
-                                                            (op, j) => (
-                                                                <div key={j}>
-                                                                    <ListOption>
+                                                        {question.questionType ===
+                                                            "radio" ||
+                                                        question.questionType ===
+                                                            "checkbox" ? (
+                                                            question.options.map(
+                                                                (op, j) => (
+                                                                    <div
+                                                                        key={j}
+                                                                    >
+                                                                        <ListOption>
+                                                                            {question
+                                                                                .options[
+                                                                                j
+                                                                            ]
+                                                                                .other ? (
+                                                                                <CustomFormControlLabel
+                                                                                    disabled
+                                                                                    control={
+                                                                                        <input
+                                                                                            type={
+                                                                                                question.questionType
+                                                                                            }
+                                                                                            color="primary"
+                                                                                            style={{
+                                                                                                margin: "13px",
+                                                                                            }}
+                                                                                            required={
+                                                                                                question.type
+                                                                                            }
+                                                                                        />
+                                                                                    }
+                                                                                    label={
+                                                                                        <CustomTypographyOption>
+                                                                                            <span id="other">
+                                                                                                Mục
+                                                                                                khác
+                                                                                            </span>
+                                                                                        </CustomTypographyOption>
+                                                                                    }
+                                                                                />
+                                                                            ) : (
+                                                                                <CustomFormControlLabel
+                                                                                    disabled
+                                                                                    control={
+                                                                                        <input
+                                                                                            type={
+                                                                                                question.questionType
+                                                                                            }
+                                                                                            color="primary"
+                                                                                            style={{
+                                                                                                margin: "13px",
+                                                                                            }}
+                                                                                            required={
+                                                                                                question.type
+                                                                                            }
+                                                                                        />
+                                                                                    }
+                                                                                    label={
+                                                                                        <CustomTypographyOption>
+                                                                                            {
+                                                                                                question
+                                                                                                    .options[
+                                                                                                    j
+                                                                                                ]
+                                                                                                    .optionText
+                                                                                            }
+                                                                                        </CustomTypographyOption>
+                                                                                    }
+                                                                                />
+                                                                            )}
+                                                                        </ListOption>
                                                                         {question
                                                                             .options[
                                                                             j
                                                                         ]
-                                                                            .other ? (
-                                                                            <CustomFormControlLabel
-                                                                                disabled
-                                                                                control={
-                                                                                    <input
-                                                                                        type={
-                                                                                            question.questionType
-                                                                                        }
-                                                                                        color="primary"
-                                                                                        style={{
-                                                                                            margin: "13px",
-                                                                                        }}
-                                                                                        required={
-                                                                                            question.type
-                                                                                        }
-                                                                                    />
+                                                                            .image && (
+                                                                            <OptionImg
+                                                                                src={
+                                                                                    ENDPOINT +
+                                                                                    "/" +
+                                                                                    question.options[
+                                                                                        j
+                                                                                    ].image.slice(
+                                                                                        7,
+                                                                                    )
                                                                                 }
-                                                                                label={
-                                                                                    <CustomTypographyOption>
-                                                                                        <span id="other">
-                                                                                            Mục
-                                                                                            khác
-                                                                                        </span>
-                                                                                    </CustomTypographyOption>
-                                                                                }
-                                                                            />
-                                                                        ) : (
-                                                                            <CustomFormControlLabel
-                                                                                disabled
-                                                                                control={
-                                                                                    <input
-                                                                                        type={
-                                                                                            question.questionType
-                                                                                        }
-                                                                                        color="primary"
-                                                                                        style={{
-                                                                                            margin: "13px",
-                                                                                        }}
-                                                                                        required={
-                                                                                            question.type
-                                                                                        }
-                                                                                    />
-                                                                                }
-                                                                                label={
-                                                                                    <CustomTypographyOption>
-                                                                                        {
-                                                                                            question
-                                                                                                .options[
-                                                                                                j
-                                                                                            ]
-                                                                                                .optionText
-                                                                                        }
-                                                                                    </CustomTypographyOption>
-                                                                                }
+                                                                                alt=""
                                                                             />
                                                                         )}
-                                                                    </ListOption>
-                                                                    {question
-                                                                        .options[
-                                                                        j
-                                                                    ].image && (
-                                                                        <OptionImg
-                                                                            src={
-                                                                                ENDPOINT +
-                                                                                "/" +
-                                                                                question.options[
-                                                                                    j
-                                                                                ].image.slice(
-                                                                                    7,
-                                                                                )
-                                                                            }
-                                                                            alt=""
-                                                                        />
-                                                                    )}
-                                                                </div>
-                                                            ),
-                                                        )
-                                                    ) : question.questionType ===
-                                                      "text" ? (
-                                                        <CustomText type="text">
-                                                            Văn bản câu trả lời
-                                                            ngắn
-                                                        </CustomText>
-                                                    ) : question.questionType ===
-                                                      "textarea" ? (
-                                                        <CustomText type="textarea">
-                                                            Văn bản câu trả lời
-                                                            dài
-                                                        </CustomText>
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </SaveQuestion>
-                                            ) : (
-                                                ""
-                                            )}
-                                        </CustomAccordionSummary>
+                                                                    </div>
+                                                                ),
+                                                            )
+                                                        ) : question.questionType ===
+                                                          "text" ? (
+                                                            <CustomText type="text">
+                                                                Văn bản câu trả
+                                                                lời ngắn
+                                                            </CustomText>
+                                                        ) : question.questionType ===
+                                                          "textarea" ? (
+                                                            <CustomText type="textarea">
+                                                                Văn bản câu trả
+                                                                lời dài
+                                                            </CustomText>
+                                                        ) : (
+                                                            ""
+                                                        )}
+                                                    </SaveQuestion>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </CustomAccordionSummary>
 
-                                        <QuestionBody
-                                            index={i}
-                                            question={question}
-                                        />
+                                            <QuestionBody
+                                                index={i}
+                                                question={question}
+                                            />
 
-                                        <QuestionFooter
-                                            index={i}
-                                            question={question}
-                                            handleCopyQuestion={() =>
-                                                handleCopyQuestion(i)
-                                            }
-                                            handleDeleteQuestion={() =>
-                                                handleDeleteQuestion(i)
-                                            }
-                                        />
-                                    </Accordion>
-                                </Form>
+                                            <QuestionFooter
+                                                index={i}
+                                                question={question}
+                                                handleCopyQuestion={() =>
+                                                    handleCopyQuestion(i)
+                                                }
+                                                handleDeleteQuestion={() =>
+                                                    handleDeleteQuestion(i)
+                                                }
+                                            />
+                                        </Accordion>
+                                    </Form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
-            </Draggable>
-        );
-    });
+                    )}
+                </Draggable>
+            );
+        });
+    }
 
     return (
         <div>
