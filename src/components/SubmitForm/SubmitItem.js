@@ -104,6 +104,13 @@ function SubmitItem(props) {
         }, 500);
     };
 
+    const handleClear = () => {
+        question.options.forEach((option) => {
+            document.getElementById(option._id).checked = false;
+        });
+        props.pushValueToSubmit("", index);
+    };
+
     return (
         <Container>
             <Question>
@@ -183,6 +190,15 @@ function SubmitItem(props) {
             ) : (
                 ""
             )}
+
+            {props.submitData.length > 0 &&
+            props.submitData[index].type === "radio" &&
+            props.submitData[index].answers.answer !== "" ? (
+                <Clear onClick={handleClear}>Xóa lựa chọn</Clear>
+            ) : (
+                ""
+            )}
+
             {props.submitData.length > 0 && props.submitData[index].validate ? (
                 <Alert>Vui lòng điền vào trường này!</Alert>
             ) : (
@@ -191,6 +207,19 @@ function SubmitItem(props) {
         </Container>
     );
 }
+
+const Clear = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    border-radius: 6px;
+    background-color: #7192974d;
+    color: #a04141;
+    width: 120px;
+    padding: 2px 0;
+    cursor: pointer;
+`;
 
 const Container = styled.div`
     background-color: white;
