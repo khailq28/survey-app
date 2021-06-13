@@ -8,6 +8,7 @@ import { pushValueToSubmit, changeValueOtherCheckbox } from "../../actions";
 
 SubmitItem.propTypes = {
     question: PropTypes.object,
+    submitData: PropTypes.array,
     index: PropTypes.number,
     pushValueToSubmit: PropTypes.func,
     changeValueOtherCheckbox: PropTypes.func,
@@ -15,19 +16,22 @@ SubmitItem.propTypes = {
 
 SubmitItem.defaultProps = {
     question: null,
+    submitData: [],
     index: null,
     pushValueToSubmit: null,
     changeValueOtherCheckbox: null,
 };
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        submitData: state.submit,
+    };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        pushValueToSubmit: (typeQues, value, index) => {
-            dispatch(pushValueToSubmit(typeQues, value, index));
+        pushValueToSubmit: (value, index) => {
+            dispatch(pushValueToSubmit(value, index));
         },
 
         changeValueOtherCheckbox: (value, index) => {
@@ -39,7 +43,7 @@ const mapDispatchToProps = (dispatch, props) => {
 function SubmitItem(props) {
     var { question, index } = props;
     var [valueQues, setValueQues] = useState("");
-    var [valueOther, setValueOther] = useState("");
+    var [valueOther, setValueOther] = useState("Khác");
     const typingTimeOutRef = useRef(null);
 
     const handleChange = (e, optionId) => {
@@ -52,19 +56,16 @@ function SubmitItem(props) {
         value = target.value !== "" ? target.value : valueOther;
 
         setValueQues(value);
-        if (type === "radio") {
-            setValueOther("");
-        }
 
         if (typingTimeOutRef.current) {
             clearTimeout(typingTimeOutRef.current);
         }
 
         if (type === "checkbox") {
-            props.pushValueToSubmit(type, { value, optionId, checked }, index);
+            props.pushValueToSubmit({ value, optionId, checked }, index);
         } else {
             typingTimeOutRef.current = setTimeout(() => {
-                props.pushValueToSubmit(type, value, index);
+                props.pushValueToSubmit(value, index);
             }, 500);
         }
     };
@@ -75,22 +76,19 @@ function SubmitItem(props) {
 
         if (document.getElementById(id).type === "checkbox") {
             props.pushValueToSubmit(
-                document.getElementById(id).type,
                 { value: valueOther, optionId: id, checked: true },
                 index,
             );
         } else {
-            props.pushValueToSubmit(
-                document.getElementById(id).type,
-                "",
-                index,
-            );
+            props.pushValueToSubmit(e.target.value, index);
         }
     };
 
     const handleChangeOther = (e, optionId) => {
         var target = e.target;
         var value = target.value;
+
+        value = value === "" ? "Khác" : value;
 
         setValueOther(value);
         if (typingTimeOutRef.current) {
@@ -101,7 +99,7 @@ function SubmitItem(props) {
             if (document.getElementById(optionId).type === "checkbox") {
                 props.changeValueOtherCheckbox({ value, optionId }, index);
             } else {
-                props.pushValueToSubmit(null, value, index);
+                props.pushValueToSubmit(value, index);
             }
         }, 500);
     };
@@ -124,7 +122,6 @@ function SubmitItem(props) {
                 <TextInput
                     type="text"
                     placeholder="Văn bản câu trả lời ngắn"
-                    required={question.required ? true : false}
                     value={valueQues}
                     onChange={handleChange}
                 />
@@ -133,7 +130,6 @@ function SubmitItem(props) {
                     type="textarea"
                     rows={1}
                     placeholder="Văn bản câu trả lời dài"
-                    required={question.required ? true : false}
                     value={valueQues}
                     onChange={handleChange}
                 />
@@ -184,6 +180,11 @@ function SubmitItem(props) {
                         );
                     })}
                 </ListOption>
+            ) : (
+                ""
+            )}
+            {props.submitData.length > 0 && props.submitData[index].validate ? (
+                <Alert>Vui lòng điền vào trường này!</Alert>
             ) : (
                 ""
             )}
@@ -304,6 +305,13 @@ const Option = styled.div`
 const OptionImg = styled.img`
     width: 270px;
     box-shadow: 0 0 0 1px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 40%);
+`;
+
+const Alert = styled.div`
+    margin-left: 3px;
+    margin-top: 5px;
+    color: red;
+    font-weight: 600;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubmitItem);

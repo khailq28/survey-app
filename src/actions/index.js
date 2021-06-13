@@ -225,10 +225,9 @@ export function createSubmitData(author, aId) {
     };
 }
 
-export function pushValueToSubmit(typeQues, value, index) {
+export function pushValueToSubmit(value, index) {
     return {
         type: actionType.PUSH_VALUE_TO_SUBMIT_REDUCER,
-        typeQues,
         value,
         index,
     };
@@ -239,5 +238,11 @@ export function changeValueOtherCheckbox(value, index) {
         type: actionType.CHANGE_VALUE_OTHER_CHECKBOX,
         value,
         index,
+    };
+}
+
+export function validateForm() {
+    return {
+        type: actionType.VALIDATE_FORM_SUBMIT,
     };
 }

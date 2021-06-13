@@ -78,7 +78,11 @@ function SubmitForm(props) {
             props.changeStatusProgess(false);
             var arr = [];
             oSurvey.questions.forEach((question) => {
-                arr.push(question._id);
+                arr.push({
+                    questionId: question._id,
+                    required: question.required,
+                    type: question.questionType,
+                });
             });
             if (props.user) {
                 props.createSubmitData(props.user.email, arr);

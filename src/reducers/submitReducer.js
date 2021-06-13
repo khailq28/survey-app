@@ -6,19 +6,17 @@ const submitReducer = (state = INITIAL_STATE, action) => {
         case actionType.CREATE_SUBMIT_FORM:
             for (var i = 0; i < action.aId.length; i++) {
                 state.push({
-                    idQuestion: action.aId[i],
-                    type: "",
+                    idQuestion: action.aId[i].questionId,
+                    type: action.aId[i].type,
+                    required: action.aId[i].required,
+                    validate: false,
                     answers: { user: action.author, answer: "", checkbox: [] },
                 });
             }
             return [...state];
 
         case actionType.PUSH_VALUE_TO_SUBMIT_REDUCER:
-            if (action.typeQues) {
-                state[action.index].type = action.typeQues;
-            }
-
-            if (action.typeQues === "checkbox") {
+            if (state[action.index].type === "checkbox") {
                 var check = true;
                 state[action.index].answers.checkbox.forEach(
                     (answer, index) => {
@@ -46,12 +44,27 @@ const submitReducer = (state = INITIAL_STATE, action) => {
             return [...state];
 
         case actionType.CHANGE_VALUE_OTHER_CHECKBOX:
-            console.log(action);
             state[action.index].answers.checkbox.forEach((answer, index) => {
                 if (action.value.optionId === answer.optionId) {
                     state[action.index].answers.checkbox[index].value =
                         action.value.value;
                     return;
+                }
+            });
+            return [...state];
+
+        case actionType.VALIDATE_FORM_SUBMIT:
+            state.forEach((element, index) => {
+                if (element.required) {
+                    if (element.type === "checkbox") {
+                        element.validate =
+                            element.answers.checkbox.length === 0
+                                ? true
+                                : false;
+                    } else {
+                        element.validate =
+                            element.answers.answer === "" ? true : false;
+                    }
                 }
             });
             return [...state];
