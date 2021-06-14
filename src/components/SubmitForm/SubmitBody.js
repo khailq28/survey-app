@@ -11,12 +11,14 @@ SubmitBody.propTypes = {
     questions: PropTypes.array,
     submitData: PropTypes.array,
     user: PropTypes.object,
+    surveyId: PropTypes.string,
 };
 
 SubmitBody.defaultProps = {
     user: null,
     questions: [],
     submitData: [],
+    surveyId: "",
 };
 
 const mapStateToProps = (state) => {
@@ -24,6 +26,7 @@ const mapStateToProps = (state) => {
         user: state.userState.user,
         questions: state.survey.questions,
         submitData: state.submit,
+        surveyId: state.survey._id,
     };
 };
 
@@ -48,7 +51,10 @@ function SubmitBody(props) {
                 }
             });
             if (!check) {
-                console.log("submitForm");
+                socket.emit("CLIENT_SUBMIT_FORM", {
+                    surveyId: props.surveyId,
+                    content: props.submitData,
+                });
             }
         }
     };

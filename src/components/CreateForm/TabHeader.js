@@ -56,25 +56,24 @@ function TabHeader(props) {
                     centered
                 >
                     {props.loading ? (
-                        <>
-                            <CustomTab label="Câu hỏi" {...a11yProps(0)} />
-                            <CustomTab label="Câu trả lời" {...a11yProps(1)} />
-                        </>
+                        <CustomTab label="Câu hỏi" {...a11yProps(0)} />
                     ) : (
-                        <>
-                            <Skeleton
-                                animation="wave"
-                                variant="text"
-                                width="70px"
-                                height="30px"
-                            />
-                            <Skeleton
-                                animation="wave"
-                                variant="text"
-                                width="70px"
-                                height="30px"
-                            />
-                        </>
+                        <Skeleton
+                            animation="wave"
+                            variant="text"
+                            width="70px"
+                            height="30px"
+                        />
+                    )}
+                    {props.loading ? (
+                        <CustomTab label="Câu trả lời" {...a11yProps(1)} />
+                    ) : (
+                        <Skeleton
+                            animation="wave"
+                            variant="text"
+                            width="70px"
+                            height="30px"
+                        />
                     )}
                 </CustomTabs>
             </CustomPaper>
