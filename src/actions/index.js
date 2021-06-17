@@ -19,6 +19,7 @@ export function signInAPI() {
                 dispatch(setUser(payload.user));
                 dispatch(cleanAllSurveys());
                 dispatch(cleanSurvey());
+                dispatch(cleanSubmit());
             })
             .catch((error) => {
                 alert(error.message);
@@ -35,6 +36,12 @@ export function cleanAllSurveys() {
 export function cleanSurvey() {
     return {
         type: actionType.CLEAN_SURVER_REDUCER,
+    };
+}
+
+export function cleanSubmit() {
+    return {
+        type: actionType.CLEAN_SUBMIT_REDUCER,
     };
 }
 
@@ -56,6 +63,9 @@ export function signOutAPI() {
         auth.signOut()
             .then(() => {
                 dispatch(setUser(null));
+                dispatch(cleanAllSurveys());
+                dispatch(cleanSurvey());
+                dispatch(cleanSubmit());
             })
             .catch((error) => {
                 console.log(error.message);

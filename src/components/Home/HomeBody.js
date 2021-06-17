@@ -114,7 +114,7 @@ function HomeBody(props) {
 
     const CreateForm = () => {
         props.changeStatusProgess(true);
-        socket.emit("CLIENT_CREATE_NEW_FORM");
+        socket.emit("CLIENT_CREATE_NEW_FORM", props.user.email);
     };
 
     const handleRemoveSurvey = (id) => {

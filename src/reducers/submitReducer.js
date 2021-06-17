@@ -4,8 +4,10 @@ var INITIAL_STATE = [];
 const submitReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case actionType.CREATE_SUBMIT_FORM:
+            var arr = [];
+            console.log(arr);
             for (var i = 0; i < action.aId.length; i++) {
-                state.push({
+                arr.push({
                     idQuestion: action.aId[i].questionId,
                     type: action.aId[i].type,
                     required: action.aId[i].required,
@@ -13,6 +15,8 @@ const submitReducer = (state = INITIAL_STATE, action) => {
                     answers: { user: action.author, answer: "", checkbox: [] },
                 });
             }
+            state = arr;
+            console.log(state);
             return [...state];
 
         case actionType.PUSH_VALUE_TO_SUBMIT_REDUCER:
@@ -68,6 +72,8 @@ const submitReducer = (state = INITIAL_STATE, action) => {
                 }
             });
             return [...state];
+        case actionType.CLEAN_SUBMIT_REDUCER:
+            return [];
         default:
             return [...state];
     }

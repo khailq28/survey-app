@@ -8,7 +8,6 @@ import Skeleton from "@material-ui/lab/Skeleton";
 function Login(props) {
     var [loading, setLoading] = useState(false);
     var history = useHistory();
-    console.log(props.location);
 
     useEffect(() => {
         if (props.checkLogin === "true") {

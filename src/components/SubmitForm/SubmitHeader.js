@@ -23,17 +23,36 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 function SubmitHeader(props) {
-    console.log(props.user);
     return (
         <div style={{ marginBottom: "10px" }}>
             <Container>
                 <Left>
-                    {props.user && props.user.photoURL ? (
+                    {props.user &&
+                    props.user.photoURL &&
+                    props.user.displayName ? (
                         <UserImg src={props.user.photoURL} alt="" />
                     ) : (
                         <UserImg src="/images/user.svg" alt="" />
                     )}
-                    <span>{props.user.email}</span>
+                    <div>
+                        <div
+                            style={{
+                                marginLeft: "5px",
+                                fontSize: "18px",
+                            }}
+                        >
+                            {props.user ? props.user.displayName : ""}
+                        </div>
+                        <div
+                            style={{
+                                marginLeft: "5px",
+                                fontSize: "14px",
+                                color: "blue",
+                            }}
+                        >
+                            {props.user ? props.user.email : ""}
+                        </div>
+                    </div>
                 </Left>
                 <Right onClick={() => props.signOut()}>Sign out</Right>
             </Container>
@@ -62,10 +81,10 @@ const Left = styled.div`
     display: flex;
     align-items: center;
 
-    & > span {
-        margin-left: 5px;
-        font-size: 16px;
-        color: blue;
+    @media (max-width: 768px) {
+        & > div {
+            opacity: 0;
+        }
     }
 `;
 
@@ -75,10 +94,18 @@ const Right = styled.div`
     padding: 5px;
     box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 
     &:hover {
         background-color: #0063e5;
         color: white;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 14px;
     }
 `;
 

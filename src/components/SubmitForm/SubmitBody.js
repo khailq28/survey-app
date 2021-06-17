@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import socket from "../../socket";
 import SubmitItem from "./SubmitItem";
 import Button from "@material-ui/core/Button";
-import { validateForm } from "../../actions";
+import { validateForm, cleanSubmit } from "../../actions";
 
 SubmitBody.propTypes = {
     questions: PropTypes.array,
@@ -35,7 +35,22 @@ const mapDispatchToProps = (dispatch, props) => {
         validateForm: () => {
             dispatch(validateForm());
         },
+
+        cleanSubmit: () => {
+            dispatch(cleanSubmit());
+        },
     };
+};
+
+const formatDate = () => {
+    var date = new Date();
+    var hour = `0${date.getHours()}`.slice(-2);
+    var minute = `0${date.getMinutes()}`.slice(-2);
+    var day = `0${date.getDate()}`.slice(-2);
+    var mounth = `0${date.getMonth() + 1}`.slice(-2);
+    var year = date.getFullYear();
+
+    return `${hour}:${minute} ${day}/${mounth}/${year}`;
 };
 
 function SubmitBody(props) {
@@ -54,8 +69,11 @@ function SubmitBody(props) {
                 socket.emit("CLIENT_SUBMIT_FORM", {
                     surveyId: props.surveyId,
                     author: props.user.email,
+                    created: formatDate(),
                     content: props.submitData,
                 });
+
+                props.cleanSubmit();
             }
         }
     };

@@ -79,6 +79,7 @@ function SubmitForm(props) {
             props.setSurvey(oSurvey);
             props.changeStatusProgess(false);
             var arr = [];
+
             oSurvey.questions.forEach((question) => {
                 arr.push({
                     questionId: question._id,
@@ -100,6 +101,11 @@ function SubmitForm(props) {
         socket.on("SERVER_SEND_MSG_FORM_CLOSE", () => {
             setCheckDo(null);
             setLoading(true);
+        });
+
+        socket.on("SERVER_SEND_MSG_SUBMIT_SUCCESS", () => {
+            setCheckDo("done");
+            // setLoading(true);
         });
 
         socket.on("SERVER_SEND_MSG_NOT_FOUND", () => {
@@ -133,6 +139,19 @@ function SubmitForm(props) {
                                 >
                                     Khảo sát này đã đóng!
                                 </span>
+                            </Box>
+                        ) : checkDo === "done" ? (
+                            <Box>
+                                <div
+                                    style={{ color: "red", fontWeight: "600" }}
+                                >
+                                    Đã nộp thành công.
+                                </div>
+                                <div
+                                    style={{ color: "red", fontWeight: "600" }}
+                                >
+                                    Cảm ơn bạn đã làm khảo sát.
+                                </div>
                             </Box>
                         ) : (
                             ""
