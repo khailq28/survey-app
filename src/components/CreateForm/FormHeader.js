@@ -103,7 +103,7 @@ function FormHeader(props) {
                                     <MenuButton
                                         onClick={() => {
                                             window.open(
-                                                "/form/" + props.survey._id,
+                                                "/preview/" + props.survey._id,
                                             );
                                         }}
                                     >

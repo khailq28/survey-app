@@ -5,6 +5,7 @@ import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
 import SettingsOutlinedIcon from "@material-ui/icons/SettingsOutlined";
 import SendOutlinedIcon from "@material-ui/icons/SendOutlined";
 import { IconButton } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import {
     setStatusSlideBar,
@@ -97,10 +98,7 @@ function SlideBar(props) {
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_BACKGROUND_COLOR", (oColor) => {
-            if (
-                oColor.idForm === props.idForm &&
-                props.idForm !== ""
-            ) {
+            if (oColor.idForm === props.idForm && props.idForm !== "") {
                 props.setBackgroundColor(oColor.color);
             }
         });
@@ -108,10 +106,7 @@ function SlideBar(props) {
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_INTERFACE_COLOR", (oColor) => {
-            if (
-                oColor.idForm === props.idForm &&
-                props.idForm !== ""
-            ) {
+            if (oColor.idForm === props.idForm && props.idForm !== "") {
                 props.setInterfaceColor(oColor.color);
             }
         });
@@ -136,6 +131,18 @@ function SlideBar(props) {
             color,
             idForm: props.idForm,
         });
+    };
+
+    const handleCopy = (str) => {
+        // https://www.30secondsofcode.org/blog/s/copy-text-to-clipboard-with-javascript
+        const el = document.createElement("textarea");
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+
+        alert("Copied link: " + str);
     };
 
     var body =
@@ -183,7 +190,30 @@ function SlideBar(props) {
                 </Box>
             </>
         ) : title === "send" ? (
-            ""
+            <Box>
+                <Link
+                    href={window.location.origin + "/form/" + props.idForm}
+                    target="_blank"
+                    id={props.idForm}
+                >
+                    {window.location.origin + "/form/" + props.idForm}
+                </Link>
+                <div style={{ marginTop: "10px" }}>
+                    <CopyButton
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                            handleCopy(
+                                window.location.origin +
+                                    "/form/" +
+                                    props.idForm,
+                            )
+                        }
+                    >
+                        Copy
+                    </CopyButton>
+                </div>
+            </Box>
         ) : title === "setting" ? (
             ""
         ) : (
@@ -296,5 +326,19 @@ const CustomCheckCircleIcon = styled(CheckCircleIcon)`
             ? `background-color: rgb(0 0 0 / 50%);`
             : ""}
 `;
+
+const Link = styled.a`
+    word-wrap: break-word;
+
+    &:hover {
+        color: blue;
+    }
+
+    &:active {
+        color: blueviolet;
+    }
+`;
+
+const CopyButton = styled(Button)``;
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlideBar);

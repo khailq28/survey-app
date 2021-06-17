@@ -9,12 +9,12 @@ import {
     createSubmitData,
 } from "../../actions";
 import socket from "../../socket";
-import SubmitTitle from "./SubmitTitle";
-import SubmitBody from "./SubmitBody";
+import SubmitTitle from "../SubmitForm/SubmitTitle";
+// import SubmitBody from "./SubmitBody";
 import Skeleton from "@material-ui/lab/Skeleton";
-import SubmitHeader from "./SubmitHeader";
+import PreviewBody from "./PreviewBody";
 
-SubmitForm.propTypes = {
+PreviewForm.propTypes = {
     user: PropTypes.object,
     checkLogin: PropTypes.string,
     backgroundColor: PropTypes.string,
@@ -22,7 +22,7 @@ SubmitForm.propTypes = {
     changeStatusProgess: PropTypes.func,
 };
 
-SubmitForm.defaultProps = {
+PreviewForm.defaultProps = {
     user: null,
     checkLogin: "",
     backgroundColor: "",
@@ -54,7 +54,7 @@ const mapDispatchToProps = (dispatch, props) => {
     };
 };
 
-function SubmitForm(props) {
+function PreviewForm(props) {
     var { id } = useParams();
     var history = useHistory();
     var [loading, setLoading] = useState(false);
@@ -101,9 +101,9 @@ function SubmitForm(props) {
             <Content>
                 {loading ? (
                     <>
-                        <SubmitHeader />
                         <SubmitTitle />
-                        <SubmitBody />
+                        <PreviewBody />
+                        {/* <SubmitBody /> */}
                     </>
                 ) : (
                     <>
@@ -155,7 +155,7 @@ const Content = styled.div`
     height: 100%;
     display: grid;
     justify-content: center;
-    /* padding-top: 10px; */
+    padding-top: 10px;
 `;
 
 const SkeletonContent = styled(Skeleton)`
@@ -164,4 +164,4 @@ const SkeletonContent = styled(Skeleton)`
     margin-top: 10px;
 `;
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubmitForm);
+export default connect(mapStateToProps, mapDispatchToProps)(PreviewForm);

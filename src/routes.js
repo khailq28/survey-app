@@ -5,6 +5,7 @@ import CreateForm from "./components/CreateForm/CreateForm";
 
 import React from "react";
 import SubmitForm from "./components/SubmitForm/SubmitForm";
+import PreviewForm from "./components/Preview/PreviewForm";
 
 const routes = [
     {
@@ -24,6 +25,13 @@ const routes = [
         exact: false,
         main: ({ match, location }) => (
             <CreateForm match={match} location={location} />
+        ),
+    },
+    {
+        path: "/preview/:id",
+        exact: false,
+        main: ({ match, location }) => (
+            <PreviewForm match={match} location={location} />
         ),
     },
     {
