@@ -133,6 +133,24 @@ function SlideBar(props) {
         });
     };
 
+    const alertTimeout = (mymsg, mymsecs) => {
+        var myelement = document.createElement("div");
+        myelement.classList.add("alert");
+        myelement.classList.add("show");
+        myelement.innerHTML = mymsg;
+
+        setTimeout(function () {
+            myelement.classList.remove("show");
+            myelement.classList.add("hide");
+            // myelement.parentNode.removeChild(myelement);
+        }, mymsecs - 800);
+
+        setTimeout(function () {
+            myelement.parentNode.removeChild(myelement);
+        }, mymsecs);
+        document.body.appendChild(myelement);
+    };
+
     const handleCopy = (str) => {
         // https://www.30secondsofcode.org/blog/s/copy-text-to-clipboard-with-javascript
         const el = document.createElement("textarea");
@@ -141,8 +159,9 @@ function SlideBar(props) {
         el.select();
         document.execCommand("copy");
         document.body.removeChild(el);
+        alertTimeout("Copied link", 3500);
 
-        alert("Copied link: " + str);
+        // alert("Copied link: " + str);
     };
 
     var body =
