@@ -58,6 +58,7 @@ function SubmitForm(props) {
     var { id } = useParams();
     var history = useHistory();
     var [loading, setLoading] = useState(false);
+    var [checkDo, setCheckDo] = useState(false);
 
     useEffect(() => {
         if (props.checkLogin === "false") {
@@ -91,6 +92,16 @@ function SubmitForm(props) {
             setLoading(true);
         });
 
+        socket.on("SERVER_SEND_MSG_DONE", () => {
+            setCheckDo(true);
+            setLoading(true);
+        });
+
+        socket.on("SERVER_SEND_MSG_FORM_CLOSE", () => {
+            setCheckDo(null);
+            setLoading(true);
+        });
+
         socket.on("SERVER_SEND_MSG_NOT_FOUND", () => {
             history.replace("/notfound");
         });
@@ -102,8 +113,30 @@ function SubmitForm(props) {
                 {loading ? (
                     <>
                         <SubmitHeader />
-                        <SubmitTitle />
-                        <SubmitBody />
+                        {checkDo === true ? (
+                            <Box>
+                                <span
+                                    style={{ color: "red", fontWeight: "600" }}
+                                >
+                                    Bạn đã làm khảo sát này!
+                                </span>
+                            </Box>
+                        ) : checkDo === false ? (
+                            <>
+                                <SubmitTitle />
+                                <SubmitBody />
+                            </>
+                        ) : checkDo === null ? (
+                            <Box>
+                                <span
+                                    style={{ color: "red", fontWeight: "600" }}
+                                >
+                                    Khảo sát này đã đóng!
+                                </span>
+                            </Box>
+                        ) : (
+                            ""
+                        )}
                     </>
                 ) : (
                     <>
@@ -149,6 +182,21 @@ const Container = styled.div`
         props.backgroundColor ? props.backgroundColor : "while"};
     height: 100%;
     min-height: 100vh;
+`;
+
+const Box = styled.div`
+    background-color: white;
+    border-radius: 6px;
+    padding: 25px 20px;
+    width: 750px;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    margin-top: 10px;
+
+    @media (max-width: 768px) {
+        width: 96%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 `;
 
 const Content = styled.div`

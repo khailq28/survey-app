@@ -53,6 +53,7 @@ function SubmitBody(props) {
             if (!check) {
                 socket.emit("CLIENT_SUBMIT_FORM", {
                     surveyId: props.surveyId,
+                    author: props.user.email,
                     content: props.submitData,
                 });
             }

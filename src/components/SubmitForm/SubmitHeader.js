@@ -37,7 +37,6 @@ function SubmitHeader(props) {
                 </Left>
                 <Right onClick={() => props.signOut()}>Sign out</Right>
             </Container>
-            ;
         </div>
     );
 }
