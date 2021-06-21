@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
@@ -7,6 +7,25 @@ import PropTypes from "prop-types";
 import QuestionForm from "./QuestionForm";
 import Result from "../Result/Result";
 import Skeleton from "@material-ui/lab/Skeleton";
+import socket from "../../socket";
+import { connect } from "react-redux";
+import { setAllResult } from "../../actions";
+import Badge from "@material-ui/core/Badge";
+
+const mapStateToProps = (state) => {
+    return {
+        idForm: state.survey._id,
+        results: state.results,
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        setAllResult: (aResults) => {
+            dispatch(setAllResult(aResults));
+        },
+    };
+};
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -39,12 +58,30 @@ function a11yProps(index) {
     };
 }
 
+TabHeader.propTypes = {
+    results: PropTypes.array,
+};
+
+TabHeader.defaultProps = {
+    results: null,
+};
+
 function TabHeader(props) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    useEffect(() => {
+        if (props.idForm) {
+            socket.emit("CLIENT_GET_RESULTS", props.idForm);
+
+            socket.on("SERVER_SEND_RESULTS", (aData) => {
+                props.setAllResult(aData);
+            });
+        }
+    }, [props.idForm]);
 
     return (
         <Container>
@@ -67,7 +104,21 @@ function TabHeader(props) {
                         />
                     )}
                     {props.loading ? (
-                        <CustomTab label="Câu trả lời" {...a11yProps(1)} />
+                        <CustomTab
+                            label={
+                                <div>
+                                    Câu trả lời{" "}
+                                    <Badge
+                                        style={{ marginLeft: "10px" }}
+                                        badgeContent={
+                                            props.results[0].answers.length
+                                        }
+                                        color="primary"
+                                    ></Badge>
+                                </div>
+                            }
+                            {...a11yProps(1)}
+                        />
                     ) : (
                         <Skeleton
                             animation="wave"
@@ -116,4 +167,4 @@ const CustomTab = styled(Tab)`
     font-weight: 600 !important;
 `;
 
-export default TabHeader;
+export default connect(mapStateToProps, mapDispatchToProps)(TabHeader);

@@ -18,6 +18,7 @@ export function signInAPI() {
             .then((payload) => {
                 dispatch(setUser(payload.user));
                 dispatch(cleanAllSurveys());
+                dispatch(cleanAllResults());
                 dispatch(cleanSurvey());
                 dispatch(cleanSubmit());
             })
@@ -30,6 +31,12 @@ export function signInAPI() {
 export function cleanAllSurveys() {
     return {
         type: actionType.CLEAN_ALL_SURVEY_REDUCER,
+    };
+}
+
+export function cleanAllResults() {
+    return {
+        type: actionType.CLEAN_ALL_RESULT_REDUCER,
     };
 }
 
@@ -64,6 +71,7 @@ export function signOutAPI() {
             .then(() => {
                 dispatch(setUser(null));
                 dispatch(cleanAllSurveys());
+                dispatch(cleanAllResults());
                 dispatch(cleanSurvey());
                 dispatch(cleanSubmit());
             })
@@ -261,5 +269,12 @@ export function validateForm() {
 export function changeStatusForm() {
     return {
         type: actionType.CHANGE_STATUS_FORM,
+    };
+}
+
+export function setAllResult(aResults) {
+    return {
+        type: actionType.GET_ALL_RESULTS,
+        aResults,
     };
 }

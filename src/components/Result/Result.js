@@ -1,25 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Switch from "@material-ui/core/Switch";
 import { connect } from "react-redux";
 import { changeStatusForm } from "../../actions";
 import socket from "../../socket";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 Result.propTypes = {
     status: PropTypes.bool,
     idForm: PropTypes.string,
+    results: PropTypes.array,
 };
 
 Result.defaultProps = {
     status: null,
     idForm: null,
+    results: [],
 };
 
 const mapStateToProps = (state) => {
     return {
         status: state.survey.status,
         idForm: state.survey._id,
+        results: state.results,
     };
 };
 
@@ -31,16 +37,44 @@ const mapDispatchToProps = (dispatch, props) => {
     };
 };
 
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && <div>{children}</div>}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        "aria-controls": `simple-tabpanel-${index}`,
+    };
+}
+
 function Result(props) {
     var { idForm, status } = props;
+    const [value, setValue] = useState(0);
 
-    useEffect(() => {
-        socket.on("SERVER_SEND_NEW_STATUS", () => {
-            props.changeStatusForm();
-        });
-    }, []);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
-    let handleSwitch = () => {
+    const handleSwitch = () => {
         props.changeStatusForm();
         socket.emit("CLIENT_CHANGE_STATUS", {
             idForm,
@@ -48,11 +82,17 @@ function Result(props) {
         });
     };
 
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_STATUS", () => {
+            props.changeStatusForm();
+        });
+    }, []);
+
     return (
         <Container>
             <Box>
                 <Header>
-                    <Left>0 câu trả lời</Left>
+                    <Left>{props.results[0].answers.length} câu trả lời</Left>
                     <Right>
                         Chấp nhận phản hồi
                         <Switch
@@ -63,7 +103,28 @@ function Result(props) {
                         />
                     </Right>
                 </Header>
+                <CustomPaper>
+                    <CustomTabs
+                        value={value}
+                        onChange={handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        centered
+                    >
+                        <CustomTab label="Bảng tóm tắt" {...a11yProps(0)} />
+                        <CustomTab label="Cá nhân" {...a11yProps(1)} />
+                    </CustomTabs>
+                </CustomPaper>
             </Box>
+
+            <div>
+                <TabPanel value={value} index={0}>
+                    <div>sd</div>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    fff
+                </TabPanel>
+            </div>
         </Container>
     );
 }
@@ -111,6 +172,26 @@ const Right = styled.div`
     box-sizing: border-box;
     font-size: 13px;
     line-height: 135%;
+`;
+
+const CustomPaper = styled(Paper)`
+    box-shadow: none !important;
+`;
+
+const CustomTabs = styled(Tabs)`
+    height: 5 !important;
+    .PrivateTabIndicator-root-1 {
+        height: 3px;
+        border-radius: 4px 4px 0 0;
+    }
+`;
+
+const CustomTab = styled(Tab)`
+    font-size: 12 !important;
+    color: "#5f6368" !important;
+    text-transform: capitalize !important;
+    height: 5 !important;
+    font-weight: 600 !important;
 `;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Result);
