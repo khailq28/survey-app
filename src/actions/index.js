@@ -256,3 +256,10 @@ export function validateForm() {
         type: actionType.VALIDATE_FORM_SUBMIT,
     };
 }
+
+// result page
+export function changeStatusForm() {
+    return {
+        type: actionType.CHANGE_STATUS_FORM,
+    };
+}

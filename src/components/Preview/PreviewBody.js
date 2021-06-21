@@ -1,9 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { connect } from "react-redux";
 import PreviewItem from "./PreviewItem";
-import Button from "@material-ui/core/Button";
 import { validateForm } from "../../actions";
 
 PreviewBody.propTypes = {

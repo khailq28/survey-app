@@ -10,6 +10,7 @@ var INITIAL_STATE = {
     interfaceColor: "#673AB7",
     backgroundColor: "#F0EBF8",
     updateDate: "",
+    status: false,
 };
 
 const surveyReducer = (state = INITIAL_STATE, action) => {
@@ -73,6 +74,10 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             state.questions[action.indexQues].options[
                 action.indexOption
             ].image = action.image;
+            return { ...state };
+
+        case actionType.CHANGE_STATUS_FORM:
+            state.status = !state.status;
             return { ...state };
 
         case actionType.CLEAN_SURVER_REDUCER:
