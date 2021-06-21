@@ -5,7 +5,6 @@ const submitReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case actionType.CREATE_SUBMIT_FORM:
             var arr = [];
-            console.log(arr);
             for (var i = 0; i < action.aId.length; i++) {
                 arr.push({
                     idQuestion: action.aId[i].questionId,
@@ -16,7 +15,6 @@ const submitReducer = (state = INITIAL_STATE, action) => {
                 });
             }
             state = arr;
-            console.log(state);
             return [...state];
 
         case actionType.PUSH_VALUE_TO_SUBMIT_REDUCER:

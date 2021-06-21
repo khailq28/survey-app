@@ -29,7 +29,12 @@ function PreviewItem(props) {
     return (
         <Container>
             <Question>
-                {index + 1}. {question.questionText}
+                {index + 1}. {question.questionText}{" "}
+                {question.required === true ? (
+                    <span style={{ color: "red" }}>*</span>
+                ) : (
+                    ""
+                )}
             </Question>
             {question.image && (
                 <QuestionImg>
