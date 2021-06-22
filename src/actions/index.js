@@ -189,6 +189,13 @@ export function setQuestions(questions) {
     };
 }
 
+export function setSubmiter(submiter) {
+    return {
+        type: actionType.SET_SUBMITER,
+        submiter,
+    };
+}
+
 export function setQuestionImage(image, index) {
     return {
         type: actionType.SET_QUESTION_IMAGE,

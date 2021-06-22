@@ -9,13 +9,23 @@ import Result from "../Result/Result";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { connect } from "react-redux";
 import Badge from "@material-ui/core/Badge";
+import socket from "../../socket";
+import { setQuestions, setSubmiter } from "../../actions";
 
 const mapStateToProps = (state) => {
-    return { submiter: state.survey.submiter };
+    return { submiter: state.survey.submiter, idForm: state.survey._id };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-    return {};
+    return {
+        setQuestions: (questions) => {
+            dispatch(setQuestions(questions));
+        },
+
+        setSubmiter: (submiter) => {
+            dispatch(setSubmiter(submiter));
+        },
+    };
 };
 
 function TabPanel(props) {
@@ -51,15 +61,30 @@ function a11yProps(index) {
 
 TabHeader.propTypes = {
     submiter: PropTypes.array,
+    idForm: PropTypes.string,
+    setQuestions: PropTypes.func,
+    setSubmiter: PropTypes.func,
 };
 
 TabHeader.defaultProps = {
     submiter: null,
+    idForm: "",
+    setQuestions: null,
+    setSubmiter: null,
 };
 
 function TabHeader(props) {
     const [value, setValue] = React.useState(0);
-    const [length, setLength] = React.useState(0);
+
+    var { idForm } = props;
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_ANSWER", (oQuestions) => {
+            if (idForm === oQuestions.idForm) {
+                props.setQuestions(oQuestions.questions);
+                props.setSubmiter(oQuestions.submiter);
+            }
+        });
+    }, [idForm]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);

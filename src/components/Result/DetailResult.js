@@ -121,7 +121,7 @@ function DetailResult(props) {
             </Box>
 
             <SubmitTitle />
-            {value && <DetailBody index={value - 1} />}
+            {value ? <DetailBody index={value - 1} /> : ""}
         </>
     );
 }
@@ -130,13 +130,15 @@ const Box = styled.div`
     background-color: white;
     border-radius: 6px;
     padding: 25px 20px;
-    text-transform: capitalize;
     width: 750px;
     box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+    margin-top: 10px;
     margin-bottom: 10px;
 
     @media (max-width: 768px) {
-        width: 96vw;
+        width: 96%;
+        margin-left: auto;
+        margin-right: auto;
     }
 `;
 

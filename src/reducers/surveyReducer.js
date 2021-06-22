@@ -11,6 +11,7 @@ var INITIAL_STATE = {
     backgroundColor: "#F0EBF8",
     updateDate: "",
     status: false,
+    submiter: [],
 };
 
 const surveyReducer = (state = INITIAL_STATE, action) => {
@@ -48,6 +49,7 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
 
         case actionType.SET_QUESTIONS:
+            console.log("set");
             state.questions = action.questions;
             return { ...state };
 
@@ -78,6 +80,10 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
 
         case actionType.CHANGE_STATUS_FORM:
             state.status = !state.status;
+            return { ...state };
+
+        case actionType.SET_SUBMITER:
+            state.submiter = action.submiter;
             return { ...state };
 
         case actionType.CLEAN_SURVER_REDUCER:

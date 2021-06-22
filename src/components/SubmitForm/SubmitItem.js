@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { connect } from "react-redux";
@@ -44,7 +44,6 @@ function SubmitItem(props) {
     var { question, index } = props;
     var [valueQues, setValueQues] = useState("");
     var [valueOther, setValueOther] = useState("Khác");
-    const typingTimeOutRef = useRef(null);
 
     const handleChange = (e, optionId) => {
         var target = e.target;
@@ -57,16 +56,10 @@ function SubmitItem(props) {
 
         setValueQues(value);
 
-        if (typingTimeOutRef.current) {
-            clearTimeout(typingTimeOutRef.current);
-        }
-
         if (type === "checkbox") {
             props.pushValueToSubmit({ value, optionId, checked }, index);
         } else {
-            typingTimeOutRef.current = setTimeout(() => {
-                props.pushValueToSubmit(value, index);
-            }, 500);
+            props.pushValueToSubmit(value, index);
         }
     };
 
@@ -91,17 +84,12 @@ function SubmitItem(props) {
         value = value === "" ? "Khác" : value;
 
         setValueOther(value);
-        if (typingTimeOutRef.current) {
-            clearTimeout(typingTimeOutRef.current);
-        }
 
-        typingTimeOutRef.current = setTimeout(() => {
-            if (document.getElementById(optionId).type === "checkbox") {
-                props.changeValueOtherCheckbox({ value, optionId }, index);
-            } else {
-                props.pushValueToSubmit(value, index);
-            }
-        }, 500);
+        if (document.getElementById(optionId).type === "checkbox") {
+            props.changeValueOtherCheckbox({ value, optionId }, index);
+        } else {
+            props.pushValueToSubmit(value, index);
+        }
     };
 
     const handleClear = () => {
