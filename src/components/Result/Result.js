@@ -8,24 +8,25 @@ import socket from "../../socket";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import DetailResult from "./DetailResult";
 
 Result.propTypes = {
     status: PropTypes.bool,
     idForm: PropTypes.string,
-    results: PropTypes.array,
+    submiter: PropTypes.array,
 };
 
 Result.defaultProps = {
     status: null,
     idForm: null,
-    results: [],
+    submiter: [],
 };
 
 const mapStateToProps = (state) => {
     return {
         status: state.survey.status,
         idForm: state.survey._id,
-        results: state.results,
+        submiter: state.survey.submiter,
     };
 };
 
@@ -67,7 +68,7 @@ function a11yProps(index) {
 }
 
 function Result(props) {
-    var { idForm, status } = props;
+    var { idForm } = props;
     const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
@@ -90,9 +91,9 @@ function Result(props) {
 
     return (
         <Container>
-            <Box>
+            <Box style={{ paddingBottom: "0px" }}>
                 <Header>
-                    <Left>{props.results[0].answers.length} câu trả lời</Left>
+                    <Left>{props.submiter.length} câu trả lời</Left>
                     <Right>
                         Chấp nhận phản hồi
                         <Switch
@@ -122,7 +123,7 @@ function Result(props) {
                     <div>sd</div>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    fff
+                    <DetailResult />
                 </TabPanel>
             </div>
         </Container>
@@ -142,9 +143,9 @@ const Box = styled.div`
     background-color: white;
     border-radius: 6px;
     padding: 25px 20px;
-    text-transform: capitalize;
     width: 750px;
     box-shadow: 0 0 0 2px rgb(0 0 0 / 20%), 0 0 0 rgb(0 0 0 / 25%);
+
     @media (max-width: 768px) {
         width: 96vw;
     }
@@ -153,6 +154,7 @@ const Box = styled.div`
 const Header = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     @media (max-width: 768px) {
         display: block;

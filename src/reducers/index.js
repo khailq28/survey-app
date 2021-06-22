@@ -5,7 +5,6 @@ import surveyReducer from "./surveyReducer";
 import colorReducer from "./colorReducer";
 import allSurveyReducer from "./allSurveyReducer";
 import submitReducer from "./submitReducer";
-import results from "./resultsReducer";
 
 const rootReducers = combineReducers({
     userState: userReducer,
@@ -14,7 +13,6 @@ const rootReducers = combineReducers({
     color: colorReducer,
     listSurvey: allSurveyReducer,
     submit: submitReducer,
-    results,
 });
 
 export default rootReducers;

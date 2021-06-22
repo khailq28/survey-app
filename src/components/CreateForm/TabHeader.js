@@ -7,24 +7,15 @@ import PropTypes from "prop-types";
 import QuestionForm from "./QuestionForm";
 import Result from "../Result/Result";
 import Skeleton from "@material-ui/lab/Skeleton";
-import socket from "../../socket";
 import { connect } from "react-redux";
-import { setAllResult } from "../../actions";
 import Badge from "@material-ui/core/Badge";
 
 const mapStateToProps = (state) => {
-    return {
-        idForm: state.survey._id,
-        results: state.results,
-    };
+    return { submiter: state.survey.submiter };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-    return {
-        setAllResult: (aResults) => {
-            dispatch(setAllResult(aResults));
-        },
-    };
+    return {};
 };
 
 function TabPanel(props) {
@@ -59,29 +50,20 @@ function a11yProps(index) {
 }
 
 TabHeader.propTypes = {
-    results: PropTypes.array,
+    submiter: PropTypes.array,
 };
 
 TabHeader.defaultProps = {
-    results: null,
+    submiter: null,
 };
 
 function TabHeader(props) {
     const [value, setValue] = React.useState(0);
+    const [length, setLength] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
-    useEffect(() => {
-        if (props.idForm) {
-            socket.emit("CLIENT_GET_RESULTS", props.idForm);
-
-            socket.on("SERVER_SEND_RESULTS", (aData) => {
-                props.setAllResult(aData);
-            });
-        }
-    }, [props.idForm]);
 
     return (
         <Container>
@@ -110,9 +92,7 @@ function TabHeader(props) {
                                     Câu trả lời{" "}
                                     <Badge
                                         style={{ marginLeft: "10px" }}
-                                        badgeContent={
-                                            props.results[0].answers.length
-                                        }
+                                        badgeContent={props.submiter.length}
                                         color="primary"
                                     ></Badge>
                                 </div>

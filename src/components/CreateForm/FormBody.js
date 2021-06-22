@@ -185,6 +185,7 @@ function FormBody(props) {
             options: questionsTemp[index].options,
             open: true,
             required: questionsTemp[index].required,
+            answers: []
         });
 
         setQuestions(questionsTemp);
