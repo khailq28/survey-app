@@ -128,7 +128,7 @@ function DetailBody(props) {
                         {question.questionType === "text" ||
                         question.questionType === "textarea"
                             ? question.answers.map((answer, z) => {
-                                  if (submiter[index].name === answer.user)
+                                  if (submiter.length > 0 && submiter[index].name === answer.user)
                                       return (
                                           <div key={z}>
                                               {answer.answer[0] ? (

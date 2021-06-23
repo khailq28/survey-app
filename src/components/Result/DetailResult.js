@@ -9,13 +9,17 @@ import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import IconButton from "@material-ui/core/IconButton";
 import SubmitTitle from "../SubmitForm/SubmitTitle";
 import DetailBody from "./DetailBody";
+import socket from "../../socket";
 
-DetailResult.propTypes = { submiter: PropTypes.array };
+DetailResult.propTypes = {
+    submiter: PropTypes.array,
+    survey: PropTypes.object,
+};
 
-DetailResult.defaultProps = { submiter: null };
+DetailResult.defaultProps = { submiter: null, survey: null };
 
 const mapStateToProps = (state) => {
-    return { submiter: state.survey.submiter };
+    return { submiter: state.survey.submiter, survey: state.survey };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -30,8 +34,14 @@ function DetailResult(props) {
     useEffect(() => {
         if (props.submiter.length > 0) {
             setValue(1);
+        } else {
+            setValue(0);
         }
     }, []);
+
+    useEffect(() => {
+        setValue(1);
+    }, [props.survey]);
 
     const handleChange = (e) => {
         if (e.nativeEvent.data >= 0 && e.nativeEvent.data <= 9) {
@@ -64,6 +74,31 @@ function DetailResult(props) {
     const handleNext = () => {
         if (parseInt(value) < props.submiter.length)
             setValue(parseInt(value) + 1);
+    };
+
+    const handleDeleteResult = (name) => {
+        var arrAns = [];
+        var oData = {};
+        props.survey.questions.forEach((ques, i) => {
+            ques.answers.forEach((ans, j) => {
+                if (ans.user === name) {
+                    arrAns.push({ idQues: ques._id, idAns: ans._id });
+                    return true;
+                }
+            });
+        });
+
+        props.survey.submiter.forEach((sub, i) => {
+            if (sub.name === name) {
+                oData.idSub = sub._id;
+                return true;
+            }
+        });
+
+        oData.idForm = props.survey._id;
+        oData.answers = arrAns;
+
+        socket.emit("CLIENT_DELETE_RESULT", oData);
     };
 
     return (
@@ -113,7 +148,13 @@ function DetailResult(props) {
                         </IconButton>
                     </Left>
                     <Right>
-                        <IconButton>
+                        <IconButton
+                            onClick={() =>
+                                handleDeleteResult(
+                                    props.submiter[value - 1].name,
+                                )
+                            }
+                        >
                             <DeleteOutlineIcon />
                         </IconButton>
                     </Right>

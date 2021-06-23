@@ -49,7 +49,6 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             return { ...state };
 
         case actionType.SET_QUESTIONS:
-            console.log("set");
             state.questions = action.questions;
             return { ...state };
 
