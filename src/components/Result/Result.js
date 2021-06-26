@@ -9,6 +9,7 @@ import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import DetailResult from "./DetailResult";
+import ChartList from "./ChartList";
 
 Result.propTypes = {
     status: PropTypes.bool,
@@ -120,7 +121,7 @@ function Result(props) {
 
             <div>
                 <TabPanel value={value} index={0}>
-                    <div>sd</div>
+                    <ChartList />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <DetailResult />

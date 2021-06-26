@@ -44,7 +44,9 @@ function DetailBody(props) {
                         <Question>
                             {i + 1}. {question.questionText}{" "}
                             {question.required === true ? (
-                                <span style={{ color: "red" }}>*</span>
+                                <span style={{ color: "red" }}>
+                                    * (Bắt buộc)
+                                </span>
                             ) : (
                                 ""
                             )}
@@ -128,7 +130,10 @@ function DetailBody(props) {
                         {question.questionType === "text" ||
                         question.questionType === "textarea"
                             ? question.answers.map((answer, z) => {
-                                  if (submiter.length > 0 && submiter[index].name === answer.user)
+                                  if (
+                                      submiter.length > 0 &&
+                                      submiter[index].name === answer.user
+                                  )
                                       return (
                                           <div key={z}>
                                               {answer.answer[0] ? (

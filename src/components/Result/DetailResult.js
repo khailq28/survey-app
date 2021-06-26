@@ -163,9 +163,20 @@ function DetailResult(props) {
 
             <SubmitTitle />
             {value ? <DetailBody index={value - 1} /> : ""}
+
+
+            <Created>Đã gửi lúc {props.submiter.length > 0 && value > 0 && value !== ""
+                            ? props.submiter[value - 1].created
+                            : ""}</Created>
         </>
     );
 }
+
+const Created = styled.div`
+    padding-top: 5px;
+    color: var(--icon-color);
+    text-align: right;
+`;
 
 const Box = styled.div`
     background-color: white;

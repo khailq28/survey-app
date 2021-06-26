@@ -31,7 +31,7 @@ function PreviewItem(props) {
             <Question>
                 {index + 1}. {question.questionText}{" "}
                 {question.required === true ? (
-                    <span style={{ color: "red" }}>*</span>
+                    <span style={{ color: "red" }}>* (Bắt buộc)</span>
                 ) : (
                     ""
                 )}
