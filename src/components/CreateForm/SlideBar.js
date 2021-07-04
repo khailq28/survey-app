@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CloseIcon from "@material-ui/icons/Close";
 import ColorLensOutlinedIcon from "@material-ui/icons/ColorLensOutlined";
@@ -11,18 +11,26 @@ import {
     setStatusSlideBar,
     setInterfaceColor,
     setBackgroundColor,
+    changeStatusTimeStart,
+    changeStatusTimeEnd,
+    changeValueTimeStart,
+    changeValueTimeEnd,
 } from "../../actions";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import socket from "../../socket";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 SlideBar.propTypes = {
     idForm: PropTypes.string,
     slideBar: PropTypes.object,
+    timer: PropTypes.object,
     setStatusSlideBar: PropTypes.func,
     colorList: PropTypes.array,
     setInterfaceColor: PropTypes.func,
     setBackgroundColor: PropTypes.func,
+    changeStatusTimeStart: PropTypes.func,
+    changeStatusTimeEnd: PropTypes.func,
     interfaceColor: PropTypes.string,
     backgroundColor: PropTypes.string,
 };
@@ -30,10 +38,13 @@ SlideBar.propTypes = {
 SlideBar.defaultProps = {
     idForm: null,
     slideBar: null,
+    timer: null,
     setStatusSlideBar: null,
     colorList: null,
     setInterfaceColor: null,
     setBackgroundColor: null,
+    changeStatusTimeStart: null,
+    changeStatusTimeEnd: null,
     interfaceColor: null,
     backgroundColor: null,
 };
@@ -41,6 +52,7 @@ SlideBar.defaultProps = {
 const mapStateToProps = (state) => {
     return {
         idForm: state.survey._id,
+        timer: state.survey.timer,
         slideBar: state.tools.slideBar,
         colorList: state.color,
         interfaceColor: state.survey.interfaceColor,
@@ -61,7 +73,34 @@ const mapDispatchToProps = (dispatch, props) => {
         setBackgroundColor: (backgroundColor) => {
             dispatch(setBackgroundColor(backgroundColor));
         },
+
+        changeStatusTimeStart: (bValue) => {
+            dispatch(changeStatusTimeStart(bValue));
+        },
+
+        changeStatusTimeEnd: (bValue) => {
+            dispatch(changeStatusTimeEnd(bValue));
+        },
+
+        changeValueTimeStart: (sValue) => {
+            dispatch(changeValueTimeStart(sValue));
+        },
+
+        changeValueTimeEnd: (sValue) => {
+            dispatch(changeValueTimeEnd(sValue));
+        },
     };
+};
+
+const formatDate = () => {
+    var date = new Date();
+    var hour = `0${date.getHours()}`.slice(-2);
+    var minute = `0${date.getMinutes()}`.slice(-2);
+    var day = `0${date.getDate()}`.slice(-2);
+    var month = `0${date.getMonth() + 1}`.slice(-2);
+    var year = date.getFullYear();
+
+    return `${year}-${month}-${day}T${hour}:${minute}`;
 };
 
 function SlideBar(props) {
@@ -75,26 +114,6 @@ function SlideBar(props) {
             bgColorTemp = index;
         }
     });
-
-    var header =
-        title === "layout" ? (
-            <SlideLeft>
-                <ColorLensOutlinedIcon className="icon" />
-                &nbsp;<p> Tùy chọn giao diện</p>
-            </SlideLeft>
-        ) : title === "send" ? (
-            <SlideLeft>
-                <SendOutlinedIcon className="icon" />
-                &nbsp;<p>Gửi</p>
-            </SlideLeft>
-        ) : title === "setting" ? (
-            <SlideLeft>
-                <SettingsOutlinedIcon className="icon" />
-                &nbsp;<p> Cài đặt</p>
-            </SlideLeft>
-        ) : (
-            ""
-        );
 
     useEffect(() => {
         socket.on("SERVER_SEND_NEW_BACKGROUND_COLOR", (oColor) => {
@@ -163,6 +182,102 @@ function SlideBar(props) {
 
         // alert("Copied link: " + str);
     };
+
+    // setting func
+    const [statusStart, setStatusStart] = useState(false);
+    const [timeStart, setTimeStart] = useState(formatDate());
+    const [statusEnd, setStatusEnd] = useState(false);
+    const [timeEnd, setTimeEnd] = useState(formatDate());
+
+    useEffect(() => {
+        setStatusStart(props.timer.start.status);
+        setStatusEnd(props.timer.end.status);
+        setTimeStart(
+            props.timer.start.value ? props.timer.start.value : formatDate(),
+        );
+        setTimeEnd(
+            props.timer.end.value ? props.timer.end.value : formatDate(),
+        );
+    }, [props.idForm]);
+
+    useEffect(() => {
+        socket.on("SERVER_SEND_NEW_STATUS_TIME_START", (status) => {
+            props.changeStatusTimeStart(status);
+            setStatusStart(status);
+        });
+
+        socket.on("SERVER_SEND_NEW_STATUS_TIME_END", (status) => {
+            props.changeStatusTimeEnd(status);
+            setStatusEnd(status);
+        });
+
+        socket.on("SERVER_SEND_NEW_VALUE_TIME_START", (value) => {
+            setTimeStart(value);
+            props.changeValueTimeStart(value);
+        });
+
+        socket.on("SERVER_SEND_NEW_VALUE_TIME_END", (value) => {
+            setTimeEnd(value);
+            props.changeValueTimeEnd(value);
+        });
+    }, []);
+
+    const handleChangeStartStatus = (e) => {
+        setStatusStart(e.target.checked);
+        socket.emit("CLIENT_CHANGE_STATUS_TIME_START", {
+            status: e.target.checked,
+            idForm: props.idForm,
+        });
+        props.changeStatusTimeStart(e.target.checked);
+    };
+
+    const handleChangeEndStatus = (e) => {
+        setStatusEnd(e.target.checked);
+        socket.emit("CLIENT_CHANGE_STATUS_TIME_END", {
+            status: e.target.checked,
+            idForm: props.idForm,
+        });
+        props.changeStatusTimeEnd(e.target.checked);
+    };
+
+    const handleChangeEndTime = (e) => {
+        setTimeEnd(e.target.value);
+        props.changeValueTimeEnd(e.target.value);
+        socket.emit("CLIENT_CHANGE_VALUE_TIME_END", {
+            value: e.target.value,
+            idForm: props.idForm,
+        });
+    };
+
+    const handleChangeStartTime = (e) => {
+        setTimeStart(e.target.value);
+        props.changeValueTimeStart(e.target.value);
+        socket.emit("CLIENT_CHANGE_VALUE_TIME_START", {
+            value: e.target.value,
+            idForm: props.idForm,
+        });
+    };
+
+    // render
+    var header =
+        title === "layout" ? (
+            <SlideLeft>
+                <ColorLensOutlinedIcon className="icon" />
+                &nbsp;<p> Tùy chọn giao diện</p>
+            </SlideLeft>
+        ) : title === "send" ? (
+            <SlideLeft>
+                <SendOutlinedIcon className="icon" />
+                &nbsp;<p>Gửi</p>
+            </SlideLeft>
+        ) : title === "setting" ? (
+            <SlideLeft>
+                <SettingsOutlinedIcon className="icon" />
+                &nbsp;<p> Cài đặt</p>
+            </SlideLeft>
+        ) : (
+            ""
+        );
 
     var body =
         title === "layout" ? (
@@ -234,7 +349,46 @@ function SlideBar(props) {
                 </div>
             </Box>
         ) : title === "setting" ? (
-            ""
+            <>
+                <Timer>
+                    <input
+                        type="checkbox"
+                        name="start"
+                        value={statusStart}
+                        checked={statusStart}
+                        onChange={(e) => handleChangeStartStatus(e)}
+                    />{" "}
+                    Hẹn giờ mở khảo sát
+                </Timer>
+                <Timer>
+                    <DatetimeInput
+                        type="datetime-local"
+                        disabled={!statusStart}
+                        min={formatDate()}
+                        value={timeStart}
+                        onChange={(e) => handleChangeStartTime(e)}
+                    />
+                </Timer>
+                <Timer>
+                    <input
+                        type="checkbox"
+                        name="start"
+                        value={statusEnd}
+                        checked={statusEnd}
+                        onChange={(e) => handleChangeEndStatus(e)}
+                    />{" "}
+                    Hẹn giờ đóng khảo sát
+                </Timer>
+                <Timer>
+                    <DatetimeInput
+                        type="datetime-local"
+                        disabled={!statusEnd}
+                        min={formatDate()}
+                        value={timeEnd}
+                        onChange={(e) => handleChangeEndTime(e)}
+                    />
+                </Timer>
+            </>
         ) : (
             ""
         );
@@ -359,5 +513,14 @@ const Link = styled.a`
 `;
 
 const CopyButton = styled(Button)``;
+
+const Timer = styled.div`
+    padding-top: 10px;
+    padding-left: 10px;
+`;
+
+const DatetimeInput = styled.input`
+    margin-left: 25px;
+`;
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlideBar);

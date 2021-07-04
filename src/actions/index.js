@@ -264,6 +264,34 @@ export function validateForm() {
     };
 }
 
+export function changeStatusTimeStart(bValue) {
+    return {
+        type: actionType.CHANGE_STATUS_TIME_START,
+        bValue,
+    };
+}
+
+export function changeStatusTimeEnd(bValue) {
+    return {
+        type: actionType.CHANGE_STATUS_TIME_END,
+        bValue,
+    };
+}
+
+export function changeValueTimeStart(sValue) {
+    return {
+        type: actionType.CHANGE_VALUE_TIME_START,
+        sValue,
+    };
+}
+
+export function changeValueTimeEnd(sValue) {
+    return {
+        type: actionType.CHANGE_VALUE_TIME_END,
+        sValue,
+    };
+}
+
 // result page
 export function changeStatusForm() {
     return {

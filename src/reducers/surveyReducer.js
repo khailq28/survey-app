@@ -12,6 +12,16 @@ var INITIAL_STATE = {
     updateDate: "",
     status: false,
     submiter: [],
+    timer: {
+        start: {
+            status: false,
+            value: "",
+        },
+        end: {
+            status: false,
+            value: "",
+        },
+    },
 };
 
 const surveyReducer = (state = INITIAL_STATE, action) => {
@@ -85,8 +95,25 @@ const surveyReducer = (state = INITIAL_STATE, action) => {
             state.submiter = action.submiter;
             return { ...state };
 
+        case actionType.CHANGE_STATUS_TIME_START:
+            state.timer.start.status = action.bValue;
+            return { ...state };
+
+        case actionType.CHANGE_STATUS_TIME_END:
+            state.timer.end.status = action.bValue;
+            return { ...state };
+
+        case actionType.CHANGE_VALUE_TIME_START:
+            state.timer.start.value = action.sValue;
+            return { ...state };
+
+        case actionType.CHANGE_VALUE_TIME_END:
+            state.timer.end.value = action.sValue;
+            return { ...state };
+
         case actionType.CLEAN_SURVER_REDUCER:
             return {};
+
         default:
             return { ...state };
     }
