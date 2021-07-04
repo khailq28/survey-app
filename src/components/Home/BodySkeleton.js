@@ -113,7 +113,7 @@ const Body = styled.div`
 `;
 
 const CustomAddButtonSkeleton = styled(Skeleton)`
-    padding: 10px 0;
+    /* padding: 10px 0; */
     border: 1px solid transparent !important;
     border-radius: 8px !important;
 `;

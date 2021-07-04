@@ -212,17 +212,13 @@ const CreateNewSurvey = styled.div`
     color: #f9f9f9;
     background-color: #0063e5;
     letter-spacing: 1.5px;
-    font-size: 18px;
-    padding: 10px 0;
+    font-size: 16px;
     border: 1px solid transparent;
     border-radius: 8px;
-    width: 290px;
-    height: auto;
-    margin: 12px 0 12px 20px;
+    width: 250px;
+    margin: 12px;
     position: relative;
     text-align: center;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
     animation: animateDown infinite 1.5s forwards;
 
@@ -232,7 +228,7 @@ const CreateNewSurvey = styled.div`
     }
 
     & > p {
-        margin-left: 45px;
+        margin-left: 40px;
     }
 
     @media (max-width: 280px) {
@@ -243,9 +239,9 @@ const CreateNewSurvey = styled.div`
 
 const AddIcon = styled(PostAddIcon)`
     position: absolute;
-    top: 14px;
+    top: 7px;
     left: 13px;
-    font-size: 40px !important;
+    font-size: 30px !important;
 `;
 
 const Body = styled.div`

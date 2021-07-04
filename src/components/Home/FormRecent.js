@@ -143,6 +143,7 @@ const Card = styled.div`
         width: 70%;
         margin: auto;
         margin-top: 2px;
+        padding: 5px;
     }
 `;
 const Body = styled.div`
@@ -157,6 +158,8 @@ const Title = styled.h5`
     -webkit-box-orient: vertical;
     overflow: hidden;
     width: 130px;
+    padding: 3px;
+    margin: 7px 0 !important;
 
     @media (max-width: 768px) {
         width: 80px;
