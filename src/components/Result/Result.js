@@ -10,16 +10,19 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import DetailResult from "./DetailResult";
 import ChartList from "./ChartList";
+import ExportCSV from "./ExportCSV";
 
 Result.propTypes = {
     status: PropTypes.bool,
     idForm: PropTypes.string,
     submiter: PropTypes.array,
+    survey: PropTypes.object,
 };
 
 Result.defaultProps = {
     status: null,
     idForm: null,
+    survey: null,
     submiter: [],
 };
 
@@ -28,6 +31,7 @@ const mapStateToProps = (state) => {
         status: state.survey.status,
         idForm: state.survey._id,
         submiter: state.survey.submiter,
+        survey: state.survey,
     };
 };
 
@@ -95,16 +99,18 @@ function Result(props) {
             <Box style={{ paddingBottom: "0px" }}>
                 <Header>
                     <Left>{props.submiter.length} câu trả lời</Left>
-                    <Right>
-                        Chấp nhận phản hồi
-                        <Switch
-                            name="status"
-                            color="primary"
-                            checked={props.status}
-                            onClick={handleSwitch}
-                        />
-                    </Right>
+
+                    <ExportCSV survey={props.survey} />
                 </Header>
+                <CloseForm style={{ textAlign: "right" }}>
+                    Chấp nhận phản hồi
+                    <Switch
+                        name="status"
+                        color="primary"
+                        checked={props.status}
+                        onClick={handleSwitch}
+                    />
+                </CloseForm>
                 <CustomPaper>
                     <CustomTabs
                         value={value}
@@ -158,10 +164,6 @@ const Header = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    @media (max-width: 768px) {
-        display: block;
-    }
 `;
 
 const Left = styled.div`
@@ -172,7 +174,7 @@ const Left = styled.div`
     line-height: 135%;
 `;
 
-const Right = styled.div`
+const CloseForm = styled.div`
     color: var(--icon-color);
     box-sizing: border-box;
     font-size: 13px;

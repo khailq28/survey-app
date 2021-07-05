@@ -19,7 +19,6 @@ import {
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import socket from "../../socket";
 import PropTypes from "prop-types";
-import moment from "moment";
 
 SlideBar.propTypes = {
     idForm: PropTypes.string,
