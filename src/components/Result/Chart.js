@@ -52,7 +52,10 @@ function Chart(props) {
 
         question.answers.forEach((ans) => {
             for (var i = 0; i < data.datasets.length; i++) {
-                if (data.labels[i] === ans.answer[0]) {
+                if (
+                    data.labels[i] === ans.answer[0] ||
+                    (data.labels[i] === "Khác" && ans.answer[0])
+                ) {
                     data.datasets[i]++;
                 }
             }
@@ -68,7 +71,10 @@ function Chart(props) {
         question.answers.forEach((ans) => {
             for (var i = 0; i < data.datasets.length; i++) {
                 for (var j = 0; j < ans.answer.length; j++) {
-                    if (data.labels[i] === ans.answer[j]) {
+                    if (
+                        data.labels[i] === ans.answer[j] ||
+                        (data.labels[i] === "Khác" && ans.answer[j])
+                    ) {
                         data.datasets[i]++;
                     }
                 }
